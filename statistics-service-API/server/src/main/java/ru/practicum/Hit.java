@@ -1,18 +1,23 @@
 package ru.practicum;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "statistics")
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@AllArgsConstructor
-public class HitDto {
+public class Hit {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
     @NotBlank
     String app;
     @NotBlank
@@ -20,5 +25,5 @@ public class HitDto {
     @NotBlank
     String ip;
     @NotBlank
-    String timestamp;
+    LocalDateTime timestamp;
 }

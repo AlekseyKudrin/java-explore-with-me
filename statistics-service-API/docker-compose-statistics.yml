@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  HTTP-client-statistics:
+    build: gateway
+    image: gateway
+    container_name: service_getaway
+    ports:
+      - "8080:8080"
+    environment:
+      - STATISTICS_SERVER.URL=http://localhost:8081
+
+  statistics-server:
+    build: server
+    image: server
+    container_name: service_server
+    ports:
+      - "8081:8081"
+    depends_on:
+      - HTTP-client-statistics
+      - stats_db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats_db:5432/postgres
+
+  stats_db:
+    image: postgres:14-alpine
+    container_name: postgres_db
+    ports:
+      - "6541:5432"
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
