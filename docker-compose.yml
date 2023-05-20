@@ -5,6 +5,9 @@ services:
     container_name: http-client-statistics
     ports:
       - "9090:9090"
+    depends_on:
+      - statistics-server
+      - stats_db
     environment:
       - STATISTICS_SERVER.URL=http://statistics-server:9091
 
