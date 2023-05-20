@@ -1,9 +1,6 @@
 package ru.practicum;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.validation.constraints.NotBlank;
@@ -11,6 +8,7 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@RequiredArgsConstructor
 @AllArgsConstructor
 public class HitDto {
     @NotBlank
