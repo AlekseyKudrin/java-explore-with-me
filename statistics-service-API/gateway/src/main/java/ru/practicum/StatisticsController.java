@@ -30,7 +30,7 @@ public class StatisticsController {
     public ResponseEntity<Object> getStats(
             @RequestParam String start,
             @RequestParam String end,
-            @RequestParam List<String> uris,
+            @RequestParam(required = false) List<String> uris,
             @RequestParam(defaultValue = "false") Boolean unique
     ) {
         return statisticsClient.getStats(start, end, uris, unique);

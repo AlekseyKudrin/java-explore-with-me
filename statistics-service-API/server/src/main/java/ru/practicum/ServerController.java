@@ -32,10 +32,10 @@ public class ServerController {
 
     @GetMapping("/stats")
     public List<Stats> getStats(
-            @RequestParam() String start,
-            @RequestParam() String end,
-            @RequestParam() List<String> uris,
-            @RequestParam() Boolean unique
+            @RequestParam String start,
+            @RequestParam String end,
+            @RequestParam(required = false) List<String> uris,
+            @RequestParam Boolean unique
     ) {
         return statisticsService.getStats(
                 LocalDateTime.parse(start, FORMATTER),

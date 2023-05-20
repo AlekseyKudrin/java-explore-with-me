@@ -32,14 +32,19 @@ public class StatisticsClient {
     }
 
     public ResponseEntity<Object> getStats(String start, String end, List<String> uris, Boolean unique) {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (uris != null) {
+            for (String s : uris) {
+                stringBuilder.append("uris=").append(s).append("&");
+            }
+        }
         Map<String, Object> parameters = Map.of(
                 "start", start,
                 "end", end,
-                "uris", List.of(),
                 "unique", unique);
         return makeAndSendRequest(
                 HttpMethod.GET,
-                "/stats?start={start}&end={end}&uris={uris}&unique={unique}",
+                "/stats?start={start}&end={end}&"+stringBuilder+"unique={unique}",
                 parameters,
                 null);
     }
