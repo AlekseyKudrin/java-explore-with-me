@@ -8,10 +8,9 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>service-gateway</artifactId>
+    <artifactId>http-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
-    <name>Statistics Gateway</name>
 
     <dependencies>
         <dependency>
@@ -49,18 +48,13 @@
 
         <dependency>
             <groupId>ru.practicum</groupId>
-            <artifactId>statistics-dto</artifactId>
+            <artifactId>general-dto</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.10.1</version>
         </dependency>
 
     </dependencies>

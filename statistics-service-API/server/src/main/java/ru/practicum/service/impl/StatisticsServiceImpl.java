@@ -40,8 +40,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         } else if (unique) {
             return statisticsRepository.getStatsUnique(start, end, uris);
         } else {
-            List<Stats> s = statisticsRepository.getStatsNotUnique(start, end, uris);
-            return s;
+            return statisticsRepository.getStatsNotUnique(start, end, uris);
         }
     }
 }

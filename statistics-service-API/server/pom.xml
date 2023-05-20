@@ -9,7 +9,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>service-server</artifactId>
+	<artifactId>server-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
 	<name>Statistics Server</name>
@@ -57,7 +57,7 @@
 
         <dependency>
             <groupId>ru.practicum</groupId>
-            <artifactId>statistics-dto</artifactId>
+            <artifactId>general-dto</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>

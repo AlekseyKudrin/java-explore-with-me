@@ -1,5 +1,6 @@
-package ru.practicum;
+package ru.practicum.client;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -10,10 +11,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
+import ru.practicum.HitDto;
 
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
 public class StatisticsClient {
 
@@ -44,7 +47,7 @@ public class StatisticsClient {
                 "unique", unique);
         return makeAndSendRequest(
                 HttpMethod.GET,
-                "/stats?start={start}&end={end}&"+stringBuilder+"unique={unique}",
+                "/stats?start={start}&end={end}&" + stringBuilder + "unique={unique}",
                 parameters,
                 null);
     }
@@ -62,6 +65,7 @@ public class StatisticsClient {
         } catch (HttpStatusCodeException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getResponseBodyAsByteArray());
         }
+        log.info("Request for method {} on path {} completed", method, path);
         return prepareGatewayResponse(serverResponse);
     }
 

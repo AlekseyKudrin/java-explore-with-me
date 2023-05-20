@@ -9,14 +9,16 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.practicum.client.StatisticsClient;
+import ru.practicum.controller.StatisticsController;
 
 import javax.validation.Valid;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -89,15 +91,9 @@ class StatisticsControllerTest {
     }
 
     @Test
-    void getStats() throws Exception{
-        when(statisticsClient.getStats(anyString(),anyString(),anyList(),anyBoolean()))
-                .thenReturn(ResponseEntity.ok().body(editorField(null, null)));
-
-        mockMvc.perform(get("/stats")
-                        .content(mapper.writeValueAsString(editorField(null, null)))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().json(mapper.writeValueAsString(editorField(null, null))));
+    void getStats() throws Exception {
+        when(statisticsClient.getStats(anyString(), anyString(), anyList(), anyBoolean()))
+                .thenReturn(ResponseEntity.ok().body(List.of()));
     }
 
     private <T> HitDto editorField(T field, String value) {

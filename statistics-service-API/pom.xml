@@ -17,7 +17,7 @@
 
     <modules>
         <module>server</module>
-        <module>gateway</module>
+        <module>httpClient</module>
         <module>dto</module>
     </modules>
 
@@ -32,11 +32,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.10.1</version>
         </dependency>
 
     </dependencies>
