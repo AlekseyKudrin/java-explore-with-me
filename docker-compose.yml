@@ -1,19 +1,23 @@
 version: '3.1'
 services:
   http-client-statistics:
-    extends:
-      file: /statistics-service-API/docker-compose-statistics.yml
-      service:
-        http-client-statistics
+    build: statistics-service-API/httpClient
+    container_name: http-client-statistics
+    ports:
+      - "9090:9090"
+    environment:
+      - STATISTICS_SERVER.URL=http://statistics-server:9091
 
   statistics-server:
-    extends:
-      file: /statistics-service-API/docker-compose-statistics.yml
-      service:
-        statistics-server
+    build: statistics-service-API/server
+    container_name: statistics-server
+    ports:
+      - "9091:9091"
     depends_on:
       - http-client-statistics
       - stats_db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats_db:5432/postgres
 
   stats_db:
     image: postgres:14-alpine
