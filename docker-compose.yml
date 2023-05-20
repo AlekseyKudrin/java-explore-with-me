@@ -1,10 +1,10 @@
 version: '3.1'
 services:
-  HTTP-client-statistics:
+  http-client-statistics:
     extends:
       file: /statistics-service-API/docker-compose-statistics.yml
       service:
-        HTTP-client-statistics
+        http-client-statistics
 
   statistics-server:
     extends:
@@ -12,7 +12,7 @@ services:
       service:
         statistics-server
     depends_on:
-      - HTTP-client-statistics
+      - http-client-statistics
       - stats_db
 
   stats_db:

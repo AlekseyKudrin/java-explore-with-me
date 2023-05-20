@@ -10,6 +10,7 @@ import ru.practicum.dao.StatisticsRepository;
 import ru.practicum.model.HitMapper;
 import ru.practicum.model.Stats;
 import ru.practicum.service.StatisticsService;
+import ru.practicum.util.Constant;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,26 +22,30 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     private final StatisticsRepository statisticsRepository;
 
-
     @Override
     public ResponseEntity<Object> createHit(HitDto hitDto) {
         statisticsRepository.save(HitMapper.toHit(hitDto));
+        log.info("Create hit successful");
         return ResponseEntity.status(HttpStatus.CREATED).body("{\"description\":\"hit saved successfully\"}");
     }
 
     @Override
-    public List<Stats> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
-        log.info("Stats sent");
+    public List<Stats> getStats(String start, String end, List<String> uris, Boolean unique) {
+        LocalDateTime startConvert = LocalDateTime.parse(start, Constant.FORMATTER);
+        LocalDateTime endConvert = LocalDateTime.parse(end, Constant.FORMATTER);
+        List<Stats> getStats;
         if (uris == null || uris.isEmpty()) {
             if (unique) {
-                return statisticsRepository.getStatsWithoutUriUnique(start, end);
+                getStats = statisticsRepository.getStatsWithoutUriUnique(startConvert, endConvert);
             } else {
-                return statisticsRepository.getStatsWithoutUriNotUnique(start, end);
+                getStats = statisticsRepository.getStatsWithoutUriNotUnique(startConvert, endConvert);
             }
         } else if (unique) {
-            return statisticsRepository.getStatsUnique(start, end, uris);
+            getStats = statisticsRepository.getStatsUnique(startConvert, endConvert, uris);
         } else {
-            return statisticsRepository.getStatsNotUnique(start, end, uris);
+            getStats = statisticsRepository.getStatsNotUnique(startConvert, endConvert, uris);
         }
+        log.info("Statistics sent");
+        return getStats;
     }
 }

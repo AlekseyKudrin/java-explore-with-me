@@ -12,8 +12,6 @@
 	<artifactId>server-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
-	<name>Statistics Server</name>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -60,16 +58,6 @@
             <artifactId>general-dto</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.10.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct</artifactId>
-            <version>1.5.3.Final</version>
         </dependency>
 
     </dependencies>

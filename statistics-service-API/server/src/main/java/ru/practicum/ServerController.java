@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.model.Stats;
 import ru.practicum.service.StatisticsService;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 
@@ -22,11 +20,10 @@ public class ServerController {
 
     private final StatisticsService statisticsService;
 
-    public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
     @PostMapping("/hit")
     public ResponseEntity<Object> createHit(
             @RequestBody HitDto hitDto) {
+        log.info("Received a request to create a hit");
         return statisticsService.createHit(hitDto);
     }
 
@@ -37,10 +34,7 @@ public class ServerController {
             @RequestParam(required = false) List<String> uris,
             @RequestParam Boolean unique
     ) {
-        return statisticsService.getStats(
-                LocalDateTime.parse(start, FORMATTER),
-                LocalDateTime.parse(end, FORMATTER),
-                uris,
-                unique);
+        log.info("Received a request to create a statistics");
+        return statisticsService.getStats(start, end, uris, unique);
     }
 }
