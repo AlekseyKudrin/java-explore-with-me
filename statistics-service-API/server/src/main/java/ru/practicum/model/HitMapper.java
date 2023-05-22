@@ -3,9 +3,9 @@ package ru.practicum.model;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import ru.practicum.HitDto;
-import ru.practicum.util.Constant;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HitMapper {
@@ -15,7 +15,7 @@ public class HitMapper {
                 hitDto.getApp(),
                 hitDto.getUri(),
                 hitDto.getIp(),
-                LocalDateTime.parse(hitDto.getTimestamp(), Constant.FORMATTER)
+                LocalDateTime.parse(hitDto.getTimestamp(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
         );
     }
 
