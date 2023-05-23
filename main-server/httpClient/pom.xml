@@ -8,7 +8,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>http-service</artifactId>
+    <artifactId>main-http-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
 
@@ -55,6 +55,12 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>ru.practicum</groupId>
+            <artifactId>main-general-dto</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
 
     </dependencies>

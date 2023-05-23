@@ -10,7 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.client.ServerClient;
-import ru.practicum.controller.StatisticsController;
+import ru.practicum.controller.ServerController;
 
 import javax.validation.Valid;
 import java.util.LinkedHashMap;
@@ -23,9 +23,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(StatisticsController.class)
+@WebMvcTest(ServerController.class)
 @AutoConfigureMockMvc
-class StatisticsControllerTest {
+class ServerControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

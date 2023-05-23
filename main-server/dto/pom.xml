@@ -9,7 +9,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>general-dto</artifactId>
+    <artifactId>main-general-dto</artifactId>
 
     <dependencies>
         <dependency>

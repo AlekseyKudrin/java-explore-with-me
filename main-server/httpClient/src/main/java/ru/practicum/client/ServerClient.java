@@ -11,8 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
-import ru.practicum.Category;
-import ru.practicum.HitDto;
+import ru.practicum.*;
 
 import java.util.List;
 import java.util.Map;
@@ -100,6 +99,94 @@ public class ServerClient {
     }
 
     public ResponseEntity<Object> createCategory(Category category) {
+        return null;
+    }
+
+    public ResponseEntity<Object> deleteCategory(Integer catId) {
+        return null;
+    }
+
+    public ResponseEntity<Object> patchCategory(Integer catId, Category category) {
+        return null;
+    }
+
+    public ResponseEntity<Object> getEventsUser(Integer userId, Integer from, Integer size) {
+        return null;
+    }
+
+    public ResponseEntity<Object> createEventUser(Integer userId, Event event) {
+        return null;
+    }
+
+    public ResponseEntity<Object> getEventUser(Integer userId, Integer eventId) {
+        return null;
+    }
+
+    public ResponseEntity<Object> changeEventUser(Integer userId, Integer eventId) {
+        return null;
+    }
+
+    public ResponseEntity<Object> getRequestsUserInEvent(Integer userId, Integer eventId) {
+        return null;
+    }
+
+    public ResponseEntity<Object> changeStatusParticipationInEvent(Integer userId, Integer eventId, StatusEvents statusEvents) {
+        return null;
+    }
+
+    public ResponseEntity<Object> getCategories(Integer from, Integer size) {
+        return null;
+    }
+
+    public ResponseEntity<Object> getCategoryById(Integer catId) {
+        return null;
+    }
+
+    public ResponseEntity<Object> searchEvents(List<Integer> users, List<Integer> states, List<Integer> categories, String rangeStart, String rangeEnd, Integer from, Integer size) {
+        return null;
+    }
+
+    public ResponseEntity<Object> changeEventAndStatus(Integer eventId, Event event) {
+        return null;
+    }
+
+    public ResponseEntity<Object> getEvents(String text, List<Integer> categories, Boolean paid, String rangeStart, String rangeEnd, Boolean onlyAvailable, String sort, Integer from, Integer size) {
+        return null;
+    }
+
+    public ResponseEntity<Object> getRequestUsersById(Integer userId) {
+        return null;
+    }
+
+    public ResponseEntity<Object> createRequestParticipate(Integer userId, Integer eventId) {
+        return null;
+    }
+
+    public ResponseEntity<Object> cancelingParticipate(Integer userId, Integer requestId) {
+        return null;
+    }
+
+    public ResponseEntity<Object> getUsers(List<Integer> ids, Integer from, Integer size) {
+        return null;
+    }
+
+    public ResponseEntity<Object> createUser(UserDto userDto) {
+        return null;
+    }
+
+    public ResponseEntity<Object> deleteUser(Integer userId) {
+        return null;
+    }
+
+    public ResponseEntity<Object> createCompilation(Compilation compilation) {
+        return null;
+    }
+
+    public ResponseEntity<Object> deleteCompilation(Integer comId) {
+        return null;
+    }
+
+    public ResponseEntity<Object> cangeCompilation(Integer comId, Compilation compilation) {
         return null;
     }
 }
