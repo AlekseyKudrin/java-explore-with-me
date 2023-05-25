@@ -9,8 +9,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.practicum.allDto.HitDto;
 import ru.practicum.client.ServerClient;
-import ru.practicum.controller.ServerController;
 
 import javax.validation.Valid;
 import java.util.LinkedHashMap;
@@ -39,7 +39,7 @@ class ServerControllerTest {
     @Test
     void createHit() throws Exception {
 
-        when(serverClient.create(any(HitDto.class)))
+        when(serverClient.create(any(ru.practicum.allDto.HitDto.class)))
                 .thenReturn(ResponseEntity.ok().body(editorField(null, null)));
 
         mockMvc.perform(post("/hit")
@@ -111,7 +111,7 @@ class ServerControllerTest {
             strings[i] = fields.get(key);
             i++;
         }
-        return new @Valid HitDto(
+        return new ru.practicum.allDto.@Valid HitDto(
                 strings[0],
                 strings[1],
                 strings[2],

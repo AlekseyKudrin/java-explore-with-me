@@ -18,7 +18,6 @@
     <modules>
         <module>server</module>
         <module>httpClient</module>
-        <module>dto</module>
     </modules>
 
     <properties>

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.json.JsonContent;
+import ru.practicum.allDto.HitDto;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
@@ -12,9 +13,9 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 public class HitDtoTest {
 
     @Autowired
-    private JacksonTester<HitDto> json;
+    private JacksonTester<ru.practicum.allDto.HitDto> json;
 
-    HitDto hitDto = new HitDto(
+    ru.practicum.allDto.HitDto hitDto = new ru.practicum.allDto.HitDto(
             "test-service",
             "/event/1",
             "192.168.0.1",
