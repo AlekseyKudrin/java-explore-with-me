@@ -1,7 +1,7 @@
 package ru.practicum.admin.service;
 
-import ru.practicum.admin.models.category.CategoryDto;
-import ru.practicum.admin.models.user.UserDto;
+import ru.practicum.user.model.UserDto;
+import ru.practicum.category.model.CategoryDto;
 
 import java.util.List;
 

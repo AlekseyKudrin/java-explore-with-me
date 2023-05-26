@@ -2,10 +2,10 @@ package ru.practicum.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.allDto.Event;
-import ru.practicum.allDto.StatusEvents;
+import ru.practicum.event.model.event.EventFullDto;
+import ru.practicum.event.model.event.NewEventDto;
 import ru.practicum.user.service.impl.UserServiceImpl;
 
 import javax.validation.Valid;
@@ -18,7 +18,7 @@ public class UserController {
 
     private final UserServiceImpl userService;
 
-//    @GetMapping("/users/{userId}/events")
+    //    @GetMapping("/users/{userId}/events")
 //    public ResponseEntity<Object> getEventsUser(
 //            @PathVariable Integer userId,
 //            @RequestParam(defaultValue = "0") Integer from,
@@ -28,14 +28,14 @@ public class UserController {
 //        return serverClient.getEventsUser(userId, from, size);
 //    }
 //
-//    @PostMapping("/users/{userId}/events")
-//    public ResponseEntity<Object> createEventUser(
-//            @PathVariable Integer userId,
-//            @RequestBody @Valid Event event
-//    ) {
-//        log.info("Received a request to create a event user id={}", userId);
-//        return userService.createEventUser(userId, event);
-//    }
+    @PostMapping("/{userId}/events")
+    public EventFullDto createEventUser(
+            @PathVariable Integer userId,
+            @RequestBody @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") NewEventDto newEventDto
+    ) {
+        log.info("Received a request to create a event user id={}", userId);
+        return userService.createEventUser(userId, newEventDto);
+    }
 //
 //    @GetMapping("/users/{userId}/events/{eventId}")
 //    public ResponseEntity<Object> getEventUser(

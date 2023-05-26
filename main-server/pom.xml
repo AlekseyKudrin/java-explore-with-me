@@ -16,7 +16,6 @@
     <name>Main service API</name>
 
     <modules>
-        <module>server</module>
         <module>httpClient</module>
     </modules>
 

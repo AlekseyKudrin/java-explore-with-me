@@ -1,6 +1,6 @@
 package ru.practicum.allDto;
 
-import ru.practicum.admin.models.category.CategoryDto;
+import ru.practicum.category.model.CategoryDto;
 
 public class EventShortDto {
     Integer id;

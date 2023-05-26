@@ -39,22 +39,7 @@
 //        return serverClient.getCompilationsById(compId);
 //    }
 //
-//    @GetMapping("/categories")
-//    public ResponseEntity<Object> getCategories(
-//            @RequestParam(defaultValue = "0") Integer from,
-//            @RequestParam(defaultValue = "10") Integer size
-//    ) {
-//        log.info("Received a request to return category list");
-//        return serverClient.getCategories(from, size);
-//    }
-//
-//    @GetMapping("/categories/{catId}")
-//    public ResponseEntity<Object> getCategoryById(
-//            @PathVariable Integer catId
-//    ) {
-//        log.info("Received a request to return category by Id={}", catId);
-//        return serverClient.getCategoryById(catId);
-//    }
+
 //
 //
 //    @GetMapping("/events")

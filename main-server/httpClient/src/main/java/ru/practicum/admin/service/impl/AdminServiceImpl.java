@@ -4,15 +4,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import ru.practicum.admin.dao.CategoriesRepository;
-import ru.practicum.admin.dao.UserRepository;
-import ru.practicum.admin.models.category.Category;
-import ru.practicum.admin.models.category.CategoryDto;
-import ru.practicum.admin.models.category.CategoryMapper;
-import ru.practicum.admin.models.user.User;
-import ru.practicum.admin.models.user.UserDto;
-import ru.practicum.admin.models.user.UserMapper;
+import ru.practicum.user.dao.UserRepository;
+import ru.practicum.user.model.User;
+import ru.practicum.user.model.UserDto;
+import ru.practicum.user.model.UserMapper;
 import ru.practicum.admin.service.AdminService;
+import ru.practicum.category.dao.CategoryRepository;
+import ru.practicum.category.model.Category;
+import ru.practicum.category.model.CategoryDto;
+import ru.practicum.category.model.CategoryMapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,7 +25,7 @@ public class AdminServiceImpl implements AdminService {
 
     private final UserRepository userRepository;
 
-    private final CategoriesRepository categoriesRepository;
+    private final CategoryRepository categoryRepository;
 
     @Override
     public UserDto createUser(UserDto userDto) {
@@ -56,21 +56,21 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public CategoryDto createCategory(CategoryDto categoryDto) {
-        Category category = categoriesRepository.save(CategoryMapper.toCategory(categoryDto));
+        Category category = categoryRepository.save(CategoryMapper.toCategory(categoryDto));
         log.info("Category successfully created");
         return CategoryMapper.toCategoryDto(category);
     }
 
     @Override
     public void deleteCategory(Integer catId) {
-        categoriesRepository.deleteById(catId);
+        categoryRepository.deleteById(catId);
         log.info("Category deleted successfully");
     }
 
     @Override
     public CategoryDto patchCategory(Integer catId, CategoryDto categoryDto) {
         categoryDto.setId(catId);
-        Category category = categoriesRepository.save(CategoryMapper.toCategory(categoryDto));
+        Category category = categoryRepository.save(CategoryMapper.toCategory(categoryDto));
         log.info("Category successfully change");
         return CategoryMapper.toCategoryDto(category);
     }

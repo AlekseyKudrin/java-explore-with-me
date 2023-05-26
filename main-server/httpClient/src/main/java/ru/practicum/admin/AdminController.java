@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.admin.models.category.CategoryDto;
-import ru.practicum.admin.models.user.UserDto;
+import ru.practicum.user.model.UserDto;
 import ru.practicum.admin.service.impl.AdminServiceImpl;
+import ru.practicum.category.model.CategoryDto;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;

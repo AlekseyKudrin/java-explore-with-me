@@ -3,7 +3,10 @@ package ru.practicum.category;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.category.model.CategoryDto;
 import ru.practicum.category.service.impl.CategoryServiceImpl;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -12,5 +15,22 @@ import ru.practicum.category.service.impl.CategoryServiceImpl;
 public class CategoryController {
 
     private final CategoryServiceImpl categoryService;
+
+    @GetMapping()
+    public List<CategoryDto> getCategories(
+            @RequestParam(defaultValue = "0") Integer from,
+            @RequestParam(defaultValue = "10") Integer size
+    ) {
+        log.info("Received a request to return category list");
+        return categoryService.getCategories(from, size);
+    }
+
+    @GetMapping("/{catId}")
+    public CategoryDto getCategoryById(
+            @PathVariable Integer catId
+    ) {
+        log.info("Received a request to return category by Id={}", catId);
+        return categoryService.getCategoryById(catId);
+    }
 
 }

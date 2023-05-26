@@ -6,6 +6,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import ru.practicum.exceptionHandler.exception.ValueNotFoundDbException;
 
 @Slf4j
 @RestControllerAdvice
@@ -22,6 +23,13 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handlerThrowableException(final Throwable e) {
         log.error("Unexpected error: {}", e.getMessage());
+        return new ErrorResponse(e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handlerValueNotFoundDbException(final ValueNotFoundDbException e) {
+        log.error("Data input incorrect: {}", e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
 }
