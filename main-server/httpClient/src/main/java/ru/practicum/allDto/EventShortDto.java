@@ -1,5 +1,7 @@
 package ru.practicum.allDto;
 
+import ru.practicum.admin.models.category.CategoryDto;
+
 public class EventShortDto {
     Integer id;
     String annotation;

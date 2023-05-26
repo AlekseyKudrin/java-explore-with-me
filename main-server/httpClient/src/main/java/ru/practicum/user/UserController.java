@@ -1,20 +1,23 @@
-//package ru.practicum.user;
-//
-//import lombok.RequiredArgsConstructor;
-//import lombok.extern.slf4j.Slf4j;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.*;
-//import ru.practicum.allDto.Event;
-//import ru.practicum.allDto.StatusEvents;
-//
-//import javax.validation.Valid;
-//
-//@Slf4j
-//@RestController
-//@RequiredArgsConstructor
-//@RequestMapping(path = "/users")
-//public class UserController {
-//
+package ru.practicum.user;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import ru.practicum.allDto.Event;
+import ru.practicum.allDto.StatusEvents;
+import ru.practicum.user.service.impl.UserServiceImpl;
+
+import javax.validation.Valid;
+
+@Slf4j
+@RestController
+@RequiredArgsConstructor
+@RequestMapping(path = "/users")
+public class UserController {
+
+    private final UserServiceImpl userService;
+
 //    @GetMapping("/users/{userId}/events")
 //    public ResponseEntity<Object> getEventsUser(
 //            @PathVariable Integer userId,
@@ -31,7 +34,7 @@
 //            @RequestBody @Valid Event event
 //    ) {
 //        log.info("Received a request to create a event user id={}", userId);
-//        return serverClient.createEventUser(userId, event);
+//        return userService.createEventUser(userId, event);
 //    }
 //
 //    @GetMapping("/users/{userId}/events/{eventId}")
@@ -96,5 +99,5 @@
 //        log.info("Received a request to canceling participate");
 //        return serverClient.cancelingParticipate(userId, requestId);
 //    }
-//
-//}
+
+}

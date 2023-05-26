@@ -1,9 +1,8 @@
-package ru.practicum.admin.model;
+package ru.practicum.admin.models.category;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 @Getter
@@ -11,11 +10,8 @@ import javax.validation.constraints.NotBlank;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class UserDto {
-
+public class CategoryDto{
     Integer id;
-    @Email
-    String email;
     @NotBlank
     String name;
 }

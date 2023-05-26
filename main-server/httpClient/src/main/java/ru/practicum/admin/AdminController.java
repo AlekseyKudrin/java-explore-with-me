@@ -4,10 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.admin.model.UserDto;
+import ru.practicum.admin.models.category.CategoryDto;
+import ru.practicum.admin.models.user.UserDto;
 import ru.practicum.admin.service.impl.AdminServiceImpl;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @Slf4j
@@ -21,8 +24,8 @@ public class AdminController {
     @GetMapping("/users")
     public List<UserDto> getUsers(
             @RequestParam(required = false) List<Integer> ids,
-            @RequestParam(defaultValue = "0") Integer from,
-            @RequestParam(defaultValue = "10") Integer size
+            @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
+            @Positive @RequestParam(defaultValue = "10") Integer size
     ) {
         log.info("Received a request to return user list");
         return adminService.getUsers(ids, from, size);
@@ -36,15 +39,17 @@ public class AdminController {
         log.info("Received a request to create user");
         return adminService.createUser(userDto);
     }
-//
-//    @DeleteMapping("/users/{userId}")
-//    public ResponseEntity<Object> createUser(
-//            @PathVariable Integer userId
-//    ) {
-//        log.info("Received a request to delete user id={}", userId);
-//        return adminService.deleteUser(userId);
-//    }
-//
+
+    @DeleteMapping("/users/{userId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteUser(
+            @PathVariable Integer userId
+    ) {
+        log.info("Received a request to delete user id={}", userId);
+        adminService.deleteUser(userId);
+    }
+
+    //
 //    @PostMapping("/compilations")
 //    public ResponseEntity<Object> createCompilation(
 //            @RequestBody Compilation compilation
@@ -70,30 +75,32 @@ public class AdminController {
 //        return adminService.cangeCompilation(comId, compilation);
 //    }
 //
-//    @PostMapping("/categories")
-//    public ResponseEntity<Object> createCategory(
-//            @RequestBody @Valid Category category
-//    ) {
-//        log.info("Received a request to create a category");
-//        return adminService.createCategory(category);
-//    }
-//
-//    @DeleteMapping("/categories/{catId}")
-//    public ResponseEntity<Object> deleteCategory(
-//            @PathVariable Integer catId
-//    ) {
-//        log.info("Received a request to delete a category {}", catId);
-//        return adminService.deleteCategory(catId);
-//    }
-//
-//    @PatchMapping("/categories/{catId}")
-//    public ResponseEntity<Object> changeCategory(
-//            @PathVariable Integer catId,
-//            @RequestBody @Valid Category category
-//    ) {
-//        log.info("Received a request to change a category {}", catId);
-//        return adminService.patchCategory(catId, category);
-//    }
+    @PostMapping("/categories")
+    @ResponseStatus(HttpStatus.CREATED)
+    public CategoryDto createCategory(
+            @RequestBody @Valid CategoryDto categoryDto
+    ) {
+        log.info("Received a request to create a category");
+        return adminService.createCategory(categoryDto);
+    }
+
+    @DeleteMapping("/categories/{catId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCategory(
+            @PathVariable Integer catId
+    ) {
+        log.info("Received a request to delete a category {}", catId);
+        adminService.deleteCategory(catId);
+    }
+
+    @PatchMapping("/categories/{catId}")
+    public CategoryDto changeCategory(
+            @PathVariable Integer catId,
+            @RequestBody @Valid CategoryDto categoryDto
+    ) {
+        log.info("Received a request to change a category {}", catId);
+        return adminService.patchCategory(catId, categoryDto);
+    }
 //
 //    @GetMapping("/events")
 //    public ResponseEntity<Object> searchEvents(

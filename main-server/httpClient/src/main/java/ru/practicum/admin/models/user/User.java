@@ -1,4 +1,4 @@
-package ru.practicum.admin.model;
+package ru.practicum.admin.models.user;
 
 import lombok.AccessLevel;
 import lombok.Data;
