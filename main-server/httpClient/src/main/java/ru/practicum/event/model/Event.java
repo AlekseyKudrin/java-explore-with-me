@@ -1,8 +1,11 @@
-package ru.practicum.event.model.event;
+package ru.practicum.event.model;
 
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+import ru.practicum.category.model.Category;
+import ru.practicum.location.model.Location;
+import ru.practicum.user.model.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -17,12 +20,20 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
     String annotation;
-    Integer category;
+    @OneToOne
+    @JoinColumn(name = "category")
+    Category category;
     String description;
     LocalDateTime eventDate;
-    Integer location;
+    @OneToOne
+    @JoinColumn(name = "location")
+    Location location;
+    @ManyToOne
+    @JoinColumn(name = "initiator")
+    User initiator;
     Boolean paid;
     Integer participantLimit;
     Boolean requestModeration;
     String title;
+    LocalDateTime createdOn;
 }

@@ -2,13 +2,12 @@ package ru.practicum.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.event.model.event.EventFullDto;
-import ru.practicum.event.model.event.NewEventDto;
+import ru.practicum.event.model.Event;
+import ru.practicum.event.model.EventFullDto;
+import ru.practicum.event.model.NewEventDto;
 import ru.practicum.user.service.impl.UserServiceImpl;
-
-import javax.validation.Valid;
 
 @Slf4j
 @RestController
@@ -29,9 +28,11 @@ public class UserController {
 //    }
 //
     @PostMapping("/{userId}/events")
-    public EventFullDto createEventUser(
+    @ResponseStatus(HttpStatus.CREATED)
+    public Event createEventUser(
             @PathVariable Integer userId,
-            @RequestBody @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") NewEventDto newEventDto
+
+            @RequestBody NewEventDto newEventDto
     ) {
         log.info("Received a request to create a event user id={}", userId);
         return userService.createEventUser(userId, newEventDto);

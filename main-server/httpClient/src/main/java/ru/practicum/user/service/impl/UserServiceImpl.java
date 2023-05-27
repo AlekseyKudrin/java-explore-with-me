@@ -2,15 +2,21 @@ package ru.practicum.user.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import ru.practicum.event.dao.EventRepository;
-import ru.practicum.event.dao.LocationRepository;
-import ru.practicum.event.model.event.Event;
-import ru.practicum.event.model.event.EventFullDto;
-import ru.practicum.event.model.event.EventMapper;
-import ru.practicum.event.model.event.NewEventDto;
-import ru.practicum.event.model.location.Location;
+import ru.practicum.event.model.Event;
+import ru.practicum.event.model.EventFullDto;
+import ru.practicum.event.model.NewEventDto;
+import ru.practicum.event.service.impl.EventServiceImpl;
+import ru.practicum.exceptionHandler.exception.ValueNotFoundDbException;
+import ru.practicum.user.dao.UserRepository;
+import ru.practicum.user.model.User;
+import ru.practicum.user.model.UserDto;
+import ru.practicum.user.model.UserMapper;
 import ru.practicum.user.service.UserService;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -18,13 +24,45 @@ import ru.practicum.user.service.UserService;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final EventRepository eventRepository;
+    private final EventServiceImpl eventService;
 
-    private final LocationRepository locationRepository;
+    private final UserRepository userRepository;
+
     @Override
-    public EventFullDto createEventUser(Integer userId, NewEventDto newEventDto) {
-        Location location = locationRepository.save(newEventDto.getLocation());
-        Event event = eventRepository.save(EventMapper.toEvent(location, newEventDto));
-        return EventMapper.toEventFullDto();
+    public UserDto creteUser(UserDto userDto) {
+        User user = userRepository.save(UserMapper.toUser(userDto));
+        log.info("User successfully created");
+        return UserMapper.toUserDto(user);
+    }
+
+    @Override
+    public List<UserDto> getUsers(List<Integer> ids, Integer from, Integer size) {
+        List<UserDto> userDtoList;
+        if (ids == null) {
+            int page = from / size;
+            PageRequest pageRequest = PageRequest.of(page, size);
+            userDtoList = userRepository.findAll(pageRequest).stream().map(UserMapper::toUserDto).collect(Collectors.toList());
+        } else {
+            userDtoList = userRepository.findByIdIn(ids).stream().map(UserMapper::toUserDto).collect(Collectors.toList());
+        }
+        log.info("Users search completed");
+        return userDtoList;
+    }
+
+    @Override
+    public void deleteUser(Integer userId) {
+        userRepository.deleteById(userId);
+        log.info("User deleted successfully");
+    }
+
+    @Override
+    public Event createEventUser(Integer userId, NewEventDto newEventDto) {
+        User user = findUserById(userId);
+        Event event = eventService.createEvent(user, newEventDto);
+        return event;
+    }
+
+    public User findUserById(Integer userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new ValueNotFoundDbException("User not found"));
     }
 }

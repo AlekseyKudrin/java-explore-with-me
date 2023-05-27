@@ -1,6 +1,6 @@
 package ru.practicum.allDto;
 
-import ru.practicum.event.model.location.Location;
+import ru.practicum.location.model.Location;
 
 public class UpdateEventAdminRequest {
     String annotation;

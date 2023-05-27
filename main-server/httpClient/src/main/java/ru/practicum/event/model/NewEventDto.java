@@ -1,10 +1,8 @@
-package ru.practicum.event.model.event;
+package ru.practicum.event.model;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import ru.practicum.event.model.location.Location;
-
-import java.time.LocalDateTime;
+import ru.practicum.location.model.Location;
 
 @Getter
 @Setter
@@ -15,10 +13,10 @@ public class NewEventDto {
     String annotation;
     Integer category;
     String description;
-    LocalDateTime eventDate;
+    String eventDate;
     Location location;
     Boolean paid;
     Integer participantLimit;
     Boolean requestModeration;
-    String string;
+    String title;
 }

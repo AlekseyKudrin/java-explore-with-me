@@ -1,11 +1,12 @@
-package ru.practicum.event.model.event;
+package ru.practicum.event.model;
 
-import ru.practicum.event.model.location.Location;
+import ru.practicum.location.model.Location;
 import ru.practicum.allDto.State;
 import ru.practicum.allDto.UserShortDto;
 import ru.practicum.category.model.CategoryDto;
 
 public class EventFullDto {
+
     Integer id;
     String annotation;
     CategoryDto category;

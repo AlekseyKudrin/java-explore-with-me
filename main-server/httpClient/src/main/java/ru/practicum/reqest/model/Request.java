@@ -1,4 +1,4 @@
-package ru.practicum.event.model.location;
+package ru.practicum.reqest.model;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -10,11 +10,13 @@ import javax.persistence.*;
 @Table(name = "locations")
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Location {
+public class Request {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
-    Float lat;
-    Float lon;
+    Integer event;
+    Integer requester;
+    @Enumerated(EnumType.STRING)
+    Status status;
 }

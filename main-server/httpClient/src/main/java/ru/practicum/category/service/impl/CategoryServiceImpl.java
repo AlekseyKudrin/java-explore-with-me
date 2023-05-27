@@ -12,7 +12,6 @@ import ru.practicum.category.service.CategoryService;
 import ru.practicum.exceptionHandler.exception.ValueNotFoundDbException;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -22,6 +21,27 @@ import java.util.stream.Collectors;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
+
+    @Override
+    public CategoryDto createCategory(CategoryDto categoryDto) {
+        Category category = categoryRepository.save(CategoryMapper.toCategory(categoryDto));
+        log.info("Category successfully created");
+        return CategoryMapper.toCategoryDto(category);
+    }
+
+    @Override
+    public CategoryDto patchCategory(Integer catId, CategoryDto categoryDto) {
+        categoryDto.setId(catId);
+        Category category = categoryRepository.save(CategoryMapper.toCategory(categoryDto));
+        log.info("Category successfully change");
+        return CategoryMapper.toCategoryDto(category);
+    }
+
+    @Override
+    public void deleteCategory(Integer catId) {
+        categoryRepository.deleteById(catId);
+        log.info("Category deleted successfully");
+    }
 
     @Override
     public List<CategoryDto> getCategories(Integer from, Integer size) {
@@ -34,11 +54,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto getCategoryById(Integer catId) {
-        Optional<Category> category = categoryRepository.findById(catId);
-        if (category.isPresent()) {
-            return CategoryMapper.toCategoryDto(category.get());
-        }else {
-            throw new ValueNotFoundDbException("Category not found");
-        }
+        Category category = categoryRepository.findById(catId).orElseThrow(
+                () -> new ValueNotFoundDbException("Category not found"));
+        return CategoryMapper.toCategoryDto(category);
+    }
+    public Category findCategoryById(Integer catId){
+        return categoryRepository.findById(catId).orElseThrow(
+                () -> new ValueNotFoundDbException("Category not found"));
     }
 }

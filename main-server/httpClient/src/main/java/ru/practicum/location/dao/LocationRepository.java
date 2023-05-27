@@ -1,7 +1,7 @@
-package ru.practicum.event.dao;
+package ru.practicum.location.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.practicum.event.model.location.Location;
+import ru.practicum.location.model.Location;
 
 
 public interface LocationRepository extends JpaRepository<Location, Integer> {
