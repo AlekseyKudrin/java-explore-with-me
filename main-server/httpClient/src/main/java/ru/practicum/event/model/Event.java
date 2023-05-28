@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import ru.practicum.category.model.Category;
+import ru.practicum.event.model.enums.State;
 import ru.practicum.location.model.Location;
 import ru.practicum.user.model.User;
 
@@ -36,4 +37,7 @@ public class Event {
     Boolean requestModeration;
     String title;
     LocalDateTime createdOn;
+    LocalDateTime publishedOn;
+    @Enumerated(EnumType.STRING)
+    State state;
 }

@@ -9,6 +9,9 @@ import ru.practicum.event.model.EventFullDto;
 import ru.practicum.event.model.NewEventDto;
 import ru.practicum.event.service.impl.EventServiceImpl;
 import ru.practicum.exceptionHandler.exception.ValueNotFoundDbException;
+import ru.practicum.reqest.model.ParticipationRequestDto;
+import ru.practicum.reqest.service.RequestService;
+import ru.practicum.reqest.service.impl.RequestServiceImpl;
 import ru.practicum.user.dao.UserRepository;
 import ru.practicum.user.model.User;
 import ru.practicum.user.model.UserDto;
@@ -27,6 +30,8 @@ public class UserServiceImpl implements UserService {
     private final EventServiceImpl eventService;
 
     private final UserRepository userRepository;
+
+    private final RequestServiceImpl requestService;
 
     @Override
     public UserDto creteUser(UserDto userDto) {
@@ -56,10 +61,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Event createEventUser(Integer userId, NewEventDto newEventDto) {
+    public EventFullDto createEventUser(Integer userId, NewEventDto newEventDto) {
         User user = findUserById(userId);
-        Event event = eventService.createEvent(user, newEventDto);
-        return event;
+        return eventService.createEvent(user, newEventDto);
+    }
+
+    @Override
+    public ParticipationRequestDto createRequestParticipate(Integer userId, Integer eventId) {
+        return requestService.createRequest(userId, eventId);
     }
 
     public User findUserById(Integer userId) {

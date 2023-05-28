@@ -4,9 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.user.model.UserDto;
 import ru.practicum.admin.service.impl.AdminServiceImpl;
 import ru.practicum.category.model.CategoryDto;
+import ru.practicum.compilation.model.CompilationDto;
+import ru.practicum.compilation.model.NewCompilationDto;
+import ru.practicum.user.model.UserDto;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -49,14 +51,14 @@ public class AdminController {
         adminService.deleteUser(userId);
     }
 
-    //
-//    @PostMapping("/compilations")
-//    public ResponseEntity<Object> createCompilation(
-//            @RequestBody Compilation compilation
-//    ) {
-//        log.info("Received a request to create compilation");
-//        return adminService.createCompilation(compilation);
-//    }
+
+    @PostMapping("/compilations")
+    public CompilationDto createCompilation(
+            @RequestBody NewCompilationDto newCompilationDto
+    ) {
+        log.info("Received a request to create compilation");
+        return adminService.createCompilation(newCompilationDto);
+    }
 //
 //    @DeleteMapping("/compilations/{comId}")
 //    public ResponseEntity<Object> deleteCompilation(

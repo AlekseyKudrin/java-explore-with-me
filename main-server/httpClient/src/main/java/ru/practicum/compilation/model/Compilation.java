@@ -1,27 +1,26 @@
-package ru.practicum.reqest.model;
+package ru.practicum.compilation.model;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import ru.practicum.reqest.model.enums.Status;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
-@Table(name = "requests")
+@Table(name = "compilations")
 @Getter
 @Setter
 @AllArgsConstructor
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Request {
+public class Compilation {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
-    Integer event;
-    Integer requester;
-    LocalDateTime created;
-    @Enumerated(EnumType.STRING)
-    Status status;
+    @ElementCollection
+    @CollectionTable(name = "list_events", joinColumns = @JoinColumn(name = "id"))
+    List<Integer> events;
+    Boolean pinned;
+    String title;
 }

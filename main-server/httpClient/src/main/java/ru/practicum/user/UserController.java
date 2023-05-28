@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.model.EventFullDto;
 import ru.practicum.event.model.NewEventDto;
+import ru.practicum.reqest.model.ParticipationRequestDto;
 import ru.practicum.user.service.impl.UserServiceImpl;
 
 @Slf4j
@@ -29,7 +30,7 @@ public class UserController {
 //
     @PostMapping("/{userId}/events")
     @ResponseStatus(HttpStatus.CREATED)
-    public Event createEventUser(
+    public EventFullDto createEventUser(
             @PathVariable Integer userId,
 
             @RequestBody NewEventDto newEventDto
@@ -83,14 +84,15 @@ public class UserController {
 //        return serverClient.getRequestUsersById(userId);
 //    }
 //
-//    @PostMapping("/users/{userId}/requests")
-//    public ResponseEntity<Object> createRequestParticipate(
-//            @PathVariable Integer userId,
-//            @RequestParam Integer eventId
-//    ) {
-//        log.info("Received a request to participate in event id={}", eventId);
-//        return serverClient.createRequestParticipate(userId, eventId);
-//    }
+    @PostMapping("{userId}/requests")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ParticipationRequestDto createRequestParticipate(
+            @PathVariable Integer userId,
+            @RequestParam Integer eventId
+    ) {
+        log.info("Received a request to participate in event id={}", eventId);
+        return userService.createRequestParticipate(userId, eventId);
+    }
 //
 //    @PatchMapping("/users/{userId}/requests/{requestId}/cancel")
 //    public ResponseEntity<Object> cancelingParticipate(

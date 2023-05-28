@@ -1,5 +1,7 @@
 package ru.practicum.admin.service;
 
+import ru.practicum.compilation.model.CompilationDto;
+import ru.practicum.compilation.model.NewCompilationDto;
 import ru.practicum.user.model.UserDto;
 import ru.practicum.category.model.CategoryDto;
 
@@ -17,4 +19,6 @@ public interface AdminService {
     void deleteCategory(Integer catId);
 
     CategoryDto patchCategory(Integer catId, CategoryDto categoryDto);
+
+    CompilationDto createCompilation(NewCompilationDto newCompilationDto);
 }

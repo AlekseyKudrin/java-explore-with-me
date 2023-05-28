@@ -1,5 +1,6 @@
-package ru.practicum.allDto;
+package ru.practicum.event.model;
 
+import ru.practicum.user.model.UserShortDto;
 import ru.practicum.category.model.CategoryDto;
 
 public class EventShortDto {

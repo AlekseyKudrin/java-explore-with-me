@@ -1,26 +1,33 @@
 package ru.practicum.event.model;
 
+import lombok.*;
 import ru.practicum.location.model.Location;
-import ru.practicum.allDto.State;
-import ru.practicum.allDto.UserShortDto;
+import ru.practicum.event.model.enums.State;
+import ru.practicum.user.model.UserShortDto;
 import ru.practicum.category.model.CategoryDto;
 
+import java.time.LocalDateTime;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class EventFullDto {
 
     Integer id;
     String annotation;
     CategoryDto category;
     Integer confirmedRequests;
-    String createdOn;
+    String  createdOn;
     String description;
-    String eventDate;
+    String  eventDate;
     UserShortDto initiator;
     Location location;
     Boolean paid;
     Integer participantLimit;
-    String publishedOn;
+    String  publishedOn;
     Boolean requestModeration;
-    State state;
+    String state;
     String title;
     Integer views;
 }
