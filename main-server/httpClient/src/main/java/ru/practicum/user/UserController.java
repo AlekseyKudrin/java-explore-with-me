@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.model.EventFullDto;
+import ru.practicum.event.model.EventShortDto;
 import ru.practicum.event.model.NewEventDto;
 import ru.practicum.reqest.model.ParticipationRequestDto;
 import ru.practicum.user.service.impl.UserServiceImpl;
@@ -18,16 +19,16 @@ public class UserController {
 
     private final UserServiceImpl userService;
 
-    //    @GetMapping("/users/{userId}/events")
-//    public ResponseEntity<Object> getEventsUser(
-//            @PathVariable Integer userId,
-//            @RequestParam(defaultValue = "0") Integer from,
-//            @RequestParam(defaultValue = "10") Integer size
-//    ) {
-//        log.info("Received a request to return a collection of events user id={}", userId);
-//        return serverClient.getEventsUser(userId, from, size);
-//    }
-//
+        @GetMapping("/users/{userId}/events")
+    public EventShortDto getEventsUser(
+            @PathVariable Integer userId,
+            @RequestParam(defaultValue = "0") Integer from,
+            @RequestParam(defaultValue = "10") Integer size
+    ) {
+        log.info("Received a request to return a collection of events user id={}", userId);
+        return userService.getEventsUser(userId, from, size);
+    }
+
     @PostMapping("/{userId}/events")
     @ResponseStatus(HttpStatus.CREATED)
     public EventFullDto createEventUser(

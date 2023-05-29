@@ -2,6 +2,7 @@ package ru.practicum.event.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.event.model.*;
 import ru.practicum.location.model.Location;
@@ -12,6 +13,8 @@ import ru.practicum.event.dao.EventRepository;
 import ru.practicum.event.service.EventService;
 import ru.practicum.reqest.service.impl.RequestServiceImpl;
 import ru.practicum.user.model.User;
+
+import java.util.List;
 
 
 @Slf4j
@@ -38,6 +41,12 @@ public class EventServiceImpl implements EventService {
 
 
     public EventShortDto getEventShort(int id) {
+        return null;
+    }
+
+    @Override
+    public List<Event> getEventsUser(Integer userId, PageRequest pageRequest) {
+        eventRepository.findAll(userId, pageRequest);
         return null;
     }
 }

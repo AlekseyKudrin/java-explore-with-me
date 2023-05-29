@@ -27,6 +27,6 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public int getCountConfirmedRequest(Integer eventId) {
-        return 0;
+        return requestRepository.countByEventAndStatus(eventId, Status.CONFIRMED);
     }
 }

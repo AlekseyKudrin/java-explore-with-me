@@ -6,11 +6,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.model.EventFullDto;
+import ru.practicum.event.model.EventShortDto;
 import ru.practicum.event.model.NewEventDto;
 import ru.practicum.event.service.impl.EventServiceImpl;
 import ru.practicum.exceptionHandler.exception.ValueNotFoundDbException;
 import ru.practicum.reqest.model.ParticipationRequestDto;
-import ru.practicum.reqest.service.RequestService;
 import ru.practicum.reqest.service.impl.RequestServiceImpl;
 import ru.practicum.user.dao.UserRepository;
 import ru.practicum.user.model.User;
@@ -69,6 +69,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public ParticipationRequestDto createRequestParticipate(Integer userId, Integer eventId) {
         return requestService.createRequest(userId, eventId);
+    }
+
+    @Override
+    public EventShortDto getEventsUser(Integer userId, Integer from, Integer size) {
+        int page = from / size;
+        PageRequest pageRequest = PageRequest.of(page, size);
+        List<Event> eventList = eventService.getEventsUser(userId, pageRequest);
+        return eventService.;
     }
 
     public User findUserById(Integer userId) {
