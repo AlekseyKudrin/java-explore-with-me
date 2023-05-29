@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import ru.practicum.event.model.UpdateEventUserRequest;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.model.EventFullDto;
 import ru.practicum.event.model.EventShortDto;
@@ -72,11 +73,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public EventShortDto getEventsUser(Integer userId, Integer from, Integer size) {
+    public List<EventShortDto> getEventsUser(Integer userId, Integer from, Integer size) {
         int page = from / size;
         PageRequest pageRequest = PageRequest.of(page, size);
         List<Event> eventList = eventService.getEventsUser(userId, pageRequest);
-        return eventService.;
+        return eventList.stream().map(eventService::getEventShortDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public EventFullDto getEventUser(Integer userId, Integer eventId) {
+        return eventService.getEventUser(userId, eventId);
+    }
+
+    @Override
+    public EventFullDto changeEventUser(Integer userId, Integer eventId, UpdateEventUserRequest updateEventUserRequest) {
+        EventFullDto eventFullDto = getEventUser(userId,eventId);
+        return eventService.updateEvent(eventId, updateEventUserRequest);
     }
 
     public User findUserById(Integer userId) {

@@ -3,6 +3,7 @@ package ru.practicum.compilation.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.practicum.event.model.Event;
 import ru.practicum.event.model.EventShortDto;
 import ru.practicum.compilation.dao.CompilationRepository;
 import ru.practicum.compilation.model.Compilation;
@@ -24,7 +25,7 @@ public class CompilationServiceImpl implements CompilationService {
     @Override
     public CompilationDto createCompilation(NewCompilationDto newCompilationDto) {
         Compilation compilation = compilationRepository.save(CompilationMapper.toCompilation(newCompilationDto));
-        EventShortDto list = eventService.getEventShort(1);
+        EventShortDto list = eventService.getEventShortDto(new Event());
         return null;
     }
 }

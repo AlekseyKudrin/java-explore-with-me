@@ -1,6 +1,6 @@
 package ru.practicum.user.service;
 
-import ru.practicum.event.model.Event;
+import ru.practicum.event.model.UpdateEventUserRequest;
 import ru.practicum.event.model.EventFullDto;
 import ru.practicum.event.model.EventShortDto;
 import ru.practicum.event.model.NewEventDto;
@@ -21,5 +21,9 @@ public interface UserService {
 
     ParticipationRequestDto createRequestParticipate(Integer userId, Integer eventId);
 
-    EventShortDto getEventsUser(Integer userId, Integer from, Integer size);
+    List<EventShortDto> getEventsUser(Integer userId, Integer from, Integer size);
+
+    EventFullDto getEventUser(Integer userId, Integer eventId);
+
+    EventFullDto changeEventUser(Integer userId, Integer eventId, UpdateEventUserRequest updateEventUserRequest);
 }

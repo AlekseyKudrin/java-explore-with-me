@@ -1,7 +1,14 @@
-package ru.practicum.allDto;
+package ru.practicum.event.model;
 
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+import ru.practicum.allDto.StateAction;
 import ru.practicum.location.model.Location;
-
+@Getter
+@Setter
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@AllArgsConstructor
+@RequiredArgsConstructor
 public class UpdateEventUserRequest {
     String annotation;
     Integer category;

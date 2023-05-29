@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import ru.practicum.event.model.UpdateEventUserRequest;
 import ru.practicum.event.model.*;
 import ru.practicum.location.model.Location;
 import ru.practicum.location.service.impl.LocationServiceImpl;
@@ -40,13 +41,32 @@ public class EventServiceImpl implements EventService {
     }
 
 
-    public EventShortDto getEventShort(int id) {
-        return null;
+    public EventShortDto getEventShortDto(Event event) {
+        int countConfirmedRequest = requestService.getCountConfirmedRequest(event.getId());
+        int views = 0;
+        return EventMapper.toEventShortDto(countConfirmedRequest, views, event);
     }
 
     @Override
     public List<Event> getEventsUser(Integer userId, PageRequest pageRequest) {
-        eventRepository.findAll(userId, pageRequest);
+        return eventRepository.findAllByInitiatorId(userId , pageRequest);
+    }
+
+    @Override
+    public EventFullDto getEventUser(Integer userId, Integer eventId) {
+        Event event = eventRepository.findByIdAndInitiatorId(userId, eventId);
+        int countConfirmedRequest = requestService.getCountConfirmedRequest(event.getId());
+        int views = 0;
+        return EventMapper.toEventFullDto(countConfirmedRequest, views, event);
+    }
+
+
+    @Override
+    public EventFullDto updateEvent(Integer eventId, UpdateEventUserRequest updateEventUserRequest) {
+//        Event event = eventRepository.updateEventById(eventId, new Event());
+//        int countConfirmedRequest = requestService.getCountConfirmedRequest(event.getId());
+//        int views = 0;
         return null;
+//        return EventMapper.toEventFullDto(countConfirmedRequest, views, event);
     }
 }

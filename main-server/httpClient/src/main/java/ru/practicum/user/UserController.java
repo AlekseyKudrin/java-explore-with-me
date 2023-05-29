@@ -4,12 +4,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.event.model.Event;
+import ru.practicum.event.model.UpdateEventUserRequest;
 import ru.practicum.event.model.EventFullDto;
 import ru.practicum.event.model.EventShortDto;
 import ru.practicum.event.model.NewEventDto;
 import ru.practicum.reqest.model.ParticipationRequestDto;
 import ru.practicum.user.service.impl.UserServiceImpl;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -19,8 +21,8 @@ public class UserController {
 
     private final UserServiceImpl userService;
 
-        @GetMapping("/users/{userId}/events")
-    public EventShortDto getEventsUser(
+        @GetMapping("/{userId}/events")
+    public List<EventShortDto> getEventsUser(
             @PathVariable Integer userId,
             @RequestParam(defaultValue = "0") Integer from,
             @RequestParam(defaultValue = "10") Integer size
@@ -39,24 +41,25 @@ public class UserController {
         log.info("Received a request to create a event user id={}", userId);
         return userService.createEventUser(userId, newEventDto);
     }
-//
-//    @GetMapping("/users/{userId}/events/{eventId}")
-//    public ResponseEntity<Object> getEventUser(
-//            @PathVariable Integer userId,
-//            @PathVariable Integer eventId
-//    ) {
-//        log.info("Received a request to return a eventId={} user id={}", eventId, userId);
-//        return serverClient.getEventUser(userId, eventId);
-//    }
-//
-//    @PatchMapping("/users/{userId}/events/{eventId}")
-//    public ResponseEntity<Object> changeEventUser(
-//            @PathVariable Integer userId,
-//            @PathVariable Integer eventId
-//    ) {
-//        log.info("Received a request to change a eventId={} user id={}", eventId, userId);
-//        return serverClient.changeEventUser(userId, eventId);
-//    }
+
+        @GetMapping("/{userId}/events/{eventId}")
+        public EventFullDto getEventUser(
+                @PathVariable Integer userId,
+                @PathVariable Integer eventId
+        ) {
+            log.info("Received a request to return a eventId={} user id={}", eventId, userId);
+            return userService.getEventUser(userId, eventId);
+        }
+
+    @PatchMapping("/users/{userId}/events/{eventId}")
+    public EventFullDto changeEventUser(
+            @PathVariable Integer userId,
+            @PathVariable Integer eventId,
+            @RequestBody UpdateEventUserRequest updateEventUserRequest
+    ) {
+        log.info("Received a request to change a eventId={} user id={}", eventId, userId);
+        return userService.changeEventUser(userId, eventId, updateEventUserRequest);
+    }
 //
 //    @GetMapping("/users/{userId}/events/{eventId}/requests")
 //    public ResponseEntity<Object> getRequestsUserInEvent(
