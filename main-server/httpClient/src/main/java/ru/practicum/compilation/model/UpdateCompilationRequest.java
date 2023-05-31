@@ -2,7 +2,6 @@ package ru.practicum.compilation.model;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import ru.practicum.event.model.EventShortDto;
 
 import java.util.List;
 
@@ -11,9 +10,8 @@ import java.util.List;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CompilationDto {
-    Integer id;
+public class UpdateCompilationRequest {
+    List<Integer> events;
     Boolean pinned;
     String title;
-    List<EventShortDto> events;
 }

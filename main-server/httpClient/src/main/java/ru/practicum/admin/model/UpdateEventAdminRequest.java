@@ -1,7 +1,16 @@
-package ru.practicum.allDto;
+package ru.practicum.admin.model;
 
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 import ru.practicum.location.model.Location;
 
+import javax.persistence.Enumerated;
+
+@Getter
+@Setter
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@AllArgsConstructor
+@RequiredArgsConstructor
 public class UpdateEventAdminRequest {
     String annotation;
     Integer category;

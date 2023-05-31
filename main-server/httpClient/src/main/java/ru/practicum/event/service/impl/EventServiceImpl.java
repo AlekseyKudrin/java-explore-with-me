@@ -6,6 +6,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.event.model.UpdateEventUserRequest;
 import ru.practicum.event.model.*;
+import ru.practicum.event.model.enums.State;
+import ru.practicum.event.model.enums.StateAction;
+import ru.practicum.exceptionHandler.exception.ValueNotFoundDbException;
 import ru.practicum.location.model.Location;
 import ru.practicum.location.service.impl.LocationServiceImpl;
 import ru.practicum.category.model.Category;
@@ -14,7 +17,10 @@ import ru.practicum.event.dao.EventRepository;
 import ru.practicum.event.service.EventService;
 import ru.practicum.reqest.service.impl.RequestServiceImpl;
 import ru.practicum.user.model.User;
+import ru.practicum.user.service.impl.UserServiceImpl;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 
@@ -63,10 +69,61 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventFullDto updateEvent(Integer eventId, UpdateEventUserRequest updateEventUserRequest) {
-//        Event event = eventRepository.updateEventById(eventId, new Event());
-//        int countConfirmedRequest = requestService.getCountConfirmedRequest(event.getId());
-//        int views = 0;
-        return null;
-//        return EventMapper.toEventFullDto(countConfirmedRequest, views, event);
+
+        Event event = eventRepository.findById(eventId).orElseThrow();
+        if (updateEventUserRequest.getAnnotation() != null){
+            event.setAnnotation(updateEventUserRequest.getAnnotation());
+        }
+        if (updateEventUserRequest.getCategory() != null) {
+            event.setCategory(categoryService.findCategoryById(updateEventUserRequest.getCategory()));
+        }
+        if (updateEventUserRequest.getDescription() != null) {
+            event.setDescription(updateEventUserRequest.getDescription());
+        }
+        if (updateEventUserRequest.getEventDate() != null) {
+            event.setEventDate(LocalDateTime.parse(updateEventUserRequest.getEventDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        }
+        if (updateEventUserRequest.getLocation() != null) {
+            event.setLocation(updateEventUserRequest.getLocation());
+        }
+        if (updateEventUserRequest.getPaid() != null) {
+            event.setPaid(updateEventUserRequest.getPaid());
+        }
+        if (updateEventUserRequest.getParticipantLimit() != null) {
+            event.setParticipantLimit(updateEventUserRequest.getParticipantLimit());
+        }
+        if (updateEventUserRequest.getRequestModeration() != null) {
+            event.setRequestModeration(updateEventUserRequest.getRequestModeration());
+        }
+        if (updateEventUserRequest.getStateAction() != null) {
+            if (updateEventUserRequest.getStateAction() == StateAction.CANCEL_REVIEW){
+                event.setState(State.CANCELED);
+            }
+        }
+        if (updateEventUserRequest.getTitle() != null) {
+            event.setTitle(updateEventUserRequest.getTitle());
+        }
+        event = eventRepository.save(event);
+        int countConfirmedRequest = requestService.getCountConfirmedRequest(event.getId());
+        int views = 0;
+        return EventMapper.toEventFullDto(countConfirmedRequest, views, event);
     }
+
+    @Override
+    public Event getEvent(Integer eventId) {
+        return eventRepository.findById(eventId).orElseThrow(() -> new ValueNotFoundDbException("Event not found"));
+    }
+
+    @Override
+    public Event save(Event updateEvent) {
+        return eventRepository.save(updateEvent);
+    }
+
+    public EventFullDto getEventFullDto(Event event) {
+        int countConfirmedRequest = requestService.getCountConfirmedRequest(event.getId());
+        int views = 0;
+        return EventMapper.toEventFullDto(countConfirmedRequest, views, event);
+    }
+
+
 }

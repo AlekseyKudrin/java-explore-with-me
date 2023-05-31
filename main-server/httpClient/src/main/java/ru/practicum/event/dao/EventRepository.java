@@ -14,7 +14,4 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
 
     Event findByIdAndInitiatorId(Integer userId, Integer eventId);
 
-//    Event updateById(Integer eventId, UpdateEventUserRequest updateEventUserRequest);
-
-    Event updateAllByAnnotation (String annotation,Event event);
 }

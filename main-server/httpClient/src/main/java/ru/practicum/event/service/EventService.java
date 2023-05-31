@@ -14,4 +14,8 @@ public interface EventService {
     EventFullDto getEventUser(Integer userId, Integer eventId);
 
     EventFullDto updateEvent(Integer eventId, UpdateEventUserRequest updateEventUserRequest);
+
+    Event getEvent(Integer integer);
+
+    Event save(Event updateEvent);
 }

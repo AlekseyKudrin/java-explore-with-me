@@ -11,6 +11,8 @@ import ru.practicum.event.model.EventShortDto;
 import ru.practicum.event.model.NewEventDto;
 import ru.practicum.event.service.impl.EventServiceImpl;
 import ru.practicum.exceptionHandler.exception.ValueNotFoundDbException;
+import ru.practicum.reqest.model.EventRequestStatusUpdateRequest;
+import ru.practicum.reqest.model.EventRequestStatusUpdateResult;
 import ru.practicum.reqest.model.ParticipationRequestDto;
 import ru.practicum.reqest.service.impl.RequestServiceImpl;
 import ru.practicum.user.dao.UserRepository;
@@ -87,8 +89,29 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public EventFullDto changeEventUser(Integer userId, Integer eventId, UpdateEventUserRequest updateEventUserRequest) {
-        EventFullDto eventFullDto = getEventUser(userId,eventId);
+        findUserById(userId);
+        getEventUser(userId,eventId);
         return eventService.updateEvent(eventId, updateEventUserRequest);
+    }
+
+    @Override
+    public List<ParticipationRequestDto> getRequestsParticipationInEvent(Integer userId, Integer eventId) {
+        return requestService.getRequestsParticipation(userId, eventId);
+    }
+
+    @Override
+    public EventRequestStatusUpdateResult changeStatusParticipationInEvent(Integer userId, Integer eventId, EventRequestStatusUpdateRequest statusEvents) {
+        return requestService.changeStatusParticipation(userId, eventId, statusEvents);
+    }
+
+    @Override
+    public ParticipationRequestDto getParticipation(Integer userId) {
+        return requestService.getParticipation(userId);
+    }
+
+    @Override
+    public ParticipationRequestDto cancelingParticipate(Integer userId, Integer requestId) {
+        return requestService.cancelingParticipate(userId, requestId);
     }
 
     public User findUserById(Integer userId) {

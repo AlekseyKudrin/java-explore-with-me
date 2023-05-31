@@ -4,6 +4,8 @@ import ru.practicum.event.model.UpdateEventUserRequest;
 import ru.practicum.event.model.EventFullDto;
 import ru.practicum.event.model.EventShortDto;
 import ru.practicum.event.model.NewEventDto;
+import ru.practicum.reqest.model.EventRequestStatusUpdateRequest;
+import ru.practicum.reqest.model.EventRequestStatusUpdateResult;
 import ru.practicum.reqest.model.ParticipationRequestDto;
 import ru.practicum.user.model.UserDto;
 
@@ -26,4 +28,12 @@ public interface UserService {
     EventFullDto getEventUser(Integer userId, Integer eventId);
 
     EventFullDto changeEventUser(Integer userId, Integer eventId, UpdateEventUserRequest updateEventUserRequest);
+
+    List<ParticipationRequestDto> getRequestsParticipationInEvent(Integer userId, Integer eventId);
+
+    EventRequestStatusUpdateResult changeStatusParticipationInEvent(Integer userId, Integer eventId, EventRequestStatusUpdateRequest statusEvents);
+
+    ParticipationRequestDto getParticipation(Integer userId);
+
+    ParticipationRequestDto cancelingParticipate(Integer userId, Integer requestId);
 }

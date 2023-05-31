@@ -2,7 +2,7 @@ package ru.practicum.event.model;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import ru.practicum.allDto.StateAction;
+import ru.practicum.event.model.enums.StateAction;
 import ru.practicum.location.model.Location;
 @Getter
 @Setter
