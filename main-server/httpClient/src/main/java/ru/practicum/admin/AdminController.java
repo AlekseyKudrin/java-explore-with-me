@@ -3,9 +3,12 @@ package ru.practicum.admin;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.admin.service.impl.AdminServiceImpl;
+import ru.practicum.admin.model.NewCategoryDto;
+import ru.practicum.admin.model.NewUserRequest;
 import ru.practicum.admin.model.UpdateEventAdminRequest;
+import ru.practicum.admin.service.impl.AdminServiceImpl;
 import ru.practicum.category.model.CategoryDto;
 import ru.practicum.compilation.model.CompilationDto;
 import ru.practicum.compilation.model.NewCompilationDto;
@@ -18,6 +21,7 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
+@Validated
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -25,6 +29,7 @@ import java.util.List;
 public class AdminController {
 
     private final AdminServiceImpl adminService;
+
 
     @GetMapping("/users")
     public List<UserDto> getUsers(
@@ -39,16 +44,16 @@ public class AdminController {
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto createUser(
-            @RequestBody @Valid UserDto userDto
+            @RequestBody @Valid NewUserRequest newUserRequest
     ) {
         log.info("Received a request to create user");
-        return adminService.createUser(userDto);
+        return adminService.createUser(newUserRequest);
     }
 
     @DeleteMapping("/users/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(
-            @PathVariable Integer userId
+            @Positive @PathVariable Integer userId
     ) {
         log.info("Received a request to delete user id={}", userId);
         adminService.deleteUser(userId);
@@ -84,10 +89,10 @@ public class AdminController {
     @PostMapping("/categories")
     @ResponseStatus(HttpStatus.CREATED)
     public CategoryDto createCategory(
-            @RequestBody @Valid CategoryDto categoryDto
+            @RequestBody @Valid NewCategoryDto newCategoryDto
     ) {
         log.info("Received a request to create a category");
-        return adminService.createCategory(categoryDto);
+        return adminService.createCategory(newCategoryDto);
     }
 
     @DeleteMapping("/categories/{catId}")
@@ -111,7 +116,7 @@ public class AdminController {
     @GetMapping("/events")
     public List<EventFullDto> searchEvents(
             @RequestParam List<Integer> users,
-            @RequestParam List<String > states,
+            @RequestParam List<String> states,
             @RequestParam List<Integer> categories,
             @RequestParam String rangeStart,
             @RequestParam String rangeEnd,

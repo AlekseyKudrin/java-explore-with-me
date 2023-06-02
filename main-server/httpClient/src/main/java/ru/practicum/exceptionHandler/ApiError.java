@@ -5,9 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 
+
 @Getter
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ErrorResponse {
-    final String error;
+public class ApiError {
+    String errors;
+    String message;
+    String reason;
+    String status;
+    String timestamp;
 }

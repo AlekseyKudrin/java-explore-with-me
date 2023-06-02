@@ -2,13 +2,11 @@ package ru.practicum.user.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import ru.practicum.event.model.UpdateEventUserRequest;
-import ru.practicum.event.model.Event;
-import ru.practicum.event.model.EventFullDto;
-import ru.practicum.event.model.EventShortDto;
-import ru.practicum.event.model.NewEventDto;
+import ru.practicum.admin.model.NewUserRequest;
+import ru.practicum.event.model.*;
 import ru.practicum.event.service.impl.EventServiceImpl;
 import ru.practicum.exceptionHandler.exception.ValueNotFoundDbException;
 import ru.practicum.reqest.model.EventRequestStatusUpdateRequest;
@@ -37,8 +35,8 @@ public class UserServiceImpl implements UserService {
     private final RequestServiceImpl requestService;
 
     @Override
-    public UserDto creteUser(UserDto userDto) {
-        User user = userRepository.save(UserMapper.toUser(userDto));
+    public UserDto creteUser(NewUserRequest newUserRequest) {
+        User user = userRepository.save(UserMapper.toUser(newUserRequest));
         log.info("User successfully created");
         return UserMapper.toUserDto(user);
     }
@@ -47,11 +45,15 @@ public class UserServiceImpl implements UserService {
     public List<UserDto> getUsers(List<Integer> ids, Integer from, Integer size) {
         List<UserDto> userDtoList;
         if (ids == null) {
-            int page = from / size;
-            PageRequest pageRequest = PageRequest.of(page, size);
-            userDtoList = userRepository.findAll(pageRequest).stream().map(UserMapper::toUserDto).collect(Collectors.toList());
+            PageRequest pageRequest = PageRequest.of(from > 0 ? from / size : 0, size);
+            userDtoList = userRepository.findAll(pageRequest)
+                    .map(UserMapper::toUserDto)
+                    .getContent();
         } else {
-            userDtoList = userRepository.findByIdIn(ids).stream().map(UserMapper::toUserDto).collect(Collectors.toList());
+            userDtoList = userRepository.findByIdIn(ids)
+                    .stream()
+                    .map(UserMapper::toUserDto)
+                    .collect(Collectors.toList());
         }
         log.info("Users search completed");
         return userDtoList;
@@ -59,7 +61,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(Integer userId) {
-        userRepository.deleteById(userId);
+        try {
+            userRepository.deleteById(userId);
+        } catch (EmptyResultDataAccessException e) {
+            throw new ValueNotFoundDbException("User with id=" + userId + " was not found");
+        }
         log.info("User deleted successfully");
     }
 
@@ -90,7 +96,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public EventFullDto changeEventUser(Integer userId, Integer eventId, UpdateEventUserRequest updateEventUserRequest) {
         findUserById(userId);
-        getEventUser(userId,eventId);
+        getEventUser(userId, eventId);
         return eventService.updateEvent(eventId, updateEventUserRequest);
     }
 

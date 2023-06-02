@@ -1,5 +1,6 @@
 package ru.practicum.user.service;
 
+import ru.practicum.admin.model.NewUserRequest;
 import ru.practicum.event.model.UpdateEventUserRequest;
 import ru.practicum.event.model.EventFullDto;
 import ru.practicum.event.model.EventShortDto;
@@ -13,7 +14,7 @@ import java.util.List;
 
 public interface UserService {
 
-    UserDto creteUser(UserDto userDto);
+    UserDto creteUser(NewUserRequest newUserRequest);
 
     List<UserDto> getUsers(List<Integer> ids, Integer from, Integer size);
 

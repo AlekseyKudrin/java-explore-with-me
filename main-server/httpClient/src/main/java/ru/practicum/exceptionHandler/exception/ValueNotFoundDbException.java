@@ -1,7 +1,9 @@
 package ru.practicum.exceptionHandler.exception;
 
-public class ValueNotFoundDbException extends RuntimeException {
+import org.springframework.dao.EmptyResultDataAccessException;
+
+public class ValueNotFoundDbException extends EmptyResultDataAccessException {
     public ValueNotFoundDbException(String message) {
-        super(message);
+        super(message, 0);
     }
 }

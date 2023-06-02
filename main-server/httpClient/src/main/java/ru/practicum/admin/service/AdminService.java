@@ -1,5 +1,7 @@
 package ru.practicum.admin.service;
 
+import ru.practicum.admin.model.NewCategoryDto;
+import ru.practicum.admin.model.NewUserRequest;
 import ru.practicum.admin.model.UpdateEventAdminRequest;
 import ru.practicum.compilation.model.CompilationDto;
 import ru.practicum.compilation.model.NewCompilationDto;
@@ -11,13 +13,14 @@ import ru.practicum.category.model.CategoryDto;
 import java.util.List;
 
 public interface AdminService {
-    UserDto createUser(UserDto userDto);
+
+    UserDto createUser(NewUserRequest newUserRequest);
 
     List<UserDto> getUsers(List<Integer> ids, Integer from, Integer size);
 
     void deleteUser(Integer userId);
 
-    CategoryDto createCategory(CategoryDto categoryDto);
+    CategoryDto createCategory(NewCategoryDto newCategoryDto);
 
     void deleteCategory(Integer catId);
 

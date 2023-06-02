@@ -2,14 +2,15 @@ package ru.practicum.user.model;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import ru.practicum.admin.model.NewUserRequest;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserMapper {
 
-    public static User toUser(UserDto userDto) {
+    public static User toUser(NewUserRequest newUserRequest) {
         User user = new User();
-        user.setName(userDto.getName());
-        user.setEmail(userDto.getEmail());
+        user.setName(newUserRequest.getName());
+        user.setEmail(newUserRequest.getEmail());
         return user;
     }
 

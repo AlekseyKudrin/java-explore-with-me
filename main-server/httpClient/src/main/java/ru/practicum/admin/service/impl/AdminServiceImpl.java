@@ -3,6 +3,8 @@ package ru.practicum.admin.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.practicum.admin.model.NewCategoryDto;
+import ru.practicum.admin.model.NewUserRequest;
 import ru.practicum.admin.service.AdminService;
 import ru.practicum.admin.model.UpdateEventAdminRequest;
 import ru.practicum.category.model.CategoryDto;
@@ -37,8 +39,8 @@ public class AdminServiceImpl implements AdminService {
     private final EventServiceImpl eventService;
 
     @Override
-    public UserDto createUser(UserDto userDto) {
-        return userService.creteUser(userDto);
+    public UserDto createUser(NewUserRequest newUserRequest) {
+        return userService.creteUser(newUserRequest);
     }
 
     @Override
@@ -52,8 +54,8 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public CategoryDto createCategory(CategoryDto categoryDto) {
-        return categoryService.createCategory(categoryDto);
+    public CategoryDto createCategory(NewCategoryDto newCategoryDto) {
+        return categoryService.createCategory(newCategoryDto);
     }
 
     @Override
@@ -63,7 +65,9 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public CategoryDto patchCategory(Integer catId, CategoryDto categoryDto) {
-        return categoryService.patchCategory(catId, categoryDto);
+        categoryService.getCategoryById(catId);
+        categoryDto.setId(catId);
+        return categoryService.patchCategory(categoryDto);
     }
 
     @Override
