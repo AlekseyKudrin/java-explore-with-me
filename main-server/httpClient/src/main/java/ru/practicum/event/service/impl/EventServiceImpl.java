@@ -4,20 +4,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import ru.practicum.event.model.UpdateEventUserRequest;
-import ru.practicum.event.model.*;
-import ru.practicum.event.model.enums.State;
-import ru.practicum.event.model.enums.StateAction;
-import ru.practicum.exceptionHandler.exception.ValueNotFoundDbException;
-import ru.practicum.location.model.Location;
-import ru.practicum.location.service.impl.LocationServiceImpl;
 import ru.practicum.category.model.Category;
 import ru.practicum.category.service.impl.CategoryServiceImpl;
 import ru.practicum.event.dao.EventRepository;
+import ru.practicum.event.model.*;
+import ru.practicum.event.model.enums.State;
+import ru.practicum.event.model.enums.StateAction;
 import ru.practicum.event.service.EventService;
+import ru.practicum.exceptionHandler.exception.ValueNotFoundDbException;
+import ru.practicum.location.service.impl.LocationServiceImpl;
 import ru.practicum.reqest.service.impl.RequestServiceImpl;
 import ru.practicum.user.model.User;
-import ru.practicum.user.service.impl.UserServiceImpl;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -39,8 +36,8 @@ public class EventServiceImpl implements EventService {
 
     public EventFullDto createEvent(User user, NewEventDto newEventDto) {
         Category category = categoryService.findCategoryById(newEventDto.getCategory());
-        Location location = locationService.createLocation(newEventDto.getLocation());
-        Event event = eventRepository.save(EventMapper.toEvent(user, category, location, newEventDto));
+        locationService.createLocation(newEventDto.getLocation());
+        Event event = eventRepository.save(EventMapper.toEvent(user, category, newEventDto));
         int countConfirmedRequest = requestService.getCountConfirmedRequest(event.getId());
         int views = 0;
         return EventMapper.toEventFullDto(countConfirmedRequest, views, event);
@@ -55,7 +52,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<Event> getEventsUser(Integer userId, PageRequest pageRequest) {
-        return eventRepository.findAllByInitiatorId(userId , pageRequest);
+        return eventRepository.findAllByInitiatorId(userId, pageRequest);
     }
 
     @Override
@@ -71,7 +68,7 @@ public class EventServiceImpl implements EventService {
     public EventFullDto updateEvent(Integer eventId, UpdateEventUserRequest updateEventUserRequest) {
 
         Event event = eventRepository.findById(eventId).orElseThrow();
-        if (updateEventUserRequest.getAnnotation() != null){
+        if (updateEventUserRequest.getAnnotation() != null) {
             event.setAnnotation(updateEventUserRequest.getAnnotation());
         }
         if (updateEventUserRequest.getCategory() != null) {
@@ -96,7 +93,7 @@ public class EventServiceImpl implements EventService {
             event.setRequestModeration(updateEventUserRequest.getRequestModeration());
         }
         if (updateEventUserRequest.getStateAction() != null) {
-            if (updateEventUserRequest.getStateAction() == StateAction.CANCEL_REVIEW){
+            if (updateEventUserRequest.getStateAction() == StateAction.CANCEL_REVIEW) {
                 event.setState(State.CANCELED);
             }
         }

@@ -1,7 +1,7 @@
 package ru.practicum.admin.service;
 
-import ru.practicum.admin.model.NewCategoryDto;
-import ru.practicum.admin.model.NewUserRequest;
+import ru.practicum.category.model.NewCategoryDto;
+import ru.practicum.user.model.NewUserRequest;
 import ru.practicum.admin.model.UpdateEventAdminRequest;
 import ru.practicum.compilation.model.CompilationDto;
 import ru.practicum.compilation.model.NewCompilationDto;

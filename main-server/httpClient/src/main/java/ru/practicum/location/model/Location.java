@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "locations")
@@ -15,6 +16,8 @@ public class Location {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
+    @NotNull
     Float lat;
+    @NotNull
     Float lon;
 }

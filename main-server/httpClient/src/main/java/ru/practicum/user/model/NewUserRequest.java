@@ -1,4 +1,4 @@
-package ru.practicum.admin.model;
+package ru.practicum.user.model;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;

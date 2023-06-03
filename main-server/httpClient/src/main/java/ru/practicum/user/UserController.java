@@ -13,6 +13,7 @@ import ru.practicum.event.model.UpdateEventUserRequest;
 import ru.practicum.reqest.model.ParticipationRequestDto;
 import ru.practicum.user.service.impl.UserServiceImpl;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -37,8 +38,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public EventFullDto createEventUser(
             @PathVariable Integer userId,
-
-            @RequestBody NewEventDto newEventDto
+            @RequestBody @Valid NewEventDto newEventDto
     ) {
         log.info("Received a request to create a event user id={}", userId);
         return userService.createEventUser(userId, newEventDto);

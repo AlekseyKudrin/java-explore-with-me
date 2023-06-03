@@ -21,7 +21,7 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
     String annotation;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "category")
     Category category;
     String description;

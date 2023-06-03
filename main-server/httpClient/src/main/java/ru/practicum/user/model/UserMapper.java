@@ -2,7 +2,6 @@ package ru.practicum.user.model;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import ru.practicum.admin.model.NewUserRequest;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserMapper {

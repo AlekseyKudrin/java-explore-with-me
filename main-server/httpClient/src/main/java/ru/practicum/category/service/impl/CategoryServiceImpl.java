@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import ru.practicum.admin.model.NewCategoryDto;
+import ru.practicum.category.model.NewCategoryDto;
 import ru.practicum.category.dao.CategoryRepository;
 import ru.practicum.category.model.Category;
 import ru.practicum.category.model.CategoryDto;

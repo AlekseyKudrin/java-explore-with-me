@@ -1,6 +1,6 @@
 package ru.practicum.user.service;
 
-import ru.practicum.admin.model.NewUserRequest;
+import ru.practicum.user.model.NewUserRequest;
 import ru.practicum.event.model.UpdateEventUserRequest;
 import ru.practicum.event.model.EventFullDto;
 import ru.practicum.event.model.EventShortDto;
