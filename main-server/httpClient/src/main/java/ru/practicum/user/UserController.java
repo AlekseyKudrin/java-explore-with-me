@@ -3,23 +3,26 @@ package ru.practicum.user;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.reqest.model.EventRequestStatusUpdateRequest;
-import ru.practicum.reqest.model.EventRequestStatusUpdateResult;
 import ru.practicum.event.model.EventFullDto;
 import ru.practicum.event.model.EventShortDto;
 import ru.practicum.event.model.NewEventDto;
 import ru.practicum.event.model.UpdateEventUserRequest;
+import ru.practicum.reqest.model.EventRequestStatusUpdateRequest;
+import ru.practicum.reqest.model.EventRequestStatusUpdateResult;
 import ru.practicum.reqest.model.ParticipationRequestDto;
 import ru.practicum.user.service.impl.UserServiceImpl;
 
 import javax.validation.Valid;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/users")
+@Validated
 public class UserController {
 
     private final UserServiceImpl userService;
@@ -84,18 +87,18 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/requests")
-    public ParticipationRequestDto getRequestUsersById(
-            @PathVariable Integer userId
+    public List<ParticipationRequestDto> getRequestUsersById(
+            @PositiveOrZero @PathVariable Integer userId
     ) {
         log.info("Received a request to return applications user={}", userId);
-        return userService.getParticipation(userId);
+        return userService.getParticipationRequestUser(userId);
     }
 
     @PostMapping("{userId}/requests")
     @ResponseStatus(HttpStatus.CREATED)
     public ParticipationRequestDto createRequestParticipate(
-            @PathVariable Integer userId,
-            @RequestParam Integer eventId
+            @PositiveOrZero @PathVariable Integer userId,
+            @PositiveOrZero @RequestParam Integer eventId
     ) {
         log.info("Received a request to participate in event id={}", eventId);
         return userService.createRequestParticipate(userId, eventId);

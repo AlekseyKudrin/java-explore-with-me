@@ -19,7 +19,11 @@ public interface RequestRepository extends JpaRepository<Request, Integer> {
 
     List<Request> findByEventAndStatus(Integer eventId, Status status);
 
-    Request findByRequester(Integer userId);
+    List<Request> findALLByRequester(Integer userId);
 
-    Request findByRequesterAndEvent(Integer userId, Integer eventId);
+    Request findByIdAndAndRequester(Integer requestId, Integer requester);
+
+    @Query("update Request as r set r.status = 'PENDING' where r.id=? and r.requester=?")
+    Request updateCancelingParticipate(@Param("id") Integer requestId,
+            @Param("requester") Integer requester);
 }

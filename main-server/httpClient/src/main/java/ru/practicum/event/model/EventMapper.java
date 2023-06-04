@@ -2,6 +2,7 @@ package ru.practicum.event.model;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import ru.practicum.MainHttp;
 import ru.practicum.category.model.Category;
 import ru.practicum.category.model.CategoryMapper;
 import ru.practicum.event.model.enums.State;
@@ -39,7 +40,7 @@ public class EventMapper {
         eventFullDto.setConfirmedRequests(countConfirmedRequest);
         eventFullDto.setCreatedOn(event.getCreatedOn().toString());
         eventFullDto.setDescription(event.getDescription());
-        eventFullDto.setEventDate(event.getEventDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        eventFullDto.setEventDate(event.getEventDate().format(MainHttp.SERVER_FORMAT));
         eventFullDto.setInitiator(UserMapper.toUserShortDto(event.getInitiator()));
         eventFullDto.setLocation(event.getLocation());
         eventFullDto.setPaid(event.getPaid());

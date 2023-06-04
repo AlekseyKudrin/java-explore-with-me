@@ -3,10 +3,12 @@ package ru.practicum.reqest.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.practicum.event.model.Event;
 import ru.practicum.reqest.dao.RequestRepository;
 import ru.practicum.reqest.model.*;
 import ru.practicum.reqest.model.enums.Status;
 import ru.practicum.reqest.service.RequestService;
+import ru.practicum.user.model.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,8 +22,17 @@ public class RequestServiceImpl implements RequestService {
     private final RequestRepository requestRepository;
 
     @Override
-    public ParticipationRequestDto createRequest(Integer userId, Integer eventId) {
-        Request request = requestRepository.save((new Request(0, eventId, userId, LocalDateTime.now(), Status.PENDING)));
+    public ParticipationRequestDto createRequest(User user, Event event) {
+        Request request = new Request();
+        if (event.getRequestModeration()) {
+            request.setStatus(Status.PENDING);
+        } else {
+            request.setStatus(Status.CONFIRMED);
+        }
+        request.setRequester(user.getId());
+        request.setEvent(event.getId());
+        request.setCreated(LocalDateTime.now());
+        request = requestRepository.save(request);
         return RequestMapper.toParticipationRequestDto(request);
     }
 
@@ -53,14 +64,16 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public ParticipationRequestDto getParticipation(Integer userId) {
-        return RequestMapper.toParticipationRequestDto(requestRepository.findByRequester(userId));
+    public List<ParticipationRequestDto> getParticipation(Integer userId) {
+        return requestRepository.findALLByRequester(userId)
+                .stream()
+                .map(RequestMapper::toParticipationRequestDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     public ParticipationRequestDto cancelingParticipate(Integer userId, Integer requestId) {
-        Request request = requestRepository.findByRequesterAndEvent(userId, requestId);
-        request.setStatus(Status.PENDING);
-        return RequestMapper.toParticipationRequestDto(request);
+        return RequestMapper.toParticipationRequestDto(
+                requestRepository.updateCancelingParticipate(requestId, userId));
     }
 }

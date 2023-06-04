@@ -79,7 +79,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ParticipationRequestDto createRequestParticipate(Integer userId, Integer eventId) {
-        return requestService.createRequest(userId, eventId);
+        User user = findUserById(userId);
+        Event event = eventService.getEvent(eventId);
+        return requestService.createRequest(user, event);
     }
 
     @Override
@@ -113,12 +115,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ParticipationRequestDto getParticipation(Integer userId) {
+    public List<ParticipationRequestDto> getParticipationRequestUser(Integer userId) {
+        findUserById(userId);
         return requestService.getParticipation(userId);
     }
 
     @Override
     public ParticipationRequestDto cancelingParticipate(Integer userId, Integer requestId) {
+        findUserById(userId);
         return requestService.cancelingParticipate(userId, requestId);
     }
 

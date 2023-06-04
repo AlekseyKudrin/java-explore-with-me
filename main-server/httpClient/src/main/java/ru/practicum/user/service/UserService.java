@@ -34,7 +34,7 @@ public interface UserService {
 
     EventRequestStatusUpdateResult changeStatusParticipationInEvent(Integer userId, Integer eventId, EventRequestStatusUpdateRequest statusEvents);
 
-    ParticipationRequestDto getParticipation(Integer userId);
+    List<ParticipationRequestDto> getParticipationRequestUser(Integer userId);
 
     ParticipationRequestDto cancelingParticipate(Integer userId, Integer requestId);
 }

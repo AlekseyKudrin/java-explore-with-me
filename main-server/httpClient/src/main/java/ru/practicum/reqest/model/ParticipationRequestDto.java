@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 public class ParticipationRequestDto {
     Integer id;
-    LocalDateTime created;
+    String  created;
     Integer event;
     Integer requester;
     Status status;
