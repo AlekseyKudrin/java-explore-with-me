@@ -19,6 +19,7 @@ import ru.practicum.user.model.UserDto;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Validated
@@ -115,15 +116,15 @@ public class AdminController {
 
     @GetMapping("/events")
     public List<EventFullDto> searchEvents(
-            @RequestParam List<Integer> users,
-            @RequestParam List<String> states,
-            @RequestParam List<Integer> categories,
-            @RequestParam String rangeStart,
-            @RequestParam String rangeEnd,
+            @RequestParam(required = false) List<Integer> users,
+            @RequestParam(required = false) List<String> states,
+            @RequestParam(required = false) List<Integer> categories,
+            @RequestParam(required = false) LocalDateTime rangeStart,
+            @RequestParam(required = false) LocalDateTime rangeEnd,
             @RequestParam(defaultValue = "0") Integer from,
             @RequestParam(defaultValue = "10") Integer size
     ) {
-        log.info("Received a request to event search");
+        log.info("Received a request to events search");
         return adminService.searchEvents(
                 users, states, categories, rangeStart, rangeEnd, from, size);
     }

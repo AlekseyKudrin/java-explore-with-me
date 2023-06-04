@@ -27,7 +27,7 @@ public interface RequestRepository extends JpaRepository<Request, Integer> {
 
     @Modifying
     @Query(value = "update Requests r " +
-            "set r.status = 'PENDING' where r.id=?1 " +
+            "set r.status = 'CANCELED' where r.id=?1 " +
             "and r.requester=?2", nativeQuery = true)
     void updateCancelingParticipate(Integer requestId, Integer requester);
 

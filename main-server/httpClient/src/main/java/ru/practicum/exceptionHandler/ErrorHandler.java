@@ -13,6 +13,7 @@ import ru.practicum.exceptionHandler.exception.StatusParticipationException;
 import ru.practicum.exceptionHandler.exception.ValueNotFoundDbException;
 
 import javax.validation.ConstraintViolationException;
+import javax.validation.ValidationException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -63,6 +64,18 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ApiError handlerStatusParticipationException(final StatusParticipationException e) {
+        log.error("Data input incorrect: {}", e.getMessage());
+        return new ApiError(
+                Arrays.toString(e.getStackTrace()),
+                e.getMessage(),
+                "For the requested operation the conditions are not met.",
+                HttpStatus.CONFLICT.getReasonPhrase(),
+                LocalDateTime.now().format(formatter));
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ApiError handlerValidationException(final ValidationException e) {
         log.error("Data input incorrect: {}", e.getMessage());
         return new ApiError(
                 Arrays.toString(e.getStackTrace()),

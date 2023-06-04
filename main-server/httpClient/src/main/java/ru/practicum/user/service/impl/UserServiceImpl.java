@@ -104,6 +104,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<ParticipationRequestDto> getRequestsParticipationInEvent(Integer userId, Integer eventId) {
+        findUserById(userId);
+        eventService.findEventbyId(eventId);
         return requestService.getRequestsParticipation(userId, eventId);
     }
 

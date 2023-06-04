@@ -69,8 +69,8 @@ public class UserController {
 
     @GetMapping("/{userId}/events/{eventId}/requests")
     public List<ParticipationRequestDto> getRequestsParticipationInEvent(
-            @PathVariable Integer userId,
-            @PathVariable Integer eventId
+            @PositiveOrZero @PathVariable Integer userId,
+            @PositiveOrZero @PathVariable Integer eventId
     ) {
         log.info("Received a request to return requests a eventId={} user id={}", eventId, userId);
         return userService.getRequestsParticipationInEvent(userId, eventId);

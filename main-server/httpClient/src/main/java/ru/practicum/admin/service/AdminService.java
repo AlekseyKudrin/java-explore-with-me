@@ -10,6 +10,7 @@ import ru.practicum.event.model.EventFullDto;
 import ru.practicum.user.model.UserDto;
 import ru.practicum.category.model.CategoryDto;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface AdminService {
@@ -32,7 +33,7 @@ public interface AdminService {
 
     CompilationDto cangeCompilation(Integer comId, UpdateCompilationRequest compilation);
 
-    List<EventFullDto> searchEvents(List<Integer> users, List<String> states, List<Integer> categories, String rangeStart, String rangeEnd, Integer from, Integer size);
+    List<EventFullDto> searchEvents(List<Integer> users, List<String> states, List<Integer> categories, LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size);
 
     EventFullDto changeEventAndStatus(Integer eventId, UpdateEventAdminRequest event);
 }

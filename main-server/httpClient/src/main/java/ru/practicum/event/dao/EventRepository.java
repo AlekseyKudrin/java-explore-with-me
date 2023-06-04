@@ -2,9 +2,10 @@ package ru.practicum.event.dao;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.practicum.event.model.UpdateEventUserRequest;
+import org.springframework.data.jpa.repository.Query;
 import ru.practicum.event.model.Event;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -14,4 +15,17 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
 
     Event findByIdAndInitiatorId(Integer userId, Integer eventId);
 
+    @Query(value = "select * from Events e " +
+            "where (e.initiator in (case when ?1 is null then 0 else ?1 end) " +
+            "or e.state in (case when ?2 is null then '' else ?2 end) " +
+            "or e.category in (case when ?3 is null then 0 else ?3 end)) " +
+            "and e.event_date between (case when ?4 is null then '1990-01-01 01:00' else ?4 end) and (case when ?5 is null then '2300-01-01 03:00' else ?5 end)"
+            , nativeQuery = true
+    )
+    List<Event> findEventsByParameters(List<Integer> users,
+                                       List<String> states,
+                                       List<Integer> categories,
+                                       LocalDateTime rangeStart,
+                                       LocalDateTime rangeEnd,
+                                       PageRequest pageRequest);
 }

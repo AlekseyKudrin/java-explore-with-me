@@ -3,11 +3,10 @@ package ru.practicum.admin.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.practicum.category.model.NewCategoryDto;
-import ru.practicum.user.model.NewUserRequest;
-import ru.practicum.admin.service.AdminService;
 import ru.practicum.admin.model.UpdateEventAdminRequest;
+import ru.practicum.admin.service.AdminService;
 import ru.practicum.category.model.CategoryDto;
+import ru.practicum.category.model.NewCategoryDto;
 import ru.practicum.category.service.impl.CategoryServiceImpl;
 import ru.practicum.compilation.model.CompilationDto;
 import ru.practicum.compilation.model.NewCompilationDto;
@@ -17,9 +16,11 @@ import ru.practicum.event.model.Event;
 import ru.practicum.event.model.EventFullDto;
 import ru.practicum.event.model.enums.State;
 import ru.practicum.event.service.impl.EventServiceImpl;
+import ru.practicum.user.model.NewUserRequest;
 import ru.practicum.user.model.UserDto;
 import ru.practicum.user.service.impl.UserServiceImpl;
 
+import javax.validation.ValidationException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -86,8 +87,28 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<EventFullDto> searchEvents(List<Integer> users, List<String > states, List<Integer> categories, String rangeStart, String rangeEnd, Integer from, Integer size) {
-        return List.of();
+    public List<EventFullDto> searchEvents(List<Integer> users, List<String> states, List<Integer> categories, LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size) {
+        if (users != null) {
+            users.forEach(userService::findUserById);
+        }
+        if (states != null) {
+            states.forEach(i -> {
+                for (State s : State.values()) {
+                    int t = 0;
+                    if (!i.equals(s.toString())) {
+                        t++;
+                    } else {
+                        break;
+                    }
+                    if (t == State.values().length)
+                        throw new ValidationException("Incorrect state");
+                }
+            });
+        }
+        if (categories != null) {
+            categories.forEach(categoryService::findCategoryById);
+        }
+        return eventService.getEvents(users, states, categories, rangeStart, rangeEnd, from, size);
     }
 
     @Override
