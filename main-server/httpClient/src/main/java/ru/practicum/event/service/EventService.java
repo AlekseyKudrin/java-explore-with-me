@@ -18,7 +18,7 @@ public interface EventService {
 
     Event findEventbyId(Integer integer);
 
-    Event save(Event updateEvent);
+    EventFullDto saveUpdateEvent(Event updateEvent);
 
     List<EventShortDto> getEvents(String text, List<Integer> categories, Boolean paid, String rangeStart, String rangeEnd, Boolean onlyAvailable, String sort, Integer from, Integer size);
 

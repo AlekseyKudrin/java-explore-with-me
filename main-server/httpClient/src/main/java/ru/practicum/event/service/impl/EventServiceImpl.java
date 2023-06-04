@@ -113,8 +113,9 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event save(Event updateEvent) {
-        return eventRepository.save(updateEvent);
+    public EventFullDto saveUpdateEvent(Event updateEvent) {
+        locationService.createLocation(updateEvent.getLocation());
+        return getEventFullDto(eventRepository.save(updateEvent));
     }
 
     @Override

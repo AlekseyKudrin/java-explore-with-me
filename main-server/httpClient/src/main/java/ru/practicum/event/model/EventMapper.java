@@ -48,7 +48,7 @@ public class EventMapper {
         if (event.getPublishedOn() == null) {
             eventFullDto.setPublishedOn("");
         } else {
-            eventFullDto.setPublishedOn(event.getPublishedOn().toString());
+            eventFullDto.setPublishedOn(event.getPublishedOn().format(MainHttp.SERVER_FORMAT));
         }
         eventFullDto.setRequestModeration(event.getRequestModeration());
         eventFullDto.setState(event.getState().toString());

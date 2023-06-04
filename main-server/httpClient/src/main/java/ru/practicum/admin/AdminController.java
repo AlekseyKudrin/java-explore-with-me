@@ -5,15 +5,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.category.model.NewCategoryDto;
-import ru.practicum.user.model.NewUserRequest;
 import ru.practicum.admin.model.UpdateEventAdminRequest;
 import ru.practicum.admin.service.impl.AdminServiceImpl;
 import ru.practicum.category.model.CategoryDto;
+import ru.practicum.category.model.NewCategoryDto;
 import ru.practicum.compilation.model.CompilationDto;
 import ru.practicum.compilation.model.NewCompilationDto;
 import ru.practicum.compilation.model.UpdateCompilationRequest;
 import ru.practicum.event.model.EventFullDto;
+import ru.practicum.user.model.NewUserRequest;
 import ru.practicum.user.model.UserDto;
 
 import javax.validation.Valid;
@@ -131,7 +131,7 @@ public class AdminController {
 
     @PatchMapping("/events/{eventId}")
     public EventFullDto changeEventAndStatus(
-            @PathVariable Integer eventId,
+            @PositiveOrZero @PathVariable Integer eventId,
             @RequestBody UpdateEventAdminRequest event
     ) {
         log.info("Received a request to change event id={}", eventId);

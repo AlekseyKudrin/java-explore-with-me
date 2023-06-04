@@ -3,6 +3,7 @@ package ru.practicum.admin.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.practicum.admin.model.StateAction;
 import ru.practicum.admin.model.UpdateEventAdminRequest;
 import ru.practicum.admin.service.AdminService;
 import ru.practicum.category.model.CategoryDto;
@@ -114,6 +115,28 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public EventFullDto changeEventAndStatus(Integer eventId, UpdateEventAdminRequest event) {
         Event updateEvent = eventService.findEventbyId(eventId);
+        if (updateEvent.getPublishedOn() != null) {
+            if (updateEvent.getPublishedOn().plusHours(1).isBefore(LocalDateTime.now())) {
+                throw new ValidationException("The event cannot be published because the edit date is earlier than the publication date");
+            }
+            updateEvent.setPublishedOn(LocalDateTime.now());
+        } else {
+            updateEvent.setPublishedOn(LocalDateTime.now());
+        }
+        if (event.getStateAction().equals(StateAction.PUBLISH_EVENT)) {
+            if (!State.PENDING.equals(updateEvent.getState())) {
+                throw new ValidationException("Cannot publish the event because it's not in the right state: " + updateEvent.getState());
+            } else {
+                updateEvent.setState(State.PUBLISHED);
+            }
+        }
+        if (event.getStateAction().equals(StateAction.REJECT_EVENT)) {
+            if (State.PUBLISHED.equals(updateEvent.getState())) {
+                throw new ValidationException("Unable to cancel the event because it is in the wrong state: PUBLISHING");
+            } else {
+                updateEvent.setState(State.CANCELED);
+            }
+        }
         if (event.getAnnotation() != null) {
             updateEvent.setAnnotation(event.getAnnotation());
         }
@@ -138,14 +161,9 @@ public class AdminServiceImpl implements AdminService {
         if (event.getRequestModeration() != null) {
             updateEvent.setRequestModeration(event.getRequestModeration());
         }
-        if (event.getStateAction() != null) {
-            updateEvent.setState(State.PUBLISHED);
-        }
         if (event.getTitle() != null) {
             updateEvent.setTitle(event.getTitle());
         }
-        updateEvent = eventService.save(updateEvent);
-
-        return eventService.getEventFullDto(updateEvent);
+        return eventService.saveUpdateEvent(updateEvent);
     }
 }
