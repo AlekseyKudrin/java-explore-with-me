@@ -16,7 +16,7 @@ public interface RequestService {
 
     List<ParticipationRequestDto> getRequestsParticipation(Integer userId, Integer eventId);
 
-    EventRequestStatusUpdateResult changeStatusParticipation(Integer userId, Integer eventId, EventRequestStatusUpdateRequest statusEvents);
+    EventRequestStatusUpdateResult changeStatusParticipation(Integer userId, Integer eventId, Integer limit, EventRequestStatusUpdateRequest statusEvents);
 
     List<ParticipationRequestDto> getParticipation(Integer userId);
 

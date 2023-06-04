@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import ru.practicum.exceptionHandler.exception.LimitParticipationException;
+import ru.practicum.exceptionHandler.exception.StatusParticipationException;
 import ru.practicum.exceptionHandler.exception.ValueNotFoundDbException;
 
 import javax.validation.ConstraintViolationException;
@@ -42,6 +44,30 @@ public class ErrorHandler {
                 Arrays.toString(e.getStackTrace()),
                 e.getMessage(),
                 "Integrity constraint has been violated.",
+                HttpStatus.CONFLICT.getReasonPhrase(),
+                LocalDateTime.now().format(formatter));
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ApiError handlerLimitParticipationException(final LimitParticipationException e) {
+        log.error("Data input incorrect: {}", e.getMessage());
+        return new ApiError(
+                Arrays.toString(e.getStackTrace()),
+                e.getMessage(),
+                "For the requested operation the conditions are not met.",
+                HttpStatus.CONFLICT.getReasonPhrase(),
+                LocalDateTime.now().format(formatter));
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ApiError handlerStatusParticipationException(final StatusParticipationException e) {
+        log.error("Data input incorrect: {}", e.getMessage());
+        return new ApiError(
+                Arrays.toString(e.getStackTrace()),
+                e.getMessage(),
+                "For the requested operation the conditions are not met.",
                 HttpStatus.CONFLICT.getReasonPhrase(),
                 LocalDateTime.now().format(formatter));
     }

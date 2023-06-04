@@ -72,17 +72,17 @@ public class UserController {
             @PathVariable Integer userId,
             @PathVariable Integer eventId
     ) {
-        log.info("Received a request to return >>> a eventId={} user id={}", eventId, userId);
+        log.info("Received a request to return requests a eventId={} user id={}", eventId, userId);
         return userService.getRequestsParticipationInEvent(userId, eventId);
     }
 
     @PatchMapping("/{userId}/events/{eventId}/requests")
     public EventRequestStatusUpdateResult changeStatusParticipationInEvent(
-            @PathVariable Integer userId,
-            @PathVariable Integer eventId,
-            @RequestBody EventRequestStatusUpdateRequest statusEvents
+            @PositiveOrZero @PathVariable Integer userId,
+            @PositiveOrZero @PathVariable Integer eventId,
+            @RequestBody @Valid EventRequestStatusUpdateRequest statusEvents
     ) {
-        log.info("Received a request to change a eventId={} user id={}", eventId, userId);
+        log.info("Received a request to change status a eventId={} user id={}", eventId, userId);
         return userService.changeStatusParticipationInEvent(userId, eventId, statusEvents);
     }
 

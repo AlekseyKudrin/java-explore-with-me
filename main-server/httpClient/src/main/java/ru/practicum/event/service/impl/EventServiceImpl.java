@@ -107,7 +107,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event getEvent(Integer eventId) {
+    public Event findEventbyId(Integer eventId) {
         return eventRepository.findById(eventId).orElseThrow(() -> new ValueNotFoundDbException("Event not found"));
     }
 

@@ -5,8 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import ru.practicum.category.model.Category;
-import ru.practicum.location.model.Location;
 import ru.practicum.user.model.NewUserRequest;
 import ru.practicum.event.model.*;
 import ru.practicum.event.service.impl.EventServiceImpl;
@@ -80,7 +78,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ParticipationRequestDto createRequestParticipate(Integer userId, Integer eventId) {
         User user = findUserById(userId);
-        Event event = eventService.getEvent(eventId);
+        Event event = eventService.findEventbyId(eventId);
         return requestService.createRequest(user, event);
     }
 
@@ -111,7 +109,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public EventRequestStatusUpdateResult changeStatusParticipationInEvent(Integer userId, Integer eventId, EventRequestStatusUpdateRequest statusEvents) {
-        return requestService.changeStatusParticipation(userId, eventId, statusEvents);
+        findUserById(userId);
+        int limit =eventService.findEventbyId(eventId).getParticipantLimit();
+        return requestService.changeStatusParticipation(userId, eventId, limit, statusEvents);
     }
 
     @Override
@@ -127,6 +127,6 @@ public class UserServiceImpl implements UserService {
     }
 
     public User findUserById(Integer userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new ValueNotFoundDbException("User not found"));
+        return userRepository.findById(userId).orElseThrow(() -> new ValueNotFoundDbException("User with id=" + userId + " was not found"));
     }
 }

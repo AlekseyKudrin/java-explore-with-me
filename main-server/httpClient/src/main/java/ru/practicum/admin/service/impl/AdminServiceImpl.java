@@ -92,7 +92,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public EventFullDto changeEventAndStatus(Integer eventId, UpdateEventAdminRequest event) {
-        Event updateEvent = eventService.getEvent(eventId);
+        Event updateEvent = eventService.findEventbyId(eventId);
         if (event.getAnnotation() != null) {
             updateEvent.setAnnotation(event.getAnnotation());
         }

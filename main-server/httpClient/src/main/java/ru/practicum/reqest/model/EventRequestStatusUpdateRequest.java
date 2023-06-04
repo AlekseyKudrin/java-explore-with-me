@@ -4,6 +4,8 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import ru.practicum.reqest.model.enums.Status;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Getter
@@ -12,6 +14,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EventRequestStatusUpdateRequest {
+    @NotNull
     List<Integer> requestIds;
+    @NotBlank
     String status;
 }
