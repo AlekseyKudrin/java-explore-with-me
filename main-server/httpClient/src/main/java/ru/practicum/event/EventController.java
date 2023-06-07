@@ -8,6 +8,7 @@ import ru.practicum.event.model.EventShortDto;
 import ru.practicum.event.service.impl.EventServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -18,15 +19,15 @@ public class EventController {
 
     private final EventServiceImpl eventService;
 
-    @GetMapping("/events")
+    @GetMapping
     public List<EventShortDto> getEvents(
-            @RequestParam String text,
-            @RequestParam List<Integer> categories,
-            @RequestParam Boolean paid,
-            @RequestParam String rangeStart,
-            @RequestParam String rangeEnd,
-            @RequestParam Boolean onlyAvailable,
-            @RequestParam String sort,
+            @RequestParam(required = false) String text,
+            @RequestParam(required = false) List<Integer> categories,
+            @RequestParam(required = false) Boolean paid,
+            @RequestParam(required = false) LocalDateTime rangeStart,
+            @RequestParam(required = false) LocalDateTime rangeEnd,
+            @RequestParam(required = false) Boolean onlyAvailable,
+            @RequestParam(required = false) String sort,
             @RequestParam(defaultValue = "0") Integer from,
             @RequestParam(defaultValue = "10") Integer size
     ) {

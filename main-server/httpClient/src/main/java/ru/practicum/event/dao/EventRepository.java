@@ -4,6 +4,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import ru.practicum.event.model.Event;
+import ru.practicum.event.model.EventShort;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,4 +29,14 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
                                        LocalDateTime rangeStart,
                                        LocalDateTime rangeEnd,
                                        PageRequest pageRequest);
+
+    @Query("select new ru.practicum.event.model.EventShort(e.id) from Event e " +
+            "where lower(e.annotation) like CONCAT('%',?1,'%')")
+    List<EventShort> findEventsByParametersOfUser(String text,
+                                                  List<Integer> categories,
+                                                  Boolean paid,
+                                                  LocalDateTime rangeStart,
+                                                  LocalDateTime rangeEnd,
+                                                  Boolean onlyAvailable,
+                                                  PageRequest pageRequest);
 }

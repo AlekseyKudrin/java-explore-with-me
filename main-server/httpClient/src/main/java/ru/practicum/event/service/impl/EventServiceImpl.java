@@ -119,8 +119,12 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventShortDto> getEvents(String text, List<Integer> categories, Boolean paid, String rangeStart, String rangeEnd, Boolean onlyAvailable, String sort, Integer from, Integer size) {
-        return null;
+    public List<EventShortDto> getEvents(String text, List<Integer> categories, Boolean paid, LocalDateTime rangeStart, LocalDateTime rangeEnd, Boolean onlyAvailable, String sort, Integer from, Integer size) {
+        PageRequest pageRequest = PageRequest.of(from > 0 ? from / size : 0, size);
+        System.out.println(text);
+        List<EventShort> eventShort = eventRepository.findEventsByParametersOfUser(text, categories, paid,rangeStart,rangeEnd,onlyAvailable,pageRequest);
+
+        return eventShort.stream().map(EventMapper::toEventShortDto).collect(Collectors.toList());
     }
 
     @Override

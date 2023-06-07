@@ -70,4 +70,10 @@ public class EventMapper {
         eventShortDto.setViews(views);
         return eventShortDto;
     }
+
+    public static EventShortDto toEventShortDto(EventShort eventShort) {
+        EventShortDto eventShortDto = new EventShortDto();
+        eventShortDto.setId(eventShort.id);
+        return eventShortDto;
+    }
 }

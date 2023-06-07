@@ -6,6 +6,7 @@ import ru.practicum.event.model.UpdateEventUserRequest;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.model.EventFullDto;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface EventService {
@@ -20,7 +21,7 @@ public interface EventService {
 
     EventFullDto saveUpdateEvent(Event updateEvent);
 
-    List<EventShortDto> getEvents(String text, List<Integer> categories, Boolean paid, String rangeStart, String rangeEnd, Boolean onlyAvailable, String sort, Integer from, Integer size);
+    List<EventShortDto> getEvents(String text, List<Integer> categories, Boolean paid, LocalDateTime rangeStart, LocalDateTime rangeEnd, Boolean onlyAvailable, String sort, Integer from, Integer size);
 
     EventFullDto findById(Integer eventId);
 }
