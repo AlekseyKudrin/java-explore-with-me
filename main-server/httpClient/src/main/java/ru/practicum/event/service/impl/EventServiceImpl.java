@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.category.model.Category;
+import ru.practicum.category.model.CategoryMapper;
 import ru.practicum.category.service.impl.CategoryServiceImpl;
 import ru.practicum.event.dao.EventRepository;
 import ru.practicum.event.model.*;
@@ -123,7 +124,10 @@ public class EventServiceImpl implements EventService {
         PageRequest pageRequest = PageRequest.of(from > 0 ? from / size : 0, size);
         List<EventShort> eventShort = eventRepository.findEventsByParametersOfUser(text, categories, paid,rangeStart,rangeEnd,onlyAvailable,pageRequest);
 
-        return eventShort.stream().map(EventMapper::toEventShortDto).collect(Collectors.toList());
+        return eventShort
+                .stream()
+                .map(EventMapper::toEventShortDto)
+                .collect(Collectors.toList());
     }
 
     @Override

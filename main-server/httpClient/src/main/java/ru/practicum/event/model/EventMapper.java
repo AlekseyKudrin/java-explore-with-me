@@ -75,7 +75,10 @@ public class EventMapper {
         EventShortDto eventShortDto = new EventShortDto();
         eventShortDto.setId(eventShort.id);
         eventShortDto.setAnnotation(eventShort.annotation);
-        eventShortDto.setCategory(eventShort.category);
+        eventShortDto.setCategory(CategoryMapper.toCategoryDto(eventShort.category));
+        eventShortDto.setEventDate(eventShort.eventDate.format(MainHttp.SERVER_FORMAT));
+        eventShortDto.setInitiator(UserMapper.toUserShortDto(eventShort.initiator));
+        eventShortDto.setPaid(eventShort.paid);
         return eventShortDto;
     }
 }

@@ -5,6 +5,8 @@ import lombok.*;
 import ru.practicum.category.model.Category;
 import ru.practicum.user.model.User;
 
+import java.time.LocalDateTime;
+
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Getter
@@ -14,10 +16,14 @@ public class EventShort {
     Integer id;
     @NonNull
     String annotation;
+    @NonNull
     Category category;
     Integer confirmedRequests;
-    String eventDate;
+    @NonNull
+    LocalDateTime eventDate;
+    @NonNull
     User initiator;
+    @NonNull
     Boolean paid;
     String title;
 }
