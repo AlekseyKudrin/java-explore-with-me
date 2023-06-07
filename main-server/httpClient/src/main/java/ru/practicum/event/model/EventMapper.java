@@ -74,6 +74,8 @@ public class EventMapper {
     public static EventShortDto toEventShortDto(EventShort eventShort) {
         EventShortDto eventShortDto = new EventShortDto();
         eventShortDto.setId(eventShort.id);
+        eventShortDto.setAnnotation(eventShort.annotation);
+        eventShortDto.setCategory(eventShort.category);
         return eventShortDto;
     }
 }

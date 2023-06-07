@@ -37,7 +37,7 @@ public class EventController {
                 onlyAvailable, sort, from, size);
     }
     @GetMapping("/{id}")
-    public EventFullDto findById(@PathVariable Integer eventId) {
-        return eventService.findById(eventId);
+    public EventFullDto findById(@PathVariable Integer id) {
+        return eventService.findById(id);
     }
 }

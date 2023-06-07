@@ -12,6 +12,7 @@ import ru.practicum.user.model.User;
 public class EventShort {
     @NonNull
     Integer id;
+    @NonNull
     String annotation;
     Category category;
     Integer confirmedRequests;
