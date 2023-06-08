@@ -22,12 +22,12 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/admin")
+@RequestMapping(path = "/compilations")
 public class CompilationController {
 
     private final CompilationServiceImpl compilationService;
 
-    @GetMapping("/compilations")
+    @GetMapping
     public List<CompilationDto> getCompilations(
             @RequestParam(defaultValue = "0") Integer from,
             @RequestParam(defaultValue = "10") Integer size,
@@ -37,7 +37,7 @@ public class CompilationController {
         return compilationService.getCompilations(from, size, pinned);
     }
 
-    @GetMapping("/compilations/{compId}")
+    @GetMapping("/{compId}")
     public CompilationDto getCompilationsById(
             @PathVariable Integer compId
     ) {
