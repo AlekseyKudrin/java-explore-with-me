@@ -5,14 +5,18 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.model.EventShort;
+import ru.practicum.event.model.enums.State;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 
 public interface EventRepository extends JpaRepository<Event, Integer> {
 
     List<Event> findAllByInitiatorId(Integer userId, PageRequest pageRequest);
+
+
 
     Event findByIdAndInitiatorId(Integer userId, Integer eventId);
 
@@ -44,4 +48,6 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
                                                   LocalDateTime rangeStart,
                                                   LocalDateTime rangeEnd,
                                                   PageRequest pageRequest);
+
+    Optional<Event> findByIdAndState(Integer eventId, State state);
 }

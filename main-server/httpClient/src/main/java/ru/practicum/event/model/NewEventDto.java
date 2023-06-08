@@ -7,6 +7,7 @@ import ru.practicum.location.model.Location;
 import ru.practicum.util.DateTime;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
@@ -18,10 +19,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class NewEventDto {
+    @NotBlank
     @Size(min = 20, max = 2000)
     String annotation;
     @NotNull
     Integer category;
+    @NotBlank
     @Size(min = 20, max = 7000)
     String description;
     @NotNull

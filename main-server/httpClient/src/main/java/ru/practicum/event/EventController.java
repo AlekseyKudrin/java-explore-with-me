@@ -7,7 +7,6 @@ import ru.practicum.event.model.EventFullDto;
 import ru.practicum.event.model.EventShortDto;
 import ru.practicum.event.service.impl.EventServiceImpl;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -38,6 +37,6 @@ public class EventController {
     }
     @GetMapping("/{id}")
     public EventFullDto findById(@PathVariable Integer id) {
-        return eventService.findById(id);
+        return eventService.findPublishedEventById(id);
     }
 }

@@ -40,7 +40,7 @@ public class EventServiceImpl implements EventService {
         Category category = categoryService.findCategoryById(newEventDto.getCategory());
         locationService.createLocation(newEventDto.getLocation());
         Event event = eventRepository.save(EventMapper.toEvent(user, category, newEventDto));
-        requestService.createRequest(user,event);
+        requestService.createRequest(user, event);
         int countConfirmedRequest = requestService.getCountConfirmedRequest(event.getId());
         int views = 0;
         return EventMapper.toEventFullDto(countConfirmedRequest, views, event);
@@ -98,6 +98,8 @@ public class EventServiceImpl implements EventService {
         if (updateEventUserRequest.getStateAction() != null) {
             if (updateEventUserRequest.getStateAction() == StateAction.CANCEL_REVIEW) {
                 event.setState(State.CANCELED);
+            } else {
+                event.setState(State.PENDING);
             }
         }
         if (updateEventUserRequest.getTitle() != null) {
@@ -128,7 +130,7 @@ public class EventServiceImpl implements EventService {
             int confirmed = requestService.getCountConfirmedRequest(t.getInitiator().getId());
             t.setConfirmedRequests(confirmed);
         });
-        eventShort.forEach(t-> {
+        eventShort.forEach(t -> {
             t.setViews(0);
         });
         if (onlyAvailable) {
@@ -147,8 +149,8 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventFullDto findById(Integer eventId) {
-        Event event = eventRepository.findById(eventId).orElseThrow();
+    public EventFullDto findPublishedEventById(Integer eventId) {
+        Event event = eventRepository.findByIdAndState(eventId, State.PUBLISHED).orElseThrow(() -> new ValueNotFoundDbException("Event with id=" + eventId + " was not found"));
         int countConfirmedRequest = requestService.getCountConfirmedRequest(event.getId());
         int views = 0;
         return EventMapper.toEventFullDto(countConfirmedRequest, views, event);
