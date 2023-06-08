@@ -20,7 +20,6 @@ public class UpdateEventAdminRequest {
     Integer category;
     @Size(min = 20, max = 7000)
     String description;
-    @DateTime(message = "Event start date is in the past")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime eventDate;
     Location location;
