@@ -21,6 +21,7 @@ import ru.practicum.user.model.NewUserRequest;
 import ru.practicum.user.model.UserDto;
 import ru.practicum.user.service.impl.UserServiceImpl;
 
+import javax.validation.Valid;
 import javax.validation.ValidationException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -115,26 +116,26 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public EventFullDto changeEventAndStatus(Integer eventId, UpdateEventAdminRequest event) {
         Event updateEvent = eventService.findEventbyId(eventId);
-        if (updateEvent.getPublishedOn() != null) {
-            if (updateEvent.getPublishedOn().plusHours(1).isBefore(LocalDateTime.now())) {
-                throw new ValidationException("The event cannot be published because the edit date is earlier than the publication date");
-            }
+        if (updateEvent.getEventDate().minusHours(1).isAfter(LocalDateTime.now())) {
             updateEvent.setPublishedOn(LocalDateTime.now());
         } else {
-            updateEvent.setPublishedOn(LocalDateTime.now());
+            throw new ValidationException("The event cannot be published because the edit date is earlier than the publication date");
         }
-        if (event.getStateAction().equals(StateAction.PUBLISH_EVENT)) {
-            if (!State.PENDING.equals(updateEvent.getState())) {
-                throw new ValidationException("Cannot publish the event because it's not in the right state: " + updateEvent.getState());
-            } else {
-                updateEvent.setState(State.PUBLISHED);
+        if (event.getStateAction() != null) {
+            if (event.getStateAction().equals(StateAction.PUBLISH_EVENT)) {
+                if (!State.PENDING.equals(updateEvent.getState())) {
+                    throw new ValidationException("Cannot publish the event because it's not in the right state: " + updateEvent.getState());
+                } else {
+                    updateEvent.setState(State.PUBLISHED);
+                    updateEvent.setPublishedOn(LocalDateTime.now());
+                }
             }
-        }
-        if (event.getStateAction().equals(StateAction.REJECT_EVENT)) {
-            if (State.PUBLISHED.equals(updateEvent.getState())) {
-                throw new ValidationException("Unable to cancel the event because it is in the wrong state: PUBLISHING");
-            } else {
-                updateEvent.setState(State.CANCELED);
+            if (event.getStateAction().equals(StateAction.REJECT_EVENT)) {
+                if (State.PUBLISHED.equals(updateEvent.getState())) {
+                    throw new ValidationException("Unable to cancel the event because it is in the wrong state: PUBLISHING");
+                } else {
+                    updateEvent.setState(State.CANCELED);
+                }
             }
         }
         if (event.getAnnotation() != null) {
@@ -147,7 +148,7 @@ public class AdminServiceImpl implements AdminService {
             updateEvent.setDescription(event.getDescription());
         }
         if (event.getEventDate() != null) {
-            updateEvent.setEventDate(LocalDateTime.parse(event.getEventDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            updateEvent.setEventDate(event.getEventDate());
         }
         if (event.getLocation() != null) {
             updateEvent.setLocation(event.getLocation());

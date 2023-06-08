@@ -132,7 +132,7 @@ public class AdminController {
     @PatchMapping("/events/{eventId}")
     public EventFullDto changeEventAndStatus(
             @PositiveOrZero @PathVariable Integer eventId,
-            @RequestBody UpdateEventAdminRequest event
+            @RequestBody @Valid UpdateEventAdminRequest event
     ) {
         log.info("Received a request to change event id={}", eventId);
         return adminService.changeEventAndStatus(eventId, event);
