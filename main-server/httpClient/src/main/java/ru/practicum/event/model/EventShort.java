@@ -18,6 +18,8 @@ public class EventShort {
     String annotation;
     @NonNull
     Category category;
+    @NonNull
+    Integer participantLimit;
     Integer confirmedRequests;
     @NonNull
     LocalDateTime eventDate;
@@ -25,5 +27,7 @@ public class EventShort {
     User initiator;
     @NonNull
     Boolean paid;
+    @NonNull
     String title;
+    Integer views;
 }

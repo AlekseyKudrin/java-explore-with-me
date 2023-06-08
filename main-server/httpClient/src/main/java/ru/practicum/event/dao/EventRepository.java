@@ -18,8 +18,8 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
 
     @Query(value = "select * from Events e " +
             "where (e.initiator in (case when ?1 is null then 0 else ?1 end) " +
-            "or e.state in (case when ?2 is null then '' else ?2 end) " +
-            "or e.category in (case when ?3 is null then 0 else ?3 end)) " +
+            "and e.state in (case when ?2 is null then '' else ?2 end) " +
+            "and e.category in (case when ?3 is null then 0 else ?3 end)) " +
             "and e.event_date between (case when ?4 is null then '1990-01-01 01:00' else ?4 end) and (case when ?5 is null then '2300-01-01 03:00' else ?5 end)"
             , nativeQuery = true
     )
@@ -30,19 +30,18 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
                                        LocalDateTime rangeEnd,
                                        PageRequest pageRequest);
 
-    @Query("select new ru.practicum.event.model.EventShort(e.id, e.annotation, e.category, e.eventDate, e.initiator, e.paid) from Event e " +
-            "where (lower(e.annotation) like CONCAT('%',(case when ?1 is null then '' else ?1 end),'%') " +
-            "or lower(e.description) like CONCAT('%',(case when ?1 is null then '' else ?1 end),'%'))" +
+    @Query("select new ru.practicum.event.model.EventShort(e.id, e.annotation, e.category, e.participantLimit, e.eventDate, e.initiator, e.paid, e.title) " +
+            "from Event e " +
+            "where (lower(e.annotation) like CONCAT('%',(case when ?1 is null then '' else lower(?1) end),'%') " +
+            "or lower(e.description) like CONCAT('%',(case when ?1 is null then '' else lower(?1) end),'%'))" +
             "and (?2 is null or e.category in ?2)" +
             "and (?3 is null or e.paid = ?3)" +
             "and (cast(?4 AS date) IS NULL OR e.eventDate >= ?4)" +
             "and (cast(?5 AS date) IS NULL OR e.eventDate <= ?5)")
-//    in (case when ?2 is null then 0 else ?2 end)
     List<EventShort> findEventsByParametersOfUser(String text,
                                                   List<Integer> categories,
                                                   Boolean paid,
                                                   LocalDateTime rangeStart,
                                                   LocalDateTime rangeEnd,
-                                                  Boolean onlyAvailable,
                                                   PageRequest pageRequest);
 }

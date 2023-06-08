@@ -49,7 +49,7 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public List<ParticipationRequestDto> getRequestsParticipation(Integer userId, Integer eventId) {
-        return requestRepository.findByEventAndAndRequester(eventId, userId).stream().map(RequestMapper::toParticipationRequestDto).collect(Collectors.toList());
+        return requestRepository.findAllByEvent(eventId).stream().map(RequestMapper::toParticipationRequestDto).collect(Collectors.toList());
     }
 
     @Override

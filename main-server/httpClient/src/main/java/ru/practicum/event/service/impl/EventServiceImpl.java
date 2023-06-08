@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.category.model.Category;
-import ru.practicum.category.model.CategoryMapper;
 import ru.practicum.category.service.impl.CategoryServiceImpl;
 import ru.practicum.event.dao.EventRepository;
 import ru.practicum.event.model.*;
@@ -19,6 +18,7 @@ import ru.practicum.user.model.User;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,7 +59,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventFullDto getEventUser(Integer userId, Integer eventId) {
-        Event event = eventRepository.findByIdAndInitiatorId(userId, eventId);
+        Event event = eventRepository.findByIdAndInitiatorId(eventId, userId);
         int countConfirmedRequest = requestService.getCountConfirmedRequest(event.getId());
         int views = 0;
         return EventMapper.toEventFullDto(countConfirmedRequest, views, event);
@@ -122,7 +122,22 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<EventShortDto> getEvents(String text, List<Integer> categories, Boolean paid, LocalDateTime rangeStart, LocalDateTime rangeEnd, Boolean onlyAvailable, String sort, Integer from, Integer size) {
         PageRequest pageRequest = PageRequest.of(from > 0 ? from / size : 0, size);
-        List<EventShort> eventShort = eventRepository.findEventsByParametersOfUser(text, categories, paid,rangeStart,rangeEnd,onlyAvailable,pageRequest);
+        List<EventShort> eventShort = eventRepository.findEventsByParametersOfUser(text, categories, paid, rangeStart, rangeEnd, pageRequest);
+        eventShort.forEach(t -> {
+            int confirmed = requestService.getCountConfirmedRequest(t.getInitiator().getId());
+            t.setConfirmedRequests(confirmed);
+        });
+        eventShort.forEach(t-> {
+            t.setViews(0);
+        });
+        if (onlyAvailable) {
+            eventShort = eventShort.stream().filter(i -> i.getConfirmedRequests() <= i.getParticipantLimit()).collect(Collectors.toList());
+        }
+        if (sort != null && sort.equals("EVENT_DATE")) {
+            eventShort.sort(Comparator.comparing(EventShort::getEventDate));
+        } else {
+            eventShort.sort(Comparator.comparing(EventShort::getViews));
+        }
 
         return eventShort
                 .stream()
