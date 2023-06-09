@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import ru.practicum.exceptionHandler.exception.LimitParticipationException;
 import ru.practicum.exceptionHandler.exception.StatusParticipationException;
+import ru.practicum.exceptionHandler.exception.ValidateFieldException;
 import ru.practicum.exceptionHandler.exception.ValueNotFoundDbException;
 
 import javax.validation.ConstraintViolationException;
@@ -33,6 +34,18 @@ public class ErrorHandler {
 
                 "Field: " + e.getFieldError().getField() + " Error: " + e.getMessage(),
                 "Incorrectly made request.",
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                LocalDateTime.now().format(formatter));
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError handlerValidateFieldException(final ValidateFieldException e) {
+        log.error("Data input incorrect: {}", e.getMessage());
+        return new ApiError(
+                Arrays.toString(e.getStackTrace()),
+                e.getMessage(),
+                "Integrity constraint has been violated.",
                 HttpStatus.BAD_REQUEST.getReasonPhrase(),
                 LocalDateTime.now().format(formatter));
     }

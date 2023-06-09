@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import ru.practicum.MainHttp;
 import ru.practicum.category.model.Category;
 import ru.practicum.category.service.impl.CategoryServiceImpl;
 import ru.practicum.event.dao.EventRepository;
@@ -11,6 +12,7 @@ import ru.practicum.event.model.*;
 import ru.practicum.event.model.enums.State;
 import ru.practicum.event.model.enums.StateAction;
 import ru.practicum.event.service.EventService;
+import ru.practicum.exceptionHandler.exception.ValidateFieldException;
 import ru.practicum.exceptionHandler.exception.ValueNotFoundDbException;
 import ru.practicum.location.service.impl.LocationServiceImpl;
 import ru.practicum.reqest.service.impl.RequestServiceImpl;
@@ -68,47 +70,60 @@ public class EventServiceImpl implements EventService {
 
 
     @Override
-    public EventFullDto updateEvent(Integer eventId, UpdateEventUserRequest updateEventUserRequest) {
+    public EventFullDto updateEvent(Integer eventId, UpdateEventUserRequest event) {
 
-        Event event = eventRepository.findById(eventId).orElseThrow();
-        if (updateEventUserRequest.getAnnotation() != null) {
-            event.setAnnotation(updateEventUserRequest.getAnnotation());
+        Event updateEvent = eventRepository.findById(eventId).orElseThrow();
+        if (event.getAnnotation() != null) {
+            if (event.getAnnotation().length()<20 || event.getAnnotation().length()>2000) {
+                throw new ValidateFieldException("Length annotation min 20, max 7000 ");
+            }
+            updateEvent.setAnnotation(event.getAnnotation());
         }
-        if (updateEventUserRequest.getCategory() != null) {
-            event.setCategory(categoryService.findCategoryById(updateEventUserRequest.getCategory()));
+        if (event.getCategory() != null) {
+            updateEvent.setCategory(categoryService.findCategoryById(event.getCategory()));
         }
-        if (updateEventUserRequest.getDescription() != null) {
-            event.setDescription(updateEventUserRequest.getDescription());
+        if (event.getDescription() != null) {
+            if (event.getDescription().length()<20 || event.getDescription().length()>7000) {
+                throw new ValidateFieldException("Length description min 20, max 7000 ");
+            }
+            updateEvent.setDescription(event.getDescription());
         }
-        if (updateEventUserRequest.getEventDate() != null) {
-            event.setEventDate(LocalDateTime.parse(updateEventUserRequest.getEventDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        if (event.getEventDate() != null) {
+            LocalDateTime eventDate = LocalDateTime.parse(event.getEventDate(), MainHttp.SERVER_FORMAT);
+            if (eventDate.isBefore(LocalDateTime.now())) {
+                throw new ValidateFieldException("Event date has already arrived");
+            }
+            updateEvent.setEventDate(eventDate);
         }
-        if (updateEventUserRequest.getLocation() != null) {
-            event.setLocation(updateEventUserRequest.getLocation());
+        if (event.getLocation() != null) {
+            updateEvent.setLocation(event.getLocation());
         }
-        if (updateEventUserRequest.getPaid() != null) {
-            event.setPaid(updateEventUserRequest.getPaid());
+        if (event.getPaid() != null) {
+            updateEvent.setPaid(event.getPaid());
         }
-        if (updateEventUserRequest.getParticipantLimit() != null) {
-            event.setParticipantLimit(updateEventUserRequest.getParticipantLimit());
+        if (event.getParticipantLimit() != null) {
+            updateEvent.setParticipantLimit(event.getParticipantLimit());
         }
-        if (updateEventUserRequest.getRequestModeration() != null) {
-            event.setRequestModeration(updateEventUserRequest.getRequestModeration());
+        if (event.getRequestModeration() != null) {
+            updateEvent.setRequestModeration(event.getRequestModeration());
         }
-        if (updateEventUserRequest.getStateAction() != null) {
-            if (updateEventUserRequest.getStateAction() == StateAction.CANCEL_REVIEW) {
-                event.setState(State.CANCELED);
+        if (event.getStateAction() != null) {
+            if (event.getStateAction() == StateAction.CANCEL_REVIEW) {
+                updateEvent.setState(State.CANCELED);
             } else {
-                event.setState(State.PENDING);
+                updateEvent.setState(State.PENDING);
             }
         }
-        if (updateEventUserRequest.getTitle() != null) {
-            event.setTitle(updateEventUserRequest.getTitle());
+        if (event.getTitle() != null) {
+            if (event.getTitle().length()<3 || event.getTitle().length()>120) {
+                throw new ValidateFieldException("Length title min 3, max 120");
+            }
+            updateEvent.setTitle(event.getTitle());
         }
-        event = eventRepository.save(event);
-        int countConfirmedRequest = requestService.getCountConfirmedRequest(event.getId());
+        updateEvent = eventRepository.save(updateEvent);
+        int countConfirmedRequest = requestService.getCountConfirmedRequest(updateEvent.getId());
         int views = 0;
-        return EventMapper.toEventFullDto(countConfirmedRequest, views, event);
+        return EventMapper.toEventFullDto(countConfirmedRequest, views, updateEvent);
     }
 
     @Override
@@ -133,6 +148,11 @@ public class EventServiceImpl implements EventService {
         eventShort.forEach(t -> {
             t.setViews(0);
         });
+        if (rangeStart != null && rangeEnd != null) {
+            if (rangeStart.isAfter(rangeEnd)) {
+                throw new ValidateFieldException("Start date cannot be before than end date");
+            };
+        }
         if (onlyAvailable) {
             eventShort = eventShort.stream().filter(i -> i.getConfirmedRequests() <= i.getParticipantLimit()).collect(Collectors.toList());
         }

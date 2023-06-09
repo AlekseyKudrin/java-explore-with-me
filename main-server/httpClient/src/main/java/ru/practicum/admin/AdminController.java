@@ -108,7 +108,7 @@ public class AdminController {
     @PatchMapping("/categories/{catId}")
     public CategoryDto changeCategory(
             @PathVariable Integer catId,
-            @RequestBody @Valid CategoryDto categoryDto
+            @RequestBody CategoryDto categoryDto
     ) {
         log.info("Received a request to change a category {}", catId);
         return adminService.patchCategory(catId, categoryDto);
@@ -132,7 +132,7 @@ public class AdminController {
     @PatchMapping("/events/{eventId}")
     public EventFullDto changeEventAndStatus(
             @PositiveOrZero @PathVariable Integer eventId,
-            @RequestBody @Valid UpdateEventAdminRequest event
+            @RequestBody UpdateEventAdminRequest event
     ) {
         log.info("Received a request to change event id={}", eventId);
         return adminService.changeEventAndStatus(eventId, event);

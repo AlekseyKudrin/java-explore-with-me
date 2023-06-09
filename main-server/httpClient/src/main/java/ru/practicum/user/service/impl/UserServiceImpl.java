@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import ru.practicum.exceptionHandler.exception.ValidateFieldException;
 import ru.practicum.user.model.NewUserRequest;
 import ru.practicum.event.model.*;
 import ru.practicum.event.service.impl.EventServiceImpl;
@@ -19,6 +21,9 @@ import ru.practicum.user.model.UserDto;
 import ru.practicum.user.model.UserMapper;
 import ru.practicum.user.service.UserService;
 
+import javax.validation.Valid;
+import javax.xml.bind.ValidationException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 

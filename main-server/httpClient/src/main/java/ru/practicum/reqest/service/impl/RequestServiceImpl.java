@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.event.model.Event;
-import ru.practicum.event.service.impl.EventServiceImpl;
 import ru.practicum.exceptionHandler.exception.LimitParticipationException;
 import ru.practicum.exceptionHandler.exception.StatusParticipationException;
 import ru.practicum.exceptionHandler.exception.ValueNotFoundDbException;
@@ -30,7 +29,7 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public ParticipationRequestDto createRequest(User user, Event event) {
         Request request = new Request();
-        if (event.getRequestModeration()) {
+        if (event.getRequestModeration() && event.getParticipantLimit() != 0) {
             request.setStatus(Status.PENDING);
         } else {
             request.setStatus(Status.CONFIRMED);
@@ -76,7 +75,7 @@ public class RequestServiceImpl implements RequestService {
         listRequestChange.forEach(
                 request -> {
                     if (!request.getStatus().equals(Status.PENDING))
-                        throw new StatusParticipationException("Status participant id=" + request.getId()+ " not cannot be changed");
+                        throw new StatusParticipationException("Status participant id=" + request.getId() + " not cannot be changed");
                     if (limit > countConfirm.get()) {
                         request.setStatus(Status.valueOf(statusEvents.getStatus()));
                         countConfirm.set(countConfirm.get() + 1);

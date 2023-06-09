@@ -3,6 +3,7 @@ package ru.practicum.admin.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.practicum.MainHttp;
 import ru.practicum.admin.model.StateAction;
 import ru.practicum.admin.model.UpdateEventAdminRequest;
 import ru.practicum.admin.service.AdminService;
@@ -17,14 +18,14 @@ import ru.practicum.event.model.Event;
 import ru.practicum.event.model.EventFullDto;
 import ru.practicum.event.model.enums.State;
 import ru.practicum.event.service.impl.EventServiceImpl;
+import ru.practicum.exceptionHandler.exception.ValidateFieldException;
 import ru.practicum.user.model.NewUserRequest;
 import ru.practicum.user.model.UserDto;
 import ru.practicum.user.service.impl.UserServiceImpl;
 
-import javax.validation.Valid;
 import javax.validation.ValidationException;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 
@@ -110,6 +111,12 @@ public class AdminServiceImpl implements AdminService {
         if (categories != null) {
             categories.forEach(categoryService::findCategoryById);
         }
+        if (rangeStart != null && rangeEnd != null) {
+            if (rangeStart.isAfter(rangeEnd)) {
+                throw new ValidateFieldException("Start date cannot be before than end date");
+            }
+            ;
+        }
         return eventService.getEvents(users, states, categories, rangeStart, rangeEnd, from, size);
     }
 
@@ -139,16 +146,26 @@ public class AdminServiceImpl implements AdminService {
             }
         }
         if (event.getAnnotation() != null) {
+            if (event.getAnnotation().length()<20 || event.getAnnotation().length()>2000) {
+                throw new ValidateFieldException("Length annotation min 20, max 7000 ");
+            }
             updateEvent.setAnnotation(event.getAnnotation());
         }
         if (event.getCategory() != null) {
             updateEvent.setCategory(categoryService.findCategoryById(event.getCategory()));
         }
         if (event.getDescription() != null) {
+            if (event.getDescription().length()<20 || event.getDescription().length()>7000) {
+                throw new ValidateFieldException("Length description min 20, max 7000 ");
+            }
             updateEvent.setDescription(event.getDescription());
         }
         if (event.getEventDate() != null) {
-            updateEvent.setEventDate(event.getEventDate());
+            LocalDateTime eventDate = LocalDateTime.parse(event.getEventDate(), MainHttp.SERVER_FORMAT);
+            if (eventDate.isBefore(LocalDateTime.now())) {
+                throw new ValidateFieldException("Event date has already arrived");
+            }
+            updateEvent.setEventDate(eventDate);
         }
         if (event.getLocation() != null) {
             updateEvent.setLocation(event.getLocation());
@@ -163,6 +180,9 @@ public class AdminServiceImpl implements AdminService {
             updateEvent.setRequestModeration(event.getRequestModeration());
         }
         if (event.getTitle() != null) {
+            if (event.getTitle().length()<3 || event.getTitle().length()>120) {
+                throw new ValidateFieldException("Length title min 3, max 120");
+            }
             updateEvent.setTitle(event.getTitle());
         }
         return eventService.saveUpdateEvent(updateEvent);

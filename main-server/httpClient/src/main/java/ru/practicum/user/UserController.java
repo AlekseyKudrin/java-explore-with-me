@@ -80,7 +80,7 @@ public class UserController {
     public EventRequestStatusUpdateResult changeStatusParticipationInEvent(
             @PositiveOrZero @PathVariable Integer userId,
             @PositiveOrZero @PathVariable Integer eventId,
-            @RequestBody @Valid EventRequestStatusUpdateRequest statusEvents
+            @RequestBody EventRequestStatusUpdateRequest statusEvents
     ) {
         log.info("Received a request to change status a eventId={} user id={}", eventId, userId);
         return userService.changeStatusParticipationInEvent(userId, eventId, statusEvents);

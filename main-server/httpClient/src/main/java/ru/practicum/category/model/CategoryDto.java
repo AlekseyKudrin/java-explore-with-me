@@ -12,6 +12,5 @@ import javax.validation.constraints.NotBlank;
 @RequiredArgsConstructor
 public class CategoryDto{
     Integer id;
-    @NotBlank
     String name;
 }
