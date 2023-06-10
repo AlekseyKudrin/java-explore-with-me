@@ -42,7 +42,7 @@ public class EventServiceImpl implements EventService {
         Category category = categoryService.findCategoryById(newEventDto.getCategory());
         locationService.createLocation(newEventDto.getLocation());
         Event event = eventRepository.save(EventMapper.toEvent(user, category, newEventDto));
-        requestService.createRequest(user, event);
+//        requestService.createRequest(user, event);
         int countConfirmedRequest = requestService.getCountConfirmedRequest(event.getId());
         int views = 0;
         return EventMapper.toEventFullDto(countConfirmedRequest, views, event);

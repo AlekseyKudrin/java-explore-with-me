@@ -5,10 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import ru.practicum.event.model.enums.State;
-import ru.practicum.exceptionHandler.exception.ValidateFieldException;
-import ru.practicum.user.model.NewUserRequest;
 import ru.practicum.event.model.*;
+import ru.practicum.event.model.enums.State;
 import ru.practicum.event.service.impl.EventServiceImpl;
 import ru.practicum.exceptionHandler.exception.ValueNotFoundDbException;
 import ru.practicum.reqest.model.EventRequestStatusUpdateRequest;
@@ -16,6 +14,7 @@ import ru.practicum.reqest.model.EventRequestStatusUpdateResult;
 import ru.practicum.reqest.model.ParticipationRequestDto;
 import ru.practicum.reqest.service.impl.RequestServiceImpl;
 import ru.practicum.user.dao.UserRepository;
+import ru.practicum.user.model.NewUserRequest;
 import ru.practicum.user.model.User;
 import ru.practicum.user.model.UserDto;
 import ru.practicum.user.model.UserMapper;
@@ -82,10 +81,16 @@ public class UserServiceImpl implements UserService {
     public ParticipationRequestDto createRequestParticipate(Integer userId, Integer eventId) {
         User user = findUserById(userId);
         Event event = eventService.findEventById(eventId);
+        if (event.getInitiator().equals(user)) {
+            throw new ValidationException("The user is the initiator of the event");
+        }
+        if (event.getParticipantLimit() != 0 & !(event.getParticipantLimit() > requestService.getCountConfirmedRequest(eventId) )) {
+            throw new ValidationException("Reached limit for participation in the event");
+        }
         if (!event.getState().equals(State.PUBLISHED)) {
             throw new ValidationException("Event must be published");
         }
-        if (requestService.getRequestsParticipation(userId, eventId).size()>0) {
+        if (requestService.getRequestsParticipation(userId, eventId).size() > 0) {
             throw new ValidationException("User has already created a request");
         }
         return requestService.createRequest(user, event);
@@ -107,7 +112,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public EventFullDto changeEventUser(Integer userId, Integer eventId, UpdateEventUserRequest updateEventUserRequest) {
         findUserById(userId);
-        getEventUser(userId, eventId);
+        Event event = eventService.findEventById(eventId);
+        if (event.getState().equals(State.PUBLISHED)) {
+            throw new ValidationException("The event is in the status " + event.getState());
+        }
         return eventService.updateEvent(eventId, updateEventUserRequest);
     }
 
@@ -121,7 +129,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public EventRequestStatusUpdateResult changeStatusParticipationInEvent(Integer userId, Integer eventId, EventRequestStatusUpdateRequest statusEvents) {
         findUserById(userId);
-        int limit =eventService.findEventById(eventId).getParticipantLimit();
+        int limit = eventService.findEventById(eventId).getParticipantLimit();
         return requestService.changeStatusParticipation(userId, eventId, limit, statusEvents);
     }
 

@@ -13,7 +13,7 @@ import java.util.List;
 public interface RequestRepository extends JpaRepository<Request, Integer> {
     Integer countByEventAndStatus(Integer eventId, Status status);
 
-    List<Request> findAllByEventAndRequester(Integer eventId, Integer userId);
+    List<Request> findAllByEvent(Integer eventId);
 
     @Query("select r from Request r where r.id in :ids")
     List<Request> findRequestForChange(@Param("ids") List<Integer> ids);
@@ -27,7 +27,5 @@ public interface RequestRepository extends JpaRepository<Request, Integer> {
             "set r.status = 'CANCELED' where r.id=?1 " +
             "and r.requester=?2", nativeQuery = true)
     void updateCancelingParticipate(Integer requestId, Integer requester);
-
-    List<Request> findAllByEvent(Integer eventId);
 
 }

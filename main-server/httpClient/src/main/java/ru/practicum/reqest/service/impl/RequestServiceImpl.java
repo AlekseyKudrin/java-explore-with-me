@@ -48,7 +48,7 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public List<ParticipationRequestDto> getRequestsParticipation(Integer userId, Integer eventId) {
-        return requestRepository.findAllByEventAndRequester(eventId, userId).stream().map(RequestMapper::toParticipationRequestDto).collect(Collectors.toList());
+        return requestRepository.findAllByEvent(eventId).stream().map(RequestMapper::toParticipationRequestDto).collect(Collectors.toList());
     }
 
     @Override
@@ -112,4 +112,10 @@ public class RequestServiceImpl implements RequestService {
     public Request findRequest(Integer requestId) {
         return requestRepository.findById(requestId).orElseThrow(() -> new ValueNotFoundDbException("Request with id=" + requestId + " was not found"));
     }
+
+    public List<Request> getCountRequest(Integer eventId) {
+        List<Request> list = requestRepository.findAllByEvent(eventId);
+        return list;
+    }
+
 }
