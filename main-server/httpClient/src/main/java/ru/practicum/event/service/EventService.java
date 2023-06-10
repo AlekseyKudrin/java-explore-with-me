@@ -17,7 +17,7 @@ public interface EventService {
 
     EventFullDto updateEvent(Integer eventId, UpdateEventUserRequest updateEventUserRequest);
 
-    Event findEventbyId(Integer integer);
+    Event findEventById(Integer integer);
 
     EventFullDto saveUpdateEvent(Event updateEvent);
 

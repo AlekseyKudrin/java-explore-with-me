@@ -1,16 +1,24 @@
 package ru.practicum.compilation.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.List;
 
-@AllArgsConstructor
 @Getter
 @Setter
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@AllArgsConstructor
+@RequiredArgsConstructor
 public class NewCompilationDto {
-    List<Integer> events;
-    Boolean pinned;
+    @Builder.Default
+    List<Integer> events = List.of();
+    @Builder.Default
+    Boolean pinned = false;
+    @NotBlank
+    @Size(max = 50)
     String title;
 }

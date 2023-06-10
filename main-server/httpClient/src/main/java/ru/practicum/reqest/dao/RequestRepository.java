@@ -29,4 +29,5 @@ public interface RequestRepository extends JpaRepository<Request, Integer> {
     void updateCancelingParticipate(Integer requestId, Integer requester);
 
     List<Request> findAllByEvent(Integer eventId);
+
 }

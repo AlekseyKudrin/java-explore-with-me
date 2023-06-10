@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -12,5 +13,6 @@ import javax.validation.constraints.NotBlank;
 @RequiredArgsConstructor
 public class CategoryDto{
     Integer id;
+    @Size(max = 50)
     String name;
 }

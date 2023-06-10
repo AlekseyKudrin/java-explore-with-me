@@ -62,8 +62,9 @@ public class AdminController {
 
 
     @PostMapping("/compilations")
+    @ResponseStatus(HttpStatus.CREATED)
     public CompilationDto createCompilation(
-            @RequestBody NewCompilationDto newCompilationDto
+            @RequestBody @Valid NewCompilationDto newCompilationDto
     ) {
         log.info("Received a request to create compilation");
         return adminService.createCompilation(newCompilationDto);
@@ -108,7 +109,7 @@ public class AdminController {
     @PatchMapping("/categories/{catId}")
     public CategoryDto changeCategory(
             @PathVariable Integer catId,
-            @RequestBody CategoryDto categoryDto
+            @RequestBody @Valid CategoryDto categoryDto
     ) {
         log.info("Received a request to change a category {}", catId);
         return adminService.patchCategory(catId, categoryDto);

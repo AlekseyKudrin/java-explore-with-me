@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+import ru.practicum.event.model.enums.State;
 import ru.practicum.exceptionHandler.exception.ValidateFieldException;
 import ru.practicum.user.model.NewUserRequest;
 import ru.practicum.event.model.*;
@@ -21,9 +21,7 @@ import ru.practicum.user.model.UserDto;
 import ru.practicum.user.model.UserMapper;
 import ru.practicum.user.service.UserService;
 
-import javax.validation.Valid;
-import javax.xml.bind.ValidationException;
-import java.time.LocalDateTime;
+import javax.validation.ValidationException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -83,7 +81,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public ParticipationRequestDto createRequestParticipate(Integer userId, Integer eventId) {
         User user = findUserById(userId);
-        Event event = eventService.findEventbyId(eventId);
+        Event event = eventService.findEventById(eventId);
+        if (!event.getState().equals(State.PUBLISHED)) {
+            throw new ValidationException("Event must be published");
+        }
+        if (requestService.getRequestsParticipation(userId, eventId).size()>0) {
+            throw new ValidationException("User has already created a request");
+        }
         return requestService.createRequest(user, event);
     }
 
@@ -110,14 +114,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<ParticipationRequestDto> getRequestsParticipationInEvent(Integer userId, Integer eventId) {
         findUserById(userId);
-        eventService.findEventbyId(eventId);
+        eventService.findEventById(eventId);
         return requestService.getRequestsParticipation(userId, eventId);
     }
 
     @Override
     public EventRequestStatusUpdateResult changeStatusParticipationInEvent(Integer userId, Integer eventId, EventRequestStatusUpdateRequest statusEvents) {
         findUserById(userId);
-        int limit =eventService.findEventbyId(eventId).getParticipantLimit();
+        int limit =eventService.findEventById(eventId).getParticipantLimit();
         return requestService.changeStatusParticipation(userId, eventId, limit, statusEvents);
     }
 

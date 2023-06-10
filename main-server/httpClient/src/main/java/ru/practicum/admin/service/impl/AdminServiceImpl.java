@@ -24,7 +24,6 @@ import ru.practicum.user.model.UserDto;
 import ru.practicum.user.service.impl.UserServiceImpl;
 
 import javax.validation.ValidationException;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -86,6 +85,11 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public CompilationDto cangeCompilation(Integer comId, UpdateCompilationRequest compilation) {
+        if (compilation.getTitle() != null) {
+            if (compilation.getTitle().length()>50) {
+                throw new ValidateFieldException("Length title cannot be > 50");
+            }
+        }
         return compilationService.changeCompilation(comId, compilation);
     }
 
@@ -122,7 +126,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public EventFullDto changeEventAndStatus(Integer eventId, UpdateEventAdminRequest event) {
-        Event updateEvent = eventService.findEventbyId(eventId);
+        Event updateEvent = eventService.findEventById(eventId);
         if (updateEvent.getEventDate().minusHours(1).isAfter(LocalDateTime.now())) {
             updateEvent.setPublishedOn(LocalDateTime.now());
         } else {
@@ -146,7 +150,7 @@ public class AdminServiceImpl implements AdminService {
             }
         }
         if (event.getAnnotation() != null) {
-            if (event.getAnnotation().length()<20 || event.getAnnotation().length()>2000) {
+            if (event.getAnnotation().length() < 20 || event.getAnnotation().length() > 2000) {
                 throw new ValidateFieldException("Length annotation min 20, max 7000 ");
             }
             updateEvent.setAnnotation(event.getAnnotation());
@@ -155,7 +159,7 @@ public class AdminServiceImpl implements AdminService {
             updateEvent.setCategory(categoryService.findCategoryById(event.getCategory()));
         }
         if (event.getDescription() != null) {
-            if (event.getDescription().length()<20 || event.getDescription().length()>7000) {
+            if (event.getDescription().length() < 20 || event.getDescription().length() > 7000) {
                 throw new ValidateFieldException("Length description min 20, max 7000 ");
             }
             updateEvent.setDescription(event.getDescription());
@@ -180,7 +184,7 @@ public class AdminServiceImpl implements AdminService {
             updateEvent.setRequestModeration(event.getRequestModeration());
         }
         if (event.getTitle() != null) {
-            if (event.getTitle().length()<3 || event.getTitle().length()>120) {
+            if (event.getTitle().length() < 3 || event.getTitle().length() > 120) {
                 throw new ValidateFieldException("Length title min 3, max 120");
             }
             updateEvent.setTitle(event.getTitle());
