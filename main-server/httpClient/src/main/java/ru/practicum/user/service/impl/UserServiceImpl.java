@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService {
         if (!event.getState().equals(State.PUBLISHED)) {
             throw new ValidationException("Event must be published");
         }
-        if (requestService.getRequestsParticipation(userId, eventId).size() > 0) {
+        if (requestService.validateParticipateOfUser(userId, eventId) != null) {
             throw new ValidationException("User has already created a request");
         }
         return requestService.createRequest(user, event);

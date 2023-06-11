@@ -37,12 +37,12 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
 
     @Query("select new ru.practicum.event.model.EventShort(e.id, e.annotation, e.category, e.participantLimit, e.eventDate, e.initiator, e.paid, e.title) " +
             "from Event e " +
-            "where (?1 is null or (lower(e.annotation) like CONCAT('%', ?1,'%') " +
-            "or lower(e.description) like CONCAT('%', ?1,'%')))" +
+            "where (?1 is null or ((lower(e.annotation) like lower(CONCAT('%', ?1,'%')) " +
+            "or lower(e.description) like lower(CONCAT('%', ?1,'%')))))" +
             "and (?2 is null or e.category in ?2)" +
             "and (?3 is null or e.paid = ?3)" +
-            "and (cast(?4 AS date) IS NULL OR e.eventDate >= ?4)" +
-            "and (cast(?5 AS date) IS NULL OR e.eventDate <= ?5)"
+            "and (?4 IS NULL OR e.eventDate >= ?4)" +
+            "and (?5 IS NULL OR e.eventDate <= ?5)"
     )
     List<EventShort> findEventsByParametersOfUser(String text,
                                                   List<Integer> categories,

@@ -113,9 +113,8 @@ public class RequestServiceImpl implements RequestService {
         return requestRepository.findById(requestId).orElseThrow(() -> new ValueNotFoundDbException("Request with id=" + requestId + " was not found"));
     }
 
-    public List<Request> getCountRequest(Integer eventId) {
-        List<Request> list = requestRepository.findAllByEvent(eventId);
-        return list;
+    public Request validateParticipateOfUser(Integer userId, Integer eventId) {
+        return requestRepository.findByEventAndRequester(eventId, userId);
     }
 
 }

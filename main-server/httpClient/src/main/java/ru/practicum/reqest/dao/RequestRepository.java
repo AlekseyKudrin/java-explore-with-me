@@ -28,4 +28,5 @@ public interface RequestRepository extends JpaRepository<Request, Integer> {
             "and r.requester=?2", nativeQuery = true)
     void updateCancelingParticipate(Integer requestId, Integer requester);
 
+    Request findByEventAndRequester(Integer eventId, Integer userId);
 }
