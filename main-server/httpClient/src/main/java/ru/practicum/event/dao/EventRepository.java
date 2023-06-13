@@ -20,13 +20,12 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
 
     Event findByIdAndInitiatorId(Integer userId, Integer eventId);
 
-    @Query(value = "select * from Events e " +
-            "where (?1 is null or e.initiator in (?1))" +
-            "and (?2 is null or e.state in (?2))" +
-            "and (?3 is null or e.category in (?3))" +
-            "and ((cast(?4 AS date) IS NULL OR e.event_date >= (?4)))" +
-            "and ((cast(?5 AS date) IS NULL OR e.event_date <= (?5)))"
-            , nativeQuery = true
+    @Query(value = "select e from Event as e " +
+            "where nullif((e.initiator in ?1), ?1) "
+//            "and (e.state in ?2)" +
+//            "and (e.category in ?3)" +
+//            "and ((cast(?4 AS date) IS NULL OR e.eventDate >= (?4)))" +
+//            "and ((cast(?5 AS date) IS NULL OR e.eventDate <= (?5)))"
     )
     List<Event> findEventsByParameters(List<Integer> users,
                                        List<String> states,
@@ -41,8 +40,8 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
             "or lower(e.description) like lower(CONCAT('%', ?1,'%')))))" +
             "and (?2 is null or e.category in ?2)" +
             "and (?3 is null or e.paid = ?3)" +
-            "and (?4 IS NULL OR e.eventDate >= ?4)" +
-            "and (?5 IS NULL OR e.eventDate <= ?5)"
+            "and (cast(?4 as date ) IS NULL OR e.eventDate >= ?4)" +
+            "and (cast(?5 as date ) IS NULL OR e.eventDate <= ?5)"
     )
     List<EventShort> findEventsByParametersOfUser(String text,
                                                   List<Integer> categories,

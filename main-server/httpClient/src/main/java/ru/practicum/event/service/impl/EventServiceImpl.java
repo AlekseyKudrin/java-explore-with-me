@@ -195,7 +195,7 @@ public class EventServiceImpl implements EventService {
 
     public List<EventFullDto> getEvents(List<Integer> users, List<String> states, List<Integer> categories, LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size) {
         PageRequest pageRequest = PageRequest.of(from > 0 ? from / size : 0, size);
-        List<Event> events = eventRepository.findEventsByParameters(users, states, categories, rangeStart, rangeEnd, pageRequest);
+        List<Event> events = eventRepository.findEventsByParameters(null, states, categories, rangeStart, rangeEnd, pageRequest);
         return events.stream().map(this::getEventFullDto).collect(Collectors.toList());
     }
 }
