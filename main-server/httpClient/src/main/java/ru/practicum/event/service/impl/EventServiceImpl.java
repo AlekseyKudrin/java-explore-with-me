@@ -3,10 +3,12 @@ package ru.practicum.event.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.practicum.MainHttp;
 import ru.practicum.category.model.Category;
 import ru.practicum.category.service.impl.CategoryServiceImpl;
+import ru.practicum.client.ServerClient;
 import ru.practicum.event.dao.EventRepository;
 import ru.practicum.event.model.*;
 import ru.practicum.event.model.enums.State;
@@ -19,7 +21,7 @@ import ru.practicum.reqest.service.impl.RequestServiceImpl;
 import ru.practicum.user.model.User;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,6 +39,8 @@ public class EventServiceImpl implements EventService {
     private final CategoryServiceImpl categoryService;
 
     private final RequestServiceImpl requestService;
+
+    private final ServerClient serverClient;
 
     public EventFullDto createEvent(User user, NewEventDto newEventDto) {
         Category category = categoryService.findCategoryById(newEventDto.getCategory());
@@ -74,7 +78,7 @@ public class EventServiceImpl implements EventService {
 
         Event updateEvent = eventRepository.findById(eventId).orElseThrow();
         if (event.getAnnotation() != null) {
-            if (event.getAnnotation().length()<20 || event.getAnnotation().length()>2000) {
+            if (event.getAnnotation().length() < 20 || event.getAnnotation().length() > 2000) {
                 throw new ValidateFieldException("Length annotation min 20, max 7000 ");
             }
             updateEvent.setAnnotation(event.getAnnotation());
@@ -83,7 +87,7 @@ public class EventServiceImpl implements EventService {
             updateEvent.setCategory(categoryService.findCategoryById(event.getCategory()));
         }
         if (event.getDescription() != null) {
-            if (event.getDescription().length()<20 || event.getDescription().length()>7000) {
+            if (event.getDescription().length() < 20 || event.getDescription().length() > 7000) {
                 throw new ValidateFieldException("Length description min 20, max 7000 ");
             }
             updateEvent.setDescription(event.getDescription());
@@ -115,7 +119,7 @@ public class EventServiceImpl implements EventService {
             }
         }
         if (event.getTitle() != null) {
-            if (event.getTitle().length()<3 || event.getTitle().length()>120) {
+            if (event.getTitle().length() < 3 || event.getTitle().length() > 120) {
                 throw new ValidateFieldException("Length title min 3, max 120");
             }
             updateEvent.setTitle(event.getTitle());
@@ -151,7 +155,8 @@ public class EventServiceImpl implements EventService {
         if (rangeStart != null && rangeEnd != null) {
             if (rangeStart.isAfter(rangeEnd)) {
                 throw new ValidateFieldException("Start date cannot be before than end date");
-            };
+            }
+            ;
         }
         if (onlyAvailable) {
             eventShort = eventShort.stream().filter(i -> i.getConfirmedRequests() <= i.getParticipantLimit()).collect(Collectors.toList());
@@ -172,7 +177,12 @@ public class EventServiceImpl implements EventService {
     public EventFullDto findPublishedEventById(Integer eventId) {
         Event event = eventRepository.findByIdAndState(eventId, State.PUBLISHED).orElseThrow(() -> new ValueNotFoundDbException("Event with id=" + eventId + " was not found"));
         int countConfirmedRequest = requestService.getCountConfirmedRequest(event.getId());
+        ResponseEntity<Object> response = serverClient.getStats("1992-11-12 23:15:10", "3000-11-12 23:15:10", List.of("/events/" + event.getId()), false);
         int views = 0;
+        ArrayList<Object> list = (ArrayList<Object>) response.getBody();
+        if (list != null) {
+            views = list.size();
+        }
         return EventMapper.toEventFullDto(countConfirmedRequest, views, event);
     }
 

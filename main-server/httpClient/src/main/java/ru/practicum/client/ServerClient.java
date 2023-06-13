@@ -1,4 +1,3 @@
-/*
 package ru.practicum.client;
 
 import lombok.extern.slf4j.Slf4j;
@@ -12,9 +11,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
-import ru.practicum.allDto.*;
-import ru.practicum.allDto.HitDto;
+import ru.practicum.HitDto;
+import ru.practicum.MainHttp;
 
+import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,24 +34,32 @@ public class ServerClient {
                 .build();
     }
 
-    public ResponseEntity<Object> create(HitDto body) {
-        return makeAndSendRequest(HttpMethod.POST, "/hit", null, body);
+    public ResponseEntity<Object> create(HttpServletRequest request) {
+        HitDto hitDto = new HitDto(
+                "ewm-main-service",
+                request.getRequestURI(),
+                request.getRemoteAddr(),
+                LocalDateTime.now().format(MainHttp.SERVER_FORMAT)
+        );
+        return makeAndSendRequest(HttpMethod.POST, "/hit", null, hitDto);
     }
 
-    public ResponseEntity<Object> getCompilations(String start, String end, List<String> uris, Boolean unique) {
-        StringBuilder stringBuilder = new StringBuilder();
+    public ResponseEntity<Object> getStats(String start, String end, List<String> uris, Boolean unique) {
+        StringBuilder sb = new StringBuilder();
+        Map<String, Object> parameters = new HashMap<>();
         if (uris != null) {
-            for (String s : uris) {
-                stringBuilder.append("uris=").append(s).append("&");
-            }
+            sb.append("uris=").append(String.join("&uris=", uris)).append("&");
         }
-        Map<String, Object> parameters = Map.of(
-                "start", start,
-                "end", end,
-                "unique", unique);
+        if (start != null) {
+            parameters.put("start", start);
+        }
+        if (end != null) {
+            parameters.put("end", end);
+        }
+        parameters.put("unique", unique);
         return makeAndSendRequest(
                 HttpMethod.GET,
-                "/stats?start={start}&end={end}&" + stringBuilder + "unique={unique}",
+                "/stats?start={start}&end={end}&" + sb + "unique={unique}",
                 parameters,
                 null);
     }
@@ -91,107 +101,6 @@ public class ServerClient {
 
         return responseBuilder.build();
     }
-
-    public ResponseEntity<Object> getCompilations(Integer from, Integer size, Boolean pinned) {
-        return null;
-    }
-
-    public ResponseEntity<Object> getCompilationsById(Integer compId) {
-        return null;
-    }
-
-    public ResponseEntity<Object> createCategory(Category category) {
-        return null;
-    }
-
-    public ResponseEntity<Object> deleteCategory(Integer catId) {
-        return null;
-    }
-
-    public ResponseEntity<Object> patchCategory(Integer catId, Category category) {
-        return null;
-    }
-
-    public ResponseEntity<Object> getEventsUser(Integer userId, Integer from, Integer size) {
-        return null;
-    }
-
-    public ResponseEntity<Object> createEventUser(Integer userId, Event event) {
-        return null;
-    }
-
-    public ResponseEntity<Object> getEventUser(Integer userId, Integer eventId) {
-        return null;
-    }
-
-    public ResponseEntity<Object> changeEventUser(Integer userId, Integer eventId) {
-        return null;
-    }
-
-    public ResponseEntity<Object> getRequestsUserInEvent(Integer userId, Integer eventId) {
-        return null;
-    }
-
-    public ResponseEntity<Object> changeStatusParticipationInEvent(Integer userId, Integer eventId, StatusEvents statusEvents) {
-        return null;
-    }
-
-    public ResponseEntity<Object> getCategories(Integer from, Integer size) {
-        return null;
-    }
-
-    public ResponseEntity<Object> getCategoryById(Integer catId) {
-        return null;
-    }
-
-    public ResponseEntity<Object> searchEvents(List<Integer> users, List<Integer> states, List<Integer> categories, String rangeStart, String rangeEnd, Integer from, Integer size) {
-        return null;
-    }
-
-    public ResponseEntity<Object> changeEventAndStatus(Integer eventId, Event event) {
-        return null;
-    }
-
-    public ResponseEntity<Object> getEvents(String text, List<Integer> categories, Boolean paid, String rangeStart, String rangeEnd, Boolean onlyAvailable, String sort, Integer from, Integer size) {
-        return null;
-    }
-
-    public ResponseEntity<Object> getRequestUsersById(Integer userId) {
-        return null;
-    }
-
-    public ResponseEntity<Object> createRequestParticipate(Integer userId, Integer eventId) {
-        return null;
-    }
-
-    public ResponseEntity<Object> cancelingParticipate(Integer userId, Integer requestId) {
-        return null;
-    }
-
-    public ResponseEntity<Object> getUsers(List<Integer> ids, Integer from, Integer size) {
-        return null;
-    }
-
-    public ResponseEntity<Object> createUser(UserDto userDto) {
-        return null;
-    }
-
-    public ResponseEntity<Object> deleteUser(Integer userId) {
-        return null;
-    }
-
-    public ResponseEntity<Object> createCompilation(Compilation compilation) {
-        return null;
-    }
-
-    public ResponseEntity<Object> deleteCompilation(Integer comId) {
-        return null;
-    }
-
-    public ResponseEntity<Object> cangeCompilation(Integer comId, Compilation compilation) {
-        return null;
-    }
 }
 
 
-*/
