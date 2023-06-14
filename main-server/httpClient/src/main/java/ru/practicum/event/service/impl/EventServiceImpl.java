@@ -1,7 +1,15 @@
 package ru.practicum.event.service.impl;
 
+import com.querydsl.core.types.Expression;
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.PredicateOperation;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.SessionFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,6 +28,7 @@ import ru.practicum.location.service.impl.LocationServiceImpl;
 import ru.practicum.reqest.service.impl.RequestServiceImpl;
 import ru.practicum.user.model.User;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -41,6 +50,13 @@ public class EventServiceImpl implements EventService {
     private final RequestServiceImpl requestService;
 
     private final ServerClient serverClient;
+
+    private final EntityManager entityManager;
+
+    private JPAQueryFactory jpaQueryFactory;
+
+    private SessionFactory sessionFactory;
+
 
     public EventFullDto createEvent(User user, NewEventDto newEventDto) {
         Category category = categoryService.findCategoryById(newEventDto.getCategory());
@@ -195,7 +211,25 @@ public class EventServiceImpl implements EventService {
 
     public List<EventFullDto> getEvents(List<Integer> users, List<String> states, List<Integer> categories, LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size) {
         PageRequest pageRequest = PageRequest.of(from > 0 ? from / size : 0, size);
-        List<Event> events = eventRepository.findEventsByParameters(null, states, categories, rangeStart, rangeEnd, pageRequest);
-        return events.stream().map(this::getEventFullDto).collect(Collectors.toList());
+//        QEvent event = QEvent.event;
+//        JPAQuery<?> query = new JPAQuery<Void>(entityManager);
+//        Event event1 = jpaQueryFactory.selectFrom(event).where(event.id.eq(1)).fetchOne();
+        List<BooleanExpression>  predicate = new ArrayList<>();
+        BooleanExpression expression;
+
+        if(users!= null) {
+            predicate.add(QEvent.event.initiator.id.in(users));
+        }
+        if (predicate.isEmpty()) {
+            expression = QEvent.event.isNotNull();
+        } else {
+            Expressions.allOf((BooleanExpression) predicate);
+        }
+//        BooleanExpression byUserState = QEvent.event.category.id.in(categories);
+        Iterable<Event> events = eventRepository.findAll(expression);
+//        List<EventFullDto> list = events.forEach(this::getEventFullDto);
+        List<EventFullDto> list = new ArrayList<>();
+        events.forEach(i-> list.add(getEventFullDto(i)));
+        return list;
     }
 }
