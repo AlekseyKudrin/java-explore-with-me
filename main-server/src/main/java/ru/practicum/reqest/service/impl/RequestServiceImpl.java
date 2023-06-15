@@ -13,7 +13,6 @@ import ru.practicum.reqest.model.enums.Status;
 import ru.practicum.reqest.service.RequestService;
 import ru.practicum.user.model.User;
 
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -103,10 +102,11 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    @Transactional
     public ParticipationRequestDto cancelingParticipate(Integer userId, Integer requestId) {
-        requestRepository.updateCancelingParticipate(requestId, userId);
-        return RequestMapper.toParticipationRequestDto(findRequest(requestId));
+        Request request = requestRepository.findByIdAndRequester(requestId, userId);
+        request.setStatus(Status.CANCELED);
+        requestRepository.save(request);
+        return RequestMapper.toParticipationRequestDto(request);
     }
 
     public Request findRequest(Integer requestId) {
