@@ -20,16 +20,6 @@ public interface EventRepository extends JpaRepository<Event, Integer>, Querydsl
 
     Event findByIdAndInitiatorId(Integer userId, Integer eventId);
 
-    @Query(value = "select * from EVENTS as e " +
-            "where (case when ?1 then (e.initiator is not null) else e.INITIATOR in ?1 end) "
-//            "and (e.state in ?2)" +1
-//            "and (e.category in ?3)" +
-//            "and ((cast(?4 AS date) IS NULL OR e.eventDate >= (?4)))" +
-//            "and ((cast(?5 AS date) IS NULL OR e.eventDate <= (?5)))"
-            , nativeQuery = true
-    )
-    List<Event> findEventsByParameters(List<Integer> users);
-
     @Query("select new ru.practicum.event.model.EventShort(e.id, e.annotation, e.category, e.participantLimit, e.eventDate, e.initiator, e.paid, e.title) " +
             "from Event e " +
             "where (?1 is null or ((lower(e.annotation) like lower(CONCAT('%', ?1,'%')) " +
