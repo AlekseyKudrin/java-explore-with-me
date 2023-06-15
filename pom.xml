@@ -12,7 +12,7 @@
 
 	<name>Explore With Me</name>
 	<modules>
-		<module>statistics-service-API</module>
+		<module>stat-server</module>
 		<module>main-server</module>
 	</modules>
 

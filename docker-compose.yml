@@ -1,18 +1,19 @@
 version: '3.1'
 services:
   main-server:
-    build: main-server/httpClient
+    build: main-server
     container_name: main-server
     ports:
       - "8080:8080"
     depends_on:
       - statistics-server
+      - main_db
     environment:
       - STATISTICS_SERVER.URL=http://statistics-server:9090
       - SPRING_DATASOURCE_URL=jdbc:postgresql://main_db:5432/postgres_main
 
   statistics-server:
-    build: statistics-service-API/server
+    build: stat-server
     container_name: statistics-server
     ports:
       - "9090:9090"
