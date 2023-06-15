@@ -3,10 +3,8 @@ package ru.practicum.event.service.impl;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.SessionFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -25,8 +23,6 @@ import ru.practicum.location.service.impl.LocationServiceImpl;
 import ru.practicum.reqest.service.impl.RequestServiceImpl;
 import ru.practicum.user.model.User;
 
-import javax.persistence.EntityManager;
-import javax.persistence.criteria.Predicate;
 import javax.validation.ValidationException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -211,13 +207,13 @@ public class EventServiceImpl implements EventService {
         }
         if (states != null) {
             List<State> list = new ArrayList<>();
-                    states.forEach(i -> {
+            states.forEach(i -> {
                 for (State s : State.values()) {
                     int t = 0;
                     if (!i.equals(s.toString())) {
-                        list.add(s);
                         t++;
                     } else {
+                        list.add(s);
                         break;
                     }
                     if (t == State.values().length)
@@ -235,7 +231,7 @@ public class EventServiceImpl implements EventService {
         if (rangeEnd != null) {
             builder.and(QEvent.event.eventDate.before(rangeEnd));
         }
-        if (builder.getValue()==null) {
+        if (builder.getValue() == null) {
             expression = QEvent.event.isNotNull();
         } else {
             expression = Expressions.asBoolean(builder.getValue());

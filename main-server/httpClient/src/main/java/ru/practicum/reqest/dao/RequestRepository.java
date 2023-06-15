@@ -23,9 +23,9 @@ public interface RequestRepository extends JpaRepository<Request, Integer> {
     List<Request> findALLByRequester(Integer userId);
 
     @Modifying
-    @Query(value = "update Requests r " +
-            "set r.status = 'CANCELED' where r.id=?1 " +
-            "and r.requester=?2", nativeQuery = true)
+    @Query(value = "update REQUESTS " +
+            "set STATUS = 'CANCELED' where ID=?1 " +
+            "and REQUESTER=?2", nativeQuery = true)
     void updateCancelingParticipate(Integer requestId, Integer requester);
 
     Request findByEventAndRequester(Integer eventId, Integer userId);

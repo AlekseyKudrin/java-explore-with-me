@@ -175,7 +175,7 @@ public class AdminServiceImpl implements AdminService {
             updateEvent.setLocation(event.getLocation());
         }
         if (event.getPaid() != null) {
-            updateEvent.setLocation(event.getLocation());
+            updateEvent.setPaid(event.getPaid());
         }
         if (event.getParticipantLimit() != null) {
             updateEvent.setParticipantLimit(event.getParticipantLimit());
