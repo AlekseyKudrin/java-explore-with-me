@@ -119,7 +119,6 @@ public class AdminServiceImpl implements AdminService {
             if (rangeStart.isAfter(rangeEnd)) {
                 throw new ValidateFieldException("Start date cannot be before than end date");
             }
-            ;
         }
         return eventService.getEvents(users, states, categories, rangeStart, rangeEnd, from, size);
     }

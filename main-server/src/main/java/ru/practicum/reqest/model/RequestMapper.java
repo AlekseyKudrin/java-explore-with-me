@@ -4,15 +4,8 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import ru.practicum.MainHttp;
 
-import java.time.format.DateTimeFormatter;
-
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RequestMapper {
-
-    public static Request toRequest() {
-
-        return null;
-    }
 
     public static ParticipationRequestDto toParticipationRequestDto(Request request) {
 

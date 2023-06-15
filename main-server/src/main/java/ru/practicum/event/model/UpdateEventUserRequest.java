@@ -1,13 +1,9 @@
 package ru.practicum.event.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import ru.practicum.event.model.enums.StateAction;
 import ru.practicum.location.model.Location;
-
-import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter

@@ -6,12 +6,10 @@ import ru.practicum.MainHttp;
 import ru.practicum.category.model.Category;
 import ru.practicum.category.model.CategoryMapper;
 import ru.practicum.event.model.enums.State;
-import ru.practicum.location.model.Location;
 import ru.practicum.user.model.User;
 import ru.practicum.user.model.UserMapper;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EventMapper {

@@ -154,14 +154,11 @@ public class EventServiceImpl implements EventService {
             int confirmed = requestService.getCountConfirmedRequest(t.getInitiator().getId());
             t.setConfirmedRequests(confirmed);
         });
-        eventShort.forEach(t -> {
-            t.setViews(0);
-        });
+        eventShort.forEach(t -> t.setViews(0));
         if (rangeStart != null && rangeEnd != null) {
             if (rangeStart.isAfter(rangeEnd)) {
                 throw new ValidateFieldException("Start date cannot be before than end date");
             }
-            ;
         }
         if (onlyAvailable) {
             eventShort = eventShort.stream().filter(i -> i.getConfirmedRequests() <= i.getParticipantLimit()).collect(Collectors.toList());

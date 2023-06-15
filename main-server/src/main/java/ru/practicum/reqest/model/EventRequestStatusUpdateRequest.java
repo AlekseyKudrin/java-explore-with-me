@@ -2,7 +2,6 @@ package ru.practicum.reqest.model;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import ru.practicum.reqest.model.enums.Status;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

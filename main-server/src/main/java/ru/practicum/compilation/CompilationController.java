@@ -2,21 +2,10 @@ package ru.practicum.compilation;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.admin.model.UpdateEventAdminRequest;
-import ru.practicum.admin.service.impl.AdminServiceImpl;
-import ru.practicum.category.model.CategoryDto;
 import ru.practicum.compilation.model.CompilationDto;
-import ru.practicum.compilation.model.NewCompilationDto;
-import ru.practicum.compilation.model.UpdateCompilationRequest;
 import ru.practicum.compilation.service.impl.CompilationServiceImpl;
-import ru.practicum.event.model.EventFullDto;
-import ru.practicum.user.model.UserDto;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @Slf4j
