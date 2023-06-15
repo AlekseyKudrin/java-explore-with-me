@@ -1,10 +1,10 @@
 package ru.practicum.event.service;
 
 import org.springframework.data.domain.PageRequest;
-import ru.practicum.event.model.EventShortDto;
-import ru.practicum.event.model.UpdateEventUserRequest;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.model.EventFullDto;
+import ru.practicum.event.model.EventShortDto;
+import ru.practicum.event.model.UpdateEventUserRequest;
 
 import java.time.LocalDateTime;
 import java.util.List;

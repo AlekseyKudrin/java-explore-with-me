@@ -41,6 +41,7 @@ public class EventController {
                 text, categories, paid, rangeStart, rangeEnd,
                 onlyAvailable, sort, from, size);
     }
+
     @GetMapping("/{id}")
     public EventFullDto findById(
             @PathVariable Integer id,

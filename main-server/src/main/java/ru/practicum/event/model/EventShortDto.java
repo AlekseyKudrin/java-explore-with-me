@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.practicum.user.model.UserShortDto;
 import ru.practicum.category.model.CategoryDto;
+import ru.practicum.user.model.UserShortDto;
 
 @AllArgsConstructor
 @NoArgsConstructor

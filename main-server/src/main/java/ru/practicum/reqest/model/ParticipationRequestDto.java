@@ -10,7 +10,7 @@ import ru.practicum.reqest.model.enums.Status;
 @Setter
 public class ParticipationRequestDto {
     Integer id;
-    String  created;
+    String created;
     Integer event;
     Integer requester;
     Status status;

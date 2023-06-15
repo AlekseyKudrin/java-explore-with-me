@@ -1,14 +1,14 @@
 package ru.practicum.admin.service;
 
-import ru.practicum.category.model.NewCategoryDto;
-import ru.practicum.user.model.NewUserRequest;
 import ru.practicum.admin.model.UpdateEventAdminRequest;
+import ru.practicum.category.model.CategoryDto;
+import ru.practicum.category.model.NewCategoryDto;
 import ru.practicum.compilation.model.CompilationDto;
 import ru.practicum.compilation.model.NewCompilationDto;
 import ru.practicum.compilation.model.UpdateCompilationRequest;
 import ru.practicum.event.model.EventFullDto;
+import ru.practicum.user.model.NewUserRequest;
 import ru.practicum.user.model.UserDto;
-import ru.practicum.category.model.CategoryDto;
 
 import java.time.LocalDateTime;
 import java.util.List;

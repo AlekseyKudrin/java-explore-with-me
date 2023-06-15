@@ -4,11 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import ru.practicum.compilation.dao.CompilationRepository;
 import ru.practicum.compilation.model.*;
+import ru.practicum.compilation.service.CompilationService;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.model.EventShortDto;
-import ru.practicum.compilation.dao.CompilationRepository;
-import ru.practicum.compilation.service.CompilationService;
 import ru.practicum.event.service.impl.EventServiceImpl;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class CompilationServiceImpl implements CompilationService {
     public CompilationDto createCompilation(NewCompilationDto newCompilationDto) {
         Compilation compilation = compilationRepository.save(CompilationMapper.toCompilation(newCompilationDto));
         List<EventShortDto> events = compilation.getEvents().stream().map(eventService::findEventById).map(eventService::getEventShortDto).collect(Collectors.toList());
-        return CompilationMapper.toCompilationDto(events,compilation);
+        return CompilationMapper.toCompilationDto(events, compilation);
     }
 
     @Override
@@ -57,8 +57,8 @@ public class CompilationServiceImpl implements CompilationService {
         int page = from / size;
         PageRequest pageRequest = PageRequest.of(page, size);
         List<Compilation> compilation = compilationRepository.findAll(pageRequest).toList();
-        List<CompilationDto> compilationDto =  new ArrayList<>();
-        for (Compilation a: compilation) {
+        List<CompilationDto> compilationDto = new ArrayList<>();
+        for (Compilation a : compilation) {
             List<Event> eventList = a.getEvents().stream().map(eventService::findEventById).collect(Collectors.toList());
             List<EventShortDto> eventShortDtoList = eventList.stream().map(eventService::getEventShortDto).collect(Collectors.toList());
             compilationDto.add(CompilationMapper.toCompilationDto(eventShortDtoList, a));

@@ -84,7 +84,7 @@ public class UserServiceImpl implements UserService {
         if (event.getInitiator().equals(user)) {
             throw new ValidationException("The user is the initiator of the event");
         }
-        if (event.getParticipantLimit() != 0 & !(event.getParticipantLimit() > requestService.getCountConfirmedRequest(eventId) )) {
+        if (event.getParticipantLimit() != 0 & !(event.getParticipantLimit() > requestService.getCountConfirmedRequest(eventId))) {
             throw new ValidationException("Reached limit for participation in the event");
         }
         if (!event.getState().equals(State.PUBLISHED)) {

@@ -86,7 +86,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public CompilationDto cangeCompilation(Integer comId, UpdateCompilationRequest compilation) {
         if (compilation.getTitle() != null) {
-            if (compilation.getTitle().length()>50) {
+            if (compilation.getTitle().length() > 50) {
                 throw new ValidateFieldException("Length title cannot be > 50");
             }
         }

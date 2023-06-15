@@ -1,13 +1,13 @@
 package ru.practicum.user.service;
 
-import ru.practicum.user.model.NewUserRequest;
-import ru.practicum.event.model.UpdateEventUserRequest;
 import ru.practicum.event.model.EventFullDto;
 import ru.practicum.event.model.EventShortDto;
 import ru.practicum.event.model.NewEventDto;
+import ru.practicum.event.model.UpdateEventUserRequest;
 import ru.practicum.reqest.model.EventRequestStatusUpdateRequest;
 import ru.practicum.reqest.model.EventRequestStatusUpdateResult;
 import ru.practicum.reqest.model.ParticipationRequestDto;
+import ru.practicum.user.model.NewUserRequest;
 import ru.practicum.user.model.UserDto;
 
 import java.util.List;

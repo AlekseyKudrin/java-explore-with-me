@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class CategoryDto{
+public class CategoryDto {
     Integer id;
     @Size(max = 50)
     String name;
