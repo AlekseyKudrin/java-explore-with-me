@@ -1,11 +1,8 @@
 package ru.practicum.event.service.impl;
 
-import com.querydsl.core.types.Expression;
-import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.PredicateOperation;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +26,8 @@ import ru.practicum.reqest.service.impl.RequestServiceImpl;
 import ru.practicum.user.model.User;
 
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.Predicate;
+import javax.validation.ValidationException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -50,12 +49,6 @@ public class EventServiceImpl implements EventService {
     private final RequestServiceImpl requestService;
 
     private final ServerClient serverClient;
-
-    private final EntityManager entityManager;
-
-    private JPAQueryFactory jpaQueryFactory;
-
-    private SessionFactory sessionFactory;
 
 
     public EventFullDto createEvent(User user, NewEventDto newEventDto) {
@@ -211,25 +204,45 @@ public class EventServiceImpl implements EventService {
 
     public List<EventFullDto> getEvents(List<Integer> users, List<String> states, List<Integer> categories, LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size) {
         PageRequest pageRequest = PageRequest.of(from > 0 ? from / size : 0, size);
-//        QEvent event = QEvent.event;
-//        JPAQuery<?> query = new JPAQuery<Void>(entityManager);
-//        Event event1 = jpaQueryFactory.selectFrom(event).where(event.id.eq(1)).fetchOne();
-        List<BooleanExpression>  predicate = new ArrayList<>();
+        BooleanBuilder builder = new BooleanBuilder();
         BooleanExpression expression;
-
-        if(users!= null) {
-            predicate.add(QEvent.event.initiator.id.in(users));
+        if (users != null) {
+            builder.and(QEvent.event.initiator.id.in(users));
         }
-        if (predicate.isEmpty()) {
+        if (states != null) {
+            List<State> list = new ArrayList<>();
+                    states.forEach(i -> {
+                for (State s : State.values()) {
+                    int t = 0;
+                    if (!i.equals(s.toString())) {
+                        list.add(s);
+                        t++;
+                    } else {
+                        break;
+                    }
+                    if (t == State.values().length)
+                        throw new ValidationException("Incorrect state");
+                }
+            });
+            builder.and(QEvent.event.state.in(list));
+        }
+        if (categories != null) {
+            builder.and(QEvent.event.category.id.in(categories));
+        }
+        if (rangeStart != null) {
+            builder.and(QEvent.event.eventDate.after(rangeStart));
+        }
+        if (rangeEnd != null) {
+            builder.and(QEvent.event.eventDate.before(rangeEnd));
+        }
+        if (builder.getValue()==null) {
             expression = QEvent.event.isNotNull();
         } else {
-            Expressions.allOf((BooleanExpression) predicate);
+            expression = Expressions.asBoolean(builder.getValue());
         }
-//        BooleanExpression byUserState = QEvent.event.category.id.in(categories);
-        Iterable<Event> events = eventRepository.findAll(expression);
-//        List<EventFullDto> list = events.forEach(this::getEventFullDto);
+        Iterable<Event> events = eventRepository.findAll(expression, pageRequest);
         List<EventFullDto> list = new ArrayList<>();
-        events.forEach(i-> list.add(getEventFullDto(i)));
+        events.forEach(i -> list.add(getEventFullDto(i)));
         return list;
     }
 }
