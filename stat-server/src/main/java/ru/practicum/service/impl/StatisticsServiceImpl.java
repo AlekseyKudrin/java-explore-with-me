@@ -28,6 +28,13 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Override
     public List<Stats> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
+        if (start == null || end == null) {
+            throw new IllegalArgumentException();
+        } else {
+            if (start.isAfter(end)) {
+                throw new IllegalArgumentException();
+            }
+        }
         List<Stats> getStats;
         if (uris == null || uris.isEmpty()) {
             if (unique) {
