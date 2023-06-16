@@ -198,7 +198,6 @@ public class EventServiceImpl implements EventService {
 
     public List<EventFullDto> getEvents(List<Integer> users, List<String> states, List<Integer> categories, LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size) {
         List<Request> requestList = requestService.getAllRequest();
-        long a = requestList.stream().filter(i -> i.getEvent() == 1).count();
         PageRequest pageRequest = PageRequest.of(from > 0 ? from / size : 0, size);
         BooleanBuilder builder = new BooleanBuilder();
         BooleanExpression expression;
@@ -238,7 +237,7 @@ public class EventServiceImpl implements EventService {
         }
         Iterable<Event> events = eventRepository.findAll(expression, pageRequest);
         List<EventFullDto> list = new ArrayList<>();
-        events.forEach(i -> list.add(getEventFullDto(i, requestList.stream().filter(c -> c.getEvent() == i.getId()).count())));
+        events.forEach(i -> list.add(getEventFullDto(i, requestList.stream().filter(c -> c.getEvent().equals(i.getId())).count())));
         return list;
     }
 }
