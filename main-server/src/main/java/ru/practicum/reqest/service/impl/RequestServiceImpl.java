@@ -117,4 +117,8 @@ public class RequestServiceImpl implements RequestService {
         return requestRepository.findByEventAndRequester(eventId, userId);
     }
 
+    public List<Request> getAllRequest() {
+        return requestRepository.findAll();
+    }
+
 }

@@ -20,6 +20,7 @@ import ru.practicum.event.service.EventService;
 import ru.practicum.exceptionHandler.exception.ValidateFieldException;
 import ru.practicum.exceptionHandler.exception.ValueNotFoundDbException;
 import ru.practicum.location.service.impl.LocationServiceImpl;
+import ru.practicum.reqest.model.Request;
 import ru.practicum.reqest.service.impl.RequestServiceImpl;
 import ru.practicum.user.model.User;
 
@@ -142,8 +143,9 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventFullDto saveUpdateEvent(Event updateEvent) {
+        long count = requestService.getCountConfirmedRequest(updateEvent.getId());
         locationService.createLocation(updateEvent.getLocation());
-        return getEventFullDto(eventRepository.save(updateEvent));
+        return getEventFullDto(eventRepository.save(updateEvent), count);
     }
 
     @Override
@@ -188,14 +190,15 @@ public class EventServiceImpl implements EventService {
         return EventMapper.toEventFullDto(countConfirmedRequest, views, event);
     }
 
-    public EventFullDto getEventFullDto(Event event) {
-        int countConfirmedRequest = requestService.getCountConfirmedRequest(event.getId());
+    public EventFullDto getEventFullDto(Event event, Long count) {
         int views = 0;
-        return EventMapper.toEventFullDto(countConfirmedRequest, views, event);
+        return EventMapper.toEventFullDto(count, views, event);
     }
 
 
     public List<EventFullDto> getEvents(List<Integer> users, List<String> states, List<Integer> categories, LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size) {
+        List<Request> requestList = requestService.getAllRequest();
+        long a = requestList.stream().filter(i -> i.getEvent() == 1).count();
         PageRequest pageRequest = PageRequest.of(from > 0 ? from / size : 0, size);
         BooleanBuilder builder = new BooleanBuilder();
         BooleanExpression expression;
@@ -235,7 +238,7 @@ public class EventServiceImpl implements EventService {
         }
         Iterable<Event> events = eventRepository.findAll(expression, pageRequest);
         List<EventFullDto> list = new ArrayList<>();
-        events.forEach(i -> list.add(getEventFullDto(i)));
+        events.forEach(i -> list.add(getEventFullDto(i, requestList.stream().filter(c -> c.getEvent() == i.getId()).count())));
         return list;
     }
 }

@@ -30,12 +30,12 @@ public class EventMapper {
         return event;
     }
 
-    public static EventFullDto toEventFullDto(int countConfirmedRequest, int views, Event event) {
+    public static EventFullDto toEventFullDto(long countConfirmedRequest, int views, Event event) {
         EventFullDto eventFullDto = new EventFullDto();
         eventFullDto.setId(event.getId());
         eventFullDto.setAnnotation(event.getAnnotation());
         eventFullDto.setCategory(CategoryMapper.toCategoryDto(event.getCategory()));
-        eventFullDto.setConfirmedRequests(countConfirmedRequest);
+        eventFullDto.setConfirmedRequests((int) countConfirmedRequest);
         eventFullDto.setCreatedOn(event.getCreatedOn().toString());
         eventFullDto.setDescription(event.getDescription());
         eventFullDto.setEventDate(event.getEventDate().format(MainHttp.SERVER_FORMAT));
