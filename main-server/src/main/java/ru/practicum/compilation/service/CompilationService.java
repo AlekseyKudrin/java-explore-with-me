@@ -10,7 +10,7 @@ public interface CompilationService {
 
     CompilationDto createCompilation(NewCompilationDto newCompilationDto);
 
-    void deleteComplation(Integer comId);
+    void deleteCompilation(Integer comId);
 
     CompilationDto changeCompilation(Integer comId, UpdateCompilationRequest compilation);
 

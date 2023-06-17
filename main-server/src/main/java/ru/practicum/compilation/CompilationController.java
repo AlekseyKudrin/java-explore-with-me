@@ -22,15 +22,19 @@ public class CompilationController {
             @RequestParam(defaultValue = "10") Integer size,
             @RequestParam(defaultValue = "false") Boolean pinned
     ) {
-        log.info("Received a request to return a collection of events");
-        return compilationService.getCompilations(from, size, pinned);
+        log.info("Received a request to return a collections compilation of events");
+        List<CompilationDto> list = compilationService.getCompilations(from, size, pinned);
+        log.info("Request to return a collections compilation completed");
+        return list;
     }
 
     @GetMapping("/{compId}")
     public CompilationDto getCompilationsById(
             @PathVariable Integer compId
     ) {
-        log.info("Received a request to return a collection of events by Id={}", compId);
-        return compilationService.getCompilationsById(compId);
+        log.info("Received a request to return a collection compilation by Id={}", compId);
+        CompilationDto compilation = compilationService.getCompilationsById(compId);
+        log.info("Request to return a collection compilation by Id={} completed", compId);
+        return compilation;
     }
 }

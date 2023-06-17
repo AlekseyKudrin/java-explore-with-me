@@ -3,7 +3,7 @@ package ru.practicum.admin.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.practicum.MainHttp;
+import ru.practicum.MainServer;
 import ru.practicum.admin.model.StateAction;
 import ru.practicum.admin.model.UpdateEventAdminRequest;
 import ru.practicum.admin.service.AdminService;
@@ -80,15 +80,13 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public void deleteCompilation(Integer comId) {
-        compilationService.deleteComplation(comId);
+        compilationService.deleteCompilation(comId);
     }
 
     @Override
-    public CompilationDto cangeCompilation(Integer comId, UpdateCompilationRequest compilation) {
-        if (compilation.getTitle() != null) {
-            if (compilation.getTitle().length() > 50) {
-                throw new ValidateFieldException("Length title cannot be > 50");
-            }
+    public CompilationDto changeCompilation(Integer comId, UpdateCompilationRequest compilation) {
+        if (compilation.getTitle() != null && compilation.getTitle().length() > 50) {
+            throw new ValidateFieldException("Length title cannot be > 50");
         }
         return compilationService.changeCompilation(comId, compilation);
     }
@@ -164,7 +162,7 @@ public class AdminServiceImpl implements AdminService {
             updateEvent.setDescription(event.getDescription());
         }
         if (event.getEventDate() != null) {
-            LocalDateTime eventDate = LocalDateTime.parse(event.getEventDate(), MainHttp.SERVER_FORMAT);
+            LocalDateTime eventDate = LocalDateTime.parse(event.getEventDate(), MainServer.SERVER_FORMAT);
             if (eventDate.isBefore(LocalDateTime.now())) {
                 throw new ValidateFieldException("Event date has already arrived");
             }

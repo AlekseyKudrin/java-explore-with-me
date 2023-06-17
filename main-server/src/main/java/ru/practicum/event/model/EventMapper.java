@@ -2,7 +2,7 @@ package ru.practicum.event.model;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import ru.practicum.MainHttp;
+import ru.practicum.MainServer;
 import ru.practicum.category.model.Category;
 import ru.practicum.category.model.CategoryMapper;
 import ru.practicum.event.model.enums.State;
@@ -38,7 +38,7 @@ public class EventMapper {
         eventFullDto.setConfirmedRequests((int) countConfirmedRequest);
         eventFullDto.setCreatedOn(event.getCreatedOn().toString());
         eventFullDto.setDescription(event.getDescription());
-        eventFullDto.setEventDate(event.getEventDate().format(MainHttp.SERVER_FORMAT));
+        eventFullDto.setEventDate(event.getEventDate().format(MainServer.SERVER_FORMAT));
         eventFullDto.setInitiator(UserMapper.toUserShortDto(event.getInitiator()));
         eventFullDto.setLocation(event.getLocation());
         eventFullDto.setPaid(event.getPaid());
@@ -46,7 +46,7 @@ public class EventMapper {
         if (event.getPublishedOn() == null) {
             eventFullDto.setPublishedOn("");
         } else {
-            eventFullDto.setPublishedOn(event.getPublishedOn().format(MainHttp.SERVER_FORMAT));
+            eventFullDto.setPublishedOn(event.getPublishedOn().format(MainServer.SERVER_FORMAT));
         }
         eventFullDto.setRequestModeration(event.getRequestModeration());
         eventFullDto.setState(event.getState().toString());
@@ -74,7 +74,7 @@ public class EventMapper {
         eventShortDto.setId(eventShort.id);
         eventShortDto.setAnnotation(eventShort.annotation);
         eventShortDto.setCategory(CategoryMapper.toCategoryDto(eventShort.category));
-        eventShortDto.setEventDate(eventShort.eventDate.format(MainHttp.SERVER_FORMAT));
+        eventShortDto.setEventDate(eventShort.eventDate.format(MainServer.SERVER_FORMAT));
         eventShortDto.setInitiator(UserMapper.toUserShortDto(eventShort.initiator));
         eventShortDto.setTitle(eventShort.title);
         eventShortDto.setConfirmedRequests(eventShort.confirmedRequests);

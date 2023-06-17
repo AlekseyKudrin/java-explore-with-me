@@ -10,7 +10,6 @@ import java.util.List;
 @Table(name = "compilations")
 @Getter
 @Setter
-@AllArgsConstructor
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Compilation {

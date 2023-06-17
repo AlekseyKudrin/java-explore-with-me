@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import ru.practicum.MainHttp;
+import ru.practicum.MainServer;
 import ru.practicum.category.model.Category;
 import ru.practicum.category.service.impl.CategoryServiceImpl;
 import ru.practicum.client.ServerClient;
@@ -99,7 +99,7 @@ public class EventServiceImpl implements EventService {
             updateEvent.setDescription(event.getDescription());
         }
         if (event.getEventDate() != null) {
-            LocalDateTime eventDate = LocalDateTime.parse(event.getEventDate(), MainHttp.SERVER_FORMAT);
+            LocalDateTime eventDate = LocalDateTime.parse(event.getEventDate(), MainServer.SERVER_FORMAT);
             if (eventDate.isBefore(LocalDateTime.now())) {
                 throw new ValidateFieldException("Event date has already arrived");
             }

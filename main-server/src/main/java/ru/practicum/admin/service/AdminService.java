@@ -31,7 +31,7 @@ public interface AdminService {
 
     void deleteCompilation(Integer comId);
 
-    CompilationDto cangeCompilation(Integer comId, UpdateCompilationRequest compilation);
+    CompilationDto changeCompilation(Integer comId, UpdateCompilationRequest compilation);
 
     List<EventFullDto> searchEvents(List<Integer> users, List<String> states, List<Integer> categories, LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size);
 

@@ -22,8 +22,8 @@ import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Validated
 @Slf4j
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/admin")
@@ -67,7 +67,9 @@ public class AdminController {
             @RequestBody @Valid NewCompilationDto newCompilationDto
     ) {
         log.info("Received a request to create compilation");
-        return adminService.createCompilation(newCompilationDto);
+        CompilationDto compilationDto = adminService.createCompilation(newCompilationDto);
+        log.info("Compilation id={} successfully created", compilationDto.getId());
+        return compilationDto;
     }
 
     @DeleteMapping("/compilations/{comId}")
@@ -77,6 +79,7 @@ public class AdminController {
     ) {
         log.info("Received a request to delete compilation id={}", comId);
         adminService.deleteCompilation(comId);
+        log.info("Compilation id={} successfully delete", comId);
     }
 
     @PatchMapping("/compilations/{comId}")
@@ -85,7 +88,9 @@ public class AdminController {
             @RequestBody UpdateCompilationRequest compilation
     ) {
         log.info("Received a request to change compilation id={}", comId);
-        return adminService.cangeCompilation(comId, compilation);
+        CompilationDto compilationDto = adminService.changeCompilation(comId, compilation);
+        log.info("Compilation id={} successfully change", compilationDto.getId());
+        return compilationDto;
     }
 
     @PostMapping("/categories")

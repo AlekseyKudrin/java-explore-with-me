@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import ru.practicum.location.model.Location;
-import ru.practicum.util.DateTime;
+import ru.practicum.util.annotation.DateTime;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
