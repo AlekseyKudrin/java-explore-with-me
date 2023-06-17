@@ -104,7 +104,9 @@ public class AdminController {
             @RequestBody @Valid NewCategoryDto newCategoryDto
     ) {
         log.info("Received a request to create a category");
-        return adminService.createCategory(newCategoryDto);
+        CategoryDto categoryDto = adminService.createCategory(newCategoryDto);
+        log.info("Category id={} successfully created", categoryDto.getId());
+        return categoryDto;
     }
 
     @DeleteMapping("/categories/{catId}")
@@ -114,15 +116,18 @@ public class AdminController {
     ) {
         log.info("Received a request to delete a category {}", catId);
         adminService.deleteCategory(catId);
+        log.info("Category id={} successfully delete", catId);
     }
 
     @PatchMapping("/categories/{catId}")
     public CategoryDto changeCategory(
             @PathVariable Integer catId,
-            @RequestBody @Valid CategoryDto categoryDto
+            @RequestBody @Valid CategoryDto updateCategory
     ) {
         log.info("Received a request to change a category {}", catId);
-        return adminService.patchCategory(catId, categoryDto);
+        CategoryDto categoryDto = adminService.patchCategory(catId, updateCategory);
+        log.info("Category id={} successfully change", catId);
+        return categoryDto;
     }
 
     @GetMapping("/events")

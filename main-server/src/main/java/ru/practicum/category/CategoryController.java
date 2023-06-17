@@ -21,8 +21,10 @@ public class CategoryController {
             @RequestParam(defaultValue = "0") Integer from,
             @RequestParam(defaultValue = "10") Integer size
     ) {
-        log.info("Received a request to return category list");
-        return categoryService.getCategories(from, size);
+        log.info("Received a request to return categories");
+        List<CategoryDto> list = categoryService.getCategories(from, size);
+        log.info("Request to return a categories completed");
+        return list;
     }
 
     @GetMapping("/{catId}")
@@ -30,7 +32,9 @@ public class CategoryController {
             @PathVariable Integer catId
     ) {
         log.info("Received a request to return category by Id={}", catId);
-        return categoryService.getCategoryById(catId);
+        CategoryDto categoryDto = categoryService.getCategoryById(catId);
+        log.info("Request to return a category by Id={} completed", catId);
+        return categoryDto;
     }
 
 }

@@ -68,9 +68,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public CategoryDto patchCategory(Integer catId, CategoryDto categoryDto) {
-        categoryService.getCategoryById(catId);
-        categoryDto.setId(catId);
-        return categoryService.patchCategory(categoryDto);
+        return categoryService.patchCategory(catId, categoryDto);
     }
 
     @Override

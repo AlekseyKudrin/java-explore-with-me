@@ -8,7 +8,7 @@ import java.util.List;
 public interface CategoryService {
     CategoryDto createCategory(NewCategoryDto newCategoryDto);
 
-    CategoryDto patchCategory(CategoryDto categoryDto);
+    CategoryDto patchCategory(Integer catId, CategoryDto categoryDto);
 
     void deleteCategory(Integer catId);
 
