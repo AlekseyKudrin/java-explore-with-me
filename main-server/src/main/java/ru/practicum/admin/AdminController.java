@@ -38,8 +38,10 @@ public class AdminController {
             @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
             @Positive @RequestParam(defaultValue = "10") Integer size
     ) {
-        log.info("Received a request to return user list");
-        return adminService.getUsers(ids, from, size);
+        log.info("Received a request to return users");
+        List<UserDto> userDtoList = adminService.getUsers(ids, from, size);
+        log.info("Request to return users completed");
+        return userDtoList;
     }
 
     @PostMapping("/users")
@@ -48,7 +50,9 @@ public class AdminController {
             @RequestBody @Valid NewUserRequest newUserRequest
     ) {
         log.info("Received a request to create user");
-        return adminService.createUser(newUserRequest);
+        UserDto userDto = adminService.createUser(newUserRequest);
+        log.info("User id={} successfully created", userDto.getId());
+        return userDto;
     }
 
     @DeleteMapping("/users/{userId}")
@@ -58,6 +62,7 @@ public class AdminController {
     ) {
         log.info("Received a request to delete user id={}", userId);
         adminService.deleteUser(userId);
+        log.info("User id={} successfully delete", userId);
     }
 
 

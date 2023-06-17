@@ -2,6 +2,7 @@ package ru.practicum.compilation.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import ru.practicum.compilation.dao.CompilationRepository;
 import ru.practicum.compilation.model.*;
@@ -34,7 +35,11 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public void deleteCompilation(Integer comId) {
-        compilationRepository.deleteById(comId);
+        try {
+            compilationRepository.deleteById(comId);
+        } catch (EmptyResultDataAccessException e) {
+            throw new ValueNotFoundDbException("User with id=" + comId + " was not found");
+        }
     }
 
     @Override

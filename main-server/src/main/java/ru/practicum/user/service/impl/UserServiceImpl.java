@@ -19,6 +19,7 @@ import ru.practicum.user.model.User;
 import ru.practicum.user.model.UserDto;
 import ru.practicum.user.model.UserMapper;
 import ru.practicum.user.service.UserService;
+import ru.practicum.util.General;
 
 import javax.validation.ValidationException;
 import java.util.List;
@@ -39,26 +40,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto creteUser(NewUserRequest newUserRequest) {
         User user = userRepository.save(UserMapper.toUser(newUserRequest));
-        log.info("User successfully created");
+
         return UserMapper.toUserDto(user);
     }
 
     @Override
     public List<UserDto> getUsers(List<Integer> ids, Integer from, Integer size) {
-        List<UserDto> userDtoList;
-        if (ids == null) {
-            PageRequest pageRequest = PageRequest.of(from > 0 ? from / size : 0, size);
-            userDtoList = userRepository.findAll(pageRequest)
-                    .map(UserMapper::toUserDto)
-                    .getContent();
-        } else {
-            userDtoList = userRepository.findByIdIn(ids)
-                    .stream()
-                    .map(UserMapper::toUserDto)
-                    .collect(Collectors.toList());
-        }
-        log.info("Users search completed");
-        return userDtoList;
+        return ids == null ? userRepository.findAll(General.toPage(from, size))
+                .map(UserMapper::toUserDto)
+                .getContent() : userRepository.findByIdIn(ids, General.toPage(from, size))
+                .stream()
+                .map(UserMapper::toUserDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -68,7 +61,6 @@ public class UserServiceImpl implements UserService {
         } catch (EmptyResultDataAccessException e) {
             throw new ValueNotFoundDbException("User with id=" + userId + " was not found");
         }
-        log.info("User deleted successfully");
     }
 
     @Override

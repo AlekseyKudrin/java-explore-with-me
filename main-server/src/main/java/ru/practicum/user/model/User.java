@@ -1,14 +1,18 @@
 package ru.practicum.user.model;
 
 import lombok.AccessLevel;
-import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "users")
-@Data
+@Getter
+@Setter
+@RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class User {
     @Id
