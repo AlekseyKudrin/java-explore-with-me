@@ -104,7 +104,7 @@ public class UserServiceImpl implements UserService {
         if (event.getState().equals(State.PUBLISHED)) {
             throw new ValidationException("The event is in the status " + event.getState());
         }
-        return eventService.updateEvent(eventId, updateEventUserRequest);
+        return eventService.updateEventUser(eventId, updateEventUserRequest);
     }
 
     @Override

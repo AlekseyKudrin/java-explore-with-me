@@ -1,6 +1,7 @@
 package ru.practicum.event.service;
 
 import org.springframework.data.domain.PageRequest;
+import ru.practicum.admin.model.UpdateEventAdminRequest;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.model.EventFullDto;
 import ru.practicum.event.model.EventShortDto;
@@ -15,11 +16,11 @@ public interface EventService {
 
     EventFullDto getEventUser(Integer userId, Integer eventId);
 
-    EventFullDto updateEvent(Integer eventId, UpdateEventUserRequest updateEventUserRequest);
+    EventFullDto updateEventUser(Integer eventId, UpdateEventUserRequest event);
+
+    EventFullDto updateEventAdmin(Integer eventId, UpdateEventAdminRequest event);
 
     Event findEventById(Integer integer);
-
-    EventFullDto saveUpdateEvent(Event updateEvent);
 
     List<EventShortDto> getEvents(String text, List<Integer> categories, Boolean paid, LocalDateTime rangeStart, LocalDateTime rangeEnd, Boolean onlyAvailable, String sort, Integer from, Integer size);
 
