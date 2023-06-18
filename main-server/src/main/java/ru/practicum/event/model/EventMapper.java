@@ -50,30 +50,16 @@ public class EventMapper {
                 views);
     }
 
-    public static EventShortDto toEventShortDto(int countConfirmedRequest, int views, Event event) {
+    public static EventShortDto toEventShortDto(EventFullDto eventShort) {
         EventShortDto eventShortDto = new EventShortDto();
-        eventShortDto.setAnnotation(event.getAnnotation());
-        eventShortDto.setCategory(CategoryMapper.toCategoryDto(event.getCategory()));
-        eventShortDto.setConfirmedRequests(countConfirmedRequest);
-        eventShortDto.setEventDate(event.getEventDate().toString());
-        eventShortDto.setId(event.getId());
-        eventShortDto.setInitiator(UserMapper.toUserShortDto(event.getInitiator()));
-        eventShortDto.setPaid(event.getPaid());
-        eventShortDto.setTitle(event.getTitle());
-        eventShortDto.setViews(views);
-        return eventShortDto;
-    }
-
-    public static EventShortDto toEventShortDto(EventShort eventShort) {
-        EventShortDto eventShortDto = new EventShortDto();
-        eventShortDto.setId(eventShort.id);
-        eventShortDto.setAnnotation(eventShort.annotation);
-        eventShortDto.setCategory(CategoryMapper.toCategoryDto(eventShort.category));
-        eventShortDto.setEventDate(eventShort.eventDate.format(MainServer.SERVER_FORMAT));
-        eventShortDto.setInitiator(UserMapper.toUserShortDto(eventShort.initiator));
-        eventShortDto.setTitle(eventShort.title);
-        eventShortDto.setConfirmedRequests(eventShort.confirmedRequests);
-        eventShortDto.setPaid(eventShort.paid);
+        eventShortDto.setId(eventShort.getId());
+        eventShortDto.setAnnotation(eventShort.getAnnotation());
+        eventShortDto.setCategory(eventShort.getCategory());
+        eventShortDto.setEventDate(eventShort.getEventDate());
+        eventShortDto.setInitiator(eventShort.getInitiator());
+        eventShortDto.setTitle(eventShort.getTitle());
+        eventShortDto.setConfirmedRequests(eventShort.getConfirmedRequests());
+        eventShortDto.setPaid(eventShort.getPaid());
         return eventShortDto;
     }
 }

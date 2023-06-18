@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.practicum.compilation.dao.CompilationRepository;
 import ru.practicum.compilation.model.*;
 import ru.practicum.compilation.service.CompilationService;
+import ru.practicum.event.model.EventMapper;
 import ru.practicum.event.model.EventShortDto;
 import ru.practicum.event.service.impl.EventServiceImpl;
 import ru.practicum.exceptionHandler.exception.ValueNotFoundDbException;
@@ -72,11 +73,12 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     private List<EventShortDto> receivingEvents(Compilation comp) {
-        return eventService.getEventShortDto(
-                comp.getEvents()
+        return eventService.getEventFullDto(comp.getEvents()
                         .stream()
                         .map(eventService::findEventById)
-                        .collect(Collectors.toList()));
-
+                        .collect(Collectors.toList()))
+                .stream()
+                .map(EventMapper::toEventShortDto)
+                .collect(Collectors.toList());
     }
 }

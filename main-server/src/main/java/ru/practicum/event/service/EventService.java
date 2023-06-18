@@ -24,4 +24,7 @@ public interface EventService {
     List<EventShortDto> getEvents(String text, List<Integer> categories, Boolean paid, LocalDateTime rangeStart, LocalDateTime rangeEnd, Boolean onlyAvailable, String sort, Integer from, Integer size);
 
     EventFullDto findPublishedEventById(Integer eventId);
+
+    List<EventFullDto> getEvents(List<Integer> users, List<String> states, List<Integer> categories, LocalDateTime
+            rangeStart, LocalDateTime rangeEnd, Integer from, Integer size);
 }

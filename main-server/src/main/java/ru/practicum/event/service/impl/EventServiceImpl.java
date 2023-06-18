@@ -62,7 +62,10 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<EventShortDto> getEventsUser(Integer userId, PageRequest pageRequest) {
         List<Event> events = eventRepository.findAllByInitiatorId(userId, pageRequest);
-        return getEventShortDto(events);
+        return getEventFullDto(events)
+                .stream()
+                .map(EventMapper::toEventShortDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -146,30 +149,38 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<EventShortDto> getEvents(String text, List<Integer> categories, Boolean paid, LocalDateTime rangeStart, LocalDateTime rangeEnd, Boolean onlyAvailable, String sort, Integer from, Integer size) {
-        List<EventShort> eventShort = eventRepository.findEventsByParametersOfUser(text, categories, paid, rangeStart, rangeEnd, General.toPage(from, size));
-        eventShort.forEach(t -> {
-            int confirmed = requestService.getCountConfirmedRequest(t.getInitiator().getId());
-            t.setConfirmedRequests(confirmed);
-        });
-        eventShort.forEach(t -> t.setViews(0));
         if (rangeStart != null && rangeEnd != null) {
             if (rangeStart.isAfter(rangeEnd)) {
                 throw new ValidateFieldException("Start date cannot be before than end date");
             }
         }
+
+        BooleanBuilder builder = new BooleanBuilder();
+        if (text != null) builder.and(QEvent.event.annotation.likeIgnoreCase("%" + text.toLowerCase() + "%"))
+                .or(QEvent.event.title.likeIgnoreCase("%" + text.toLowerCase() + "%"));
+        if (categories != null) builder.and(QEvent.event.category.id.in(categories));
+        if (paid != null) builder.and(QEvent.event.paid.eq(paid));
+        if (rangeStart != null) builder.and(QEvent.event.eventDate.after(rangeStart));
+        if (rangeEnd != null) builder.and(QEvent.event.eventDate.before(rangeEnd));
+        BooleanExpression expression = builder.getValue() == null ? QEvent.event.isNotNull() : Expressions.asBoolean(builder.getValue());
+
+        Iterable<Event> events = eventRepository.findAll(expression, General.toPage(from, size));
+
+        List<Event> list = new ArrayList<>();
+        events.forEach(list::add);
+
+        List<EventFullDto> eventFull = getEventFullDto(list);
+
         if (onlyAvailable) {
-            eventShort = eventShort.stream().filter(i -> i.getConfirmedRequests() <= i.getParticipantLimit()).collect(Collectors.toList());
+            eventFull = eventFull.stream().filter(i -> i.getConfirmedRequests() <= i.getParticipantLimit()).collect(Collectors.toList());
         }
         if (sort != null && sort.equals("EVENT_DATE")) {
-            eventShort.sort(Comparator.comparing(EventShort::getEventDate));
+            eventFull.sort(Comparator.comparing(EventFullDto::getEventDate));
         } else {
-            eventShort.sort(Comparator.comparing(EventShort::getViews));
+            eventFull.sort(Comparator.comparing(EventFullDto::getViews));
         }
 
-        return eventShort
-                .stream()
-                .map(EventMapper::toEventShortDto)
-                .collect(Collectors.toList());
+        return eventFull.stream().map(EventMapper::toEventShortDto).collect(Collectors.toList());
     }
 
     @Override
@@ -186,31 +197,23 @@ public class EventServiceImpl implements EventService {
         return EventMapper.toEventFullDto(count, views, event);
     }
 
-
-    public List<EventFullDto> getEvents(List<Integer> users, List<String> states, List<Integer> categories, LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size) {
+    @Override
+    public List<EventFullDto> getEvents(List<Integer> users, List<String> states, List<Integer> categories, LocalDateTime
+            rangeStart, LocalDateTime rangeEnd, Integer from, Integer size) {
         List<Request> requestList = requestService.getAllRequest();
-        PageRequest pageRequest = PageRequest.of(from > 0 ? from / size : 0, size);
         BooleanBuilder builder = new BooleanBuilder();
         BooleanExpression expression;
-        if (users != null) {
-            builder.and(QEvent.event.initiator.id.in(users));
-        }
+
+        if (users != null) builder.and(QEvent.event.initiator.id.in(users));
         if (states != null) {
-            List<State> list = new ArrayList<>();
             states.forEach(i -> {
-                for (State s : State.values()) {
-                    int t = 0;
-                    if (!i.equals(s.toString())) {
-                        t++;
-                    } else {
-                        list.add(s);
-                        break;
-                    }
-                    if (t == State.values().length)
-                        throw new ValidationException("Incorrect state");
+                try {
+                    State.valueOf(i);
+                } catch (IllegalArgumentException e) {
+                    throw new ValidationException("Incorrect state");
                 }
             });
-            builder.and(QEvent.event.state.in(list));
+            builder.and(QEvent.event.state.in(states.stream().map(State::valueOf).collect(Collectors.toList())));
         }
         if (categories != null) {
             builder.and(QEvent.event.category.id.in(categories));
@@ -226,19 +229,19 @@ public class EventServiceImpl implements EventService {
         } else {
             expression = Expressions.asBoolean(builder.getValue());
         }
-        Iterable<Event> events = eventRepository.findAll(expression, pageRequest);
+        Iterable<Event> events = eventRepository.findAll(expression, General.toPage(from, size));
         List<EventFullDto> list = new ArrayList<>();
         events.forEach(i -> list.add(getEventFullDto(i, requestList.stream().filter(c -> c.getEvent().equals(i.getId())).count())));
         return list;
     }
 
-    public List<EventShortDto> getEventShortDto(List<Event> events) {
+    public List<EventFullDto> getEventFullDto(List<Event> events) {
         if (events.size() == 0) return List.of();
         Map<Integer, Integer> views = getViews(events.stream()
                 .map(Event::getId)
                 .collect(Collectors.toList()));
         return events.stream()
-                .map(i -> EventMapper.toEventShortDto(
+                .map(i -> EventMapper.toEventFullDto(
                         requestService.getCountConfirmedRequest(i.getId()),
                         views.size() == 0 ? 0 : views.get(i.getId()),
                         i))
