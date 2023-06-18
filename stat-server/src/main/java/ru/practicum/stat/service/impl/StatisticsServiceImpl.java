@@ -1,13 +1,13 @@
-package ru.practicum.service.impl;
+package ru.practicum.stat.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.practicum.dao.StatisticsRepository;
-import ru.practicum.model.HitDto;
-import ru.practicum.model.HitMapper;
-import ru.practicum.model.Stats;
-import ru.practicum.service.StatisticsService;
+import ru.practicum.stat.dao.StatisticsRepository;
+import ru.practicum.stat.model.HitDto;
+import ru.practicum.stat.model.HitMapper;
+import ru.practicum.stat.model.Stats;
+import ru.practicum.stat.service.StatisticsService;
 
 import java.time.LocalDateTime;
 import java.util.List;

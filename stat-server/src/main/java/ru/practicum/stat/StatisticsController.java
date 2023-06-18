@@ -1,12 +1,12 @@
-package ru.practicum;
+package ru.practicum.stat;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.model.HitDto;
-import ru.practicum.model.Stats;
-import ru.practicum.service.StatisticsService;
+import ru.practicum.stat.model.HitDto;
+import ru.practicum.stat.model.Stats;
+import ru.practicum.stat.service.StatisticsService;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,8 +22,7 @@ public class StatisticsController {
 
     @PostMapping("/hit")
     @ResponseStatus(HttpStatus.CREATED)
-    public String createHit(
-            @RequestBody HitDto hitDto) {
+    public String createHit(@RequestBody HitDto hitDto) {
         log.info("Received a request to create a hit");
         return statisticsService.createHit(hitDto);
     }

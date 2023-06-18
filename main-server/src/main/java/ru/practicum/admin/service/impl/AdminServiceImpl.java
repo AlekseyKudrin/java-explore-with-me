@@ -93,15 +93,10 @@ public class AdminServiceImpl implements AdminService {
         }
         if (states != null) {
             states.forEach(i -> {
-                for (State s : State.values()) {
-                    int t = 0;
-                    if (!i.equals(s.toString())) {
-                        t++;
-                    } else {
-                        break;
-                    }
-                    if (t == State.values().length)
-                        throw new ValidationException("Incorrect state");
+                try {
+                    State.valueOf(i);
+                } catch (IllegalArgumentException e) {
+                    throw new ValidationException("Incorrect state");
                 }
             });
         }
