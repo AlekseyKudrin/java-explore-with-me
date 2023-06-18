@@ -72,10 +72,11 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     private List<EventShortDto> receivingEvents(Compilation comp) {
-        return comp.getEvents()
-                .stream()
-                .map(eventService::findEventById)
-                .map(eventService::getEventShortDto)
-                .collect(Collectors.toList());
+        return eventService.getEventShortDto(
+                comp.getEvents()
+                        .stream()
+                        .map(eventService::findEventById)
+                        .collect(Collectors.toList()));
+
     }
 }

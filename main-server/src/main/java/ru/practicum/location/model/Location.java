@@ -1,7 +1,9 @@
 package ru.practicum.location.model;
 
 import lombok.AccessLevel;
-import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
@@ -9,7 +11,9 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "locations")
-@Data
+@Getter
+@Setter
+@RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Location {
     @Id

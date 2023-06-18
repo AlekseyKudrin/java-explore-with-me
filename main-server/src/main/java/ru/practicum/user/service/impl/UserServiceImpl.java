@@ -3,7 +3,6 @@ package ru.practicum.user.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.event.model.*;
 import ru.practicum.event.model.enums.State;
@@ -65,8 +64,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public EventFullDto createEventUser(Integer userId, NewEventDto newEventDto) {
-        User user = findUserById(userId);
-        return eventService.createEvent(user, newEventDto);
+        return eventService.createEvent(findUserById(userId), newEventDto);
     }
 
     @Override
@@ -90,10 +88,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<EventShortDto> getEventsUser(Integer userId, Integer from, Integer size) {
-        int page = from / size;
-        PageRequest pageRequest = PageRequest.of(page, size);
-        List<Event> eventList = eventService.getEventsUser(userId, pageRequest);
-        return eventList.stream().map(eventService::getEventShortDto).collect(Collectors.toList());
+        findUserById(userId);
+        return eventService.getEventsUser(userId, General.toPage(from, size));
     }
 
     @Override

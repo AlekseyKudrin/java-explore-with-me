@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface EventService {
 
-    List<Event> getEventsUser(Integer userId, PageRequest pageRequest);
+    List<EventShortDto> getEventsUser(Integer userId, PageRequest pageRequest);
 
     EventFullDto getEventUser(Integer userId, Integer eventId);
 

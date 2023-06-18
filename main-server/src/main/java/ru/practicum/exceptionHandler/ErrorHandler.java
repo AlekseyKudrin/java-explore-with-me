@@ -8,10 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import ru.practicum.exceptionHandler.exception.LimitParticipationException;
-import ru.practicum.exceptionHandler.exception.StatusParticipationException;
-import ru.practicum.exceptionHandler.exception.ValidateFieldException;
-import ru.practicum.exceptionHandler.exception.ValueNotFoundDbException;
+import ru.practicum.exceptionHandler.exception.*;
 
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
@@ -124,13 +121,25 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ApiError handlerIValueNotFoundDbException(final ValueNotFoundDbException e) {
+    public ApiError handlerValueNotFoundDbException(final ValueNotFoundDbException e) {
         log.error("Data input incorrect: {}", e.getMessage());
         return new ApiError(
                 Arrays.toString(e.getStackTrace()),
                 e.getMessage(),
                 "The required object was not found.",
                 HttpStatus.NOT_FOUND.getReasonPhrase(),
+                LocalDateTime.now().format(formatter));
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ApiError handlerInternalServerErrorException(final InternalServerErrorException e) {
+        log.error(e.getMessage());
+        return new ApiError(
+                Arrays.toString(e.getStackTrace()),
+                e.getMessage(),
+                "The required object was not found.",
+                HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
                 LocalDateTime.now().format(formatter));
     }
 

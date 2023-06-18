@@ -31,28 +31,23 @@ public class EventMapper {
     }
 
     public static EventFullDto toEventFullDto(long countConfirmedRequest, int views, Event event) {
-        EventFullDto eventFullDto = new EventFullDto();
-        eventFullDto.setId(event.getId());
-        eventFullDto.setAnnotation(event.getAnnotation());
-        eventFullDto.setCategory(CategoryMapper.toCategoryDto(event.getCategory()));
-        eventFullDto.setConfirmedRequests((int) countConfirmedRequest);
-        eventFullDto.setCreatedOn(event.getCreatedOn().toString());
-        eventFullDto.setDescription(event.getDescription());
-        eventFullDto.setEventDate(event.getEventDate().format(MainServer.SERVER_FORMAT));
-        eventFullDto.setInitiator(UserMapper.toUserShortDto(event.getInitiator()));
-        eventFullDto.setLocation(event.getLocation());
-        eventFullDto.setPaid(event.getPaid());
-        eventFullDto.setParticipantLimit(event.getParticipantLimit());
-        if (event.getPublishedOn() == null) {
-            eventFullDto.setPublishedOn("");
-        } else {
-            eventFullDto.setPublishedOn(event.getPublishedOn().format(MainServer.SERVER_FORMAT));
-        }
-        eventFullDto.setRequestModeration(event.getRequestModeration());
-        eventFullDto.setState(event.getState().toString());
-        eventFullDto.setTitle(event.getTitle());
-        eventFullDto.setViews(views);
-        return eventFullDto;
+        return new EventFullDto(
+                event.getId(),
+                event.getAnnotation(),
+                CategoryMapper.toCategoryDto(event.getCategory()),
+                (int) countConfirmedRequest,
+                event.getCreatedOn().format(MainServer.SERVER_FORMAT),
+                event.getDescription(),
+                event.getEventDate().format(MainServer.SERVER_FORMAT),
+                UserMapper.toUserShortDto(event.getInitiator()),
+                event.getLocation(),
+                event.getPaid(),
+                event.getParticipantLimit(),
+                event.getPublishedOn() == null ? "" : event.getPublishedOn().format(MainServer.SERVER_FORMAT),
+                event.getRequestModeration(),
+                event.getState().toString(),
+                event.getTitle(),
+                views);
     }
 
     public static EventShortDto toEventShortDto(int countConfirmedRequest, int views, Event event) {

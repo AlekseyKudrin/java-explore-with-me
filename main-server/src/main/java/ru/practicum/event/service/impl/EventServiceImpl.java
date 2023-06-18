@@ -1,5 +1,7 @@
 package ru.practicum.event.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -17,18 +19,19 @@ import ru.practicum.event.model.*;
 import ru.practicum.event.model.enums.State;
 import ru.practicum.event.model.enums.StateAction;
 import ru.practicum.event.service.EventService;
+import ru.practicum.exceptionHandler.exception.InternalServerErrorException;
 import ru.practicum.exceptionHandler.exception.ValidateFieldException;
 import ru.practicum.exceptionHandler.exception.ValueNotFoundDbException;
 import ru.practicum.location.service.impl.LocationServiceImpl;
 import ru.practicum.reqest.model.Request;
 import ru.practicum.reqest.service.impl.RequestServiceImpl;
 import ru.practicum.user.model.User;
+import ru.practicum.util.General;
 
 import javax.validation.ValidationException;
+import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -52,29 +55,22 @@ public class EventServiceImpl implements EventService {
         Category category = categoryService.findCategoryById(newEventDto.getCategory());
         locationService.createLocation(newEventDto.getLocation());
         Event event = eventRepository.save(EventMapper.toEvent(user, category, newEventDto));
-//        requestService.createRequest(user, event);
-        int countConfirmedRequest = requestService.getCountConfirmedRequest(event.getId());
-        int views = 0;
-        return EventMapper.toEventFullDto(countConfirmedRequest, views, event);
-    }
 
-
-    public EventShortDto getEventShortDto(Event event) {
-        int countConfirmedRequest = requestService.getCountConfirmedRequest(event.getId());
-        int views = 0;
-        return EventMapper.toEventShortDto(countConfirmedRequest, views, event);
+        return EventMapper.toEventFullDto(0, 0, event);
     }
 
     @Override
-    public List<Event> getEventsUser(Integer userId, PageRequest pageRequest) {
-        return eventRepository.findAllByInitiatorId(userId, pageRequest);
+    public List<EventShortDto> getEventsUser(Integer userId, PageRequest pageRequest) {
+        List<Event> events = eventRepository.findAllByInitiatorId(userId, pageRequest);
+        return getEventShortDto(events);
     }
 
     @Override
     public EventFullDto getEventUser(Integer userId, Integer eventId) {
         Event event = eventRepository.findByIdAndInitiatorId(eventId, userId);
         int countConfirmedRequest = requestService.getCountConfirmedRequest(event.getId());
-        int views = 0;
+        int views = getViews(List.of(eventId)).isEmpty() ? 0 : getViews(List.of(eventId)).get(eventId);
+
         return EventMapper.toEventFullDto(countConfirmedRequest, views, event);
     }
 
@@ -150,8 +146,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<EventShortDto> getEvents(String text, List<Integer> categories, Boolean paid, LocalDateTime rangeStart, LocalDateTime rangeEnd, Boolean onlyAvailable, String sort, Integer from, Integer size) {
-        PageRequest pageRequest = PageRequest.of(from > 0 ? from / size : 0, size);
-        List<EventShort> eventShort = eventRepository.findEventsByParametersOfUser(text, categories, paid, rangeStart, rangeEnd, pageRequest);
+        List<EventShort> eventShort = eventRepository.findEventsByParametersOfUser(text, categories, paid, rangeStart, rangeEnd, General.toPage(from, size));
         eventShort.forEach(t -> {
             int confirmed = requestService.getCountConfirmedRequest(t.getInitiator().getId());
             t.setConfirmedRequests(confirmed);
@@ -181,12 +176,8 @@ public class EventServiceImpl implements EventService {
     public EventFullDto findPublishedEventById(Integer eventId) {
         Event event = eventRepository.findByIdAndState(eventId, State.PUBLISHED).orElseThrow(() -> new ValueNotFoundDbException("Event with id=" + eventId + " was not found"));
         int countConfirmedRequest = requestService.getCountConfirmedRequest(event.getId());
-        ResponseEntity<Object> response = serverClient.getStats("1992-11-12 23:15:10", "3000-11-12 23:15:10", List.of("/events/" + event.getId()), false);
-        int views = 0;
-        ArrayList<Object> list = (ArrayList<Object>) response.getBody();
-        if (list != null) {
-            views = list.size();
-        }
+        int views = getViews(List.of(eventId)).isEmpty() ? 0 : getViews(List.of(eventId)).get(eventId);
+
         return EventMapper.toEventFullDto(countConfirmedRequest, views, event);
     }
 
@@ -239,5 +230,41 @@ public class EventServiceImpl implements EventService {
         List<EventFullDto> list = new ArrayList<>();
         events.forEach(i -> list.add(getEventFullDto(i, requestList.stream().filter(c -> c.getEvent().equals(i.getId())).count())));
         return list;
+    }
+
+    public List<EventShortDto> getEventShortDto(List<Event> events) {
+        if (events.size() == 0) return List.of();
+        Map<Integer, Integer> views = getViews(events.stream()
+                .map(Event::getId)
+                .collect(Collectors.toList()));
+        return events.stream()
+                .map(i -> EventMapper.toEventShortDto(
+                        requestService.getCountConfirmedRequest(i.getId()),
+                        views.size() == 0 ? 0 : views.get(i.getId()),
+                        i))
+                .collect(Collectors.toList());
+    }
+
+    private Map<Integer, Integer> getViews(List<Integer> event) {
+        Gson gson = new Gson();
+        Stats[] views;
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<Integer, Integer> viewsMap = new HashMap<>();
+        List<String> uris = event.stream().map(i -> "/events/" + i).collect(Collectors.toList());
+        ResponseEntity<Object> response = serverClient.getStats(General.MIN_TIME, General.MAX_TIME, uris, true);
+
+        String responseJson = gson.toJson(response.getBody());
+        try {
+            views = objectMapper.readValue(responseJson, Stats[].class);
+        } catch (IOException e) {
+            throw new InternalServerErrorException("Internal Server Error: unable to read statistics server data");
+        }
+        for (Stats view : views) {
+            String[] lines = view.getUri().split("/");
+            int a = Integer.parseInt(lines[2]);
+            viewsMap.put(a, view.getHits());
+        }
+
+        return viewsMap;
     }
 }

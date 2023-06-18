@@ -16,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping
-public class ServerController {
+public class StatisticsController {
 
     private final StatisticsService statisticsService;
 
@@ -39,3 +39,4 @@ public class ServerController {
         return statisticsService.getStats(start, end, uris, unique);
     }
 }
+

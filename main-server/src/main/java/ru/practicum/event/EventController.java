@@ -35,11 +35,13 @@ public class EventController {
             @RequestParam(defaultValue = "10") Integer size,
             HttpServletRequest request
     ) {
-        log.info("Received a request to return events list");
+        log.info("Received a request to return events by filter");
         serverClient.create(request);
-        return eventService.getEvents(
+        List<EventShortDto> eventShortDtoList = eventService.getEvents(
                 text, categories, paid, rangeStart, rangeEnd,
                 onlyAvailable, sort, from, size);
+        log.info("Request to return events by filter completed");
+        return eventShortDtoList;
     }
 
     @GetMapping("/{id}")
@@ -47,7 +49,10 @@ public class EventController {
             @PathVariable Integer id,
             HttpServletRequest request
     ) {
+        log.info("Received a request to return a event Id={}", id);
         serverClient.create(request);
-        return eventService.findPublishedEventById(id);
+        EventFullDto eventFullDto = eventService.findPublishedEventById(id);
+        log.info("Request to return a event Id={} completed", id);
+        return eventFullDto;
     }
 }

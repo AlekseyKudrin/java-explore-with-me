@@ -34,7 +34,9 @@ public class UserController {
             @RequestParam(defaultValue = "10") Integer size
     ) {
         log.info("Received a request to return a collection of events user id={}", userId);
-        return userService.getEventsUser(userId, from, size);
+        List<EventShortDto> eventShortDtoList = userService.getEventsUser(userId, from, size);
+        log.info("Request to return collection of events user id={} completed", userId);
+        return eventShortDtoList;
     }
 
     @PostMapping("/{userId}/events")
@@ -44,7 +46,9 @@ public class UserController {
             @RequestBody @Valid NewEventDto newEventDto
     ) {
         log.info("Received a request to create a event user id={}", userId);
-        return userService.createEventUser(userId, newEventDto);
+        EventFullDto eventFullDto = userService.createEventUser(userId, newEventDto);
+        log.info("Event id={} a user id={} successfully created", eventFullDto.getId(), userId);
+        return eventFullDto;
     }
 
     @GetMapping("/{userId}/events/{eventId}")
@@ -52,8 +56,10 @@ public class UserController {
             @PathVariable Integer userId,
             @PathVariable Integer eventId
     ) {
-        log.info("Received a request to return a eventId={} user id={}", eventId, userId);
-        return userService.getEventUser(userId, eventId);
+        log.info("Received a request to return a event Id={} user id={}", eventId, userId);
+        EventFullDto eventFullDto = userService.getEventUser(userId, eventId);
+        log.info("Request to return a event Id={} user id={} completed", eventId, userId);
+        return eventFullDto;
     }
 
     @PatchMapping("/{userId}/events/{eventId}")
