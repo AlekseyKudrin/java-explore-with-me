@@ -84,9 +84,9 @@ public class EventServiceImpl implements EventService {
     public EventFullDto updateEventUser(Integer eventId, UpdateEventUserRequest event) {
 
         Event updateEvent = eventRepository.findById(eventId).orElseThrow();
-        validatedAndUpdate(updateEvent, event.getAnnotation(), event.getCategory(), event.getDescription()
-                , event.getEventDate(), event.getLocation(), event.getPaid(), event.getParticipantLimit()
-                , event.getRequestModeration());
+        validatedAndUpdate(updateEvent, event.getAnnotation(), event.getCategory(), event.getDescription(),
+                event.getEventDate(), event.getLocation(), event.getPaid(), event.getParticipantLimit(),
+                event.getRequestModeration());
         if (event.getStateAction() != null) {
             if (event.getStateAction() == StateAction.CANCEL_REVIEW) {
                 updateEvent.setState(State.CANCELED);
@@ -113,9 +113,9 @@ public class EventServiceImpl implements EventService {
         } else {
             throw new ValidationException("The event cannot be published because the edit date is earlier than the publication date");
         }
-        validatedAndUpdate(updateEvent, event.getAnnotation(), event.getCategory(), event.getDescription()
-                , event.getEventDate(), event.getLocation(), event.getPaid(), event.getParticipantLimit()
-                , event.getRequestModeration());
+        validatedAndUpdate(updateEvent, event.getAnnotation(), event.getCategory(), event.getDescription(),
+                event.getEventDate(), event.getLocation(), event.getPaid(), event.getParticipantLimit(),
+                event.getRequestModeration());
         if (event.getStateAction() != null) {
             if (event.getStateAction().equals(ru.practicum.admin.model.StateAction.PUBLISH_EVENT)) {
                 if (!State.PENDING.equals(updateEvent.getState())) {
