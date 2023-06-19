@@ -6,10 +6,9 @@ import org.springframework.stereotype.Service;
 import ru.practicum.event.model.Event;
 import ru.practicum.exceptionHandler.exception.LimitParticipationException;
 import ru.practicum.exceptionHandler.exception.StatusParticipationException;
-import ru.practicum.exceptionHandler.exception.ValueNotFoundDbException;
-import ru.practicum.reqest.dao.RequestRepository;
 import ru.practicum.reqest.model.*;
 import ru.practicum.reqest.model.enums.Status;
+import ru.practicum.reqest.repository.RequestRepository;
 import ru.practicum.reqest.service.RequestService;
 import ru.practicum.user.model.User;
 
@@ -109,16 +108,8 @@ public class RequestServiceImpl implements RequestService {
         return RequestMapper.toParticipationRequestDto(request);
     }
 
-    public Request findRequest(Integer requestId) {
-        return requestRepository.findById(requestId).orElseThrow(() -> new ValueNotFoundDbException("Request with id=" + requestId + " was not found"));
-    }
-
+    @Override
     public Request validateParticipateOfUser(Integer userId, Integer eventId) {
         return requestRepository.findByEventAndRequester(eventId, userId);
     }
-
-    public List<Request> getAllRequest() {
-        return requestRepository.findAll();
-    }
-
 }

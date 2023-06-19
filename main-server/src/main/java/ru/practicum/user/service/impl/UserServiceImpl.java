@@ -6,17 +6,17 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import ru.practicum.event.model.*;
 import ru.practicum.event.model.enums.State;
-import ru.practicum.event.service.impl.EventServiceImpl;
+import ru.practicum.event.service.EventService;
 import ru.practicum.exceptionHandler.exception.ValueNotFoundDbException;
 import ru.practicum.reqest.model.EventRequestStatusUpdateRequest;
 import ru.practicum.reqest.model.EventRequestStatusUpdateResult;
 import ru.practicum.reqest.model.ParticipationRequestDto;
-import ru.practicum.reqest.service.impl.RequestServiceImpl;
-import ru.practicum.user.dao.UserRepository;
+import ru.practicum.reqest.service.RequestService;
 import ru.practicum.user.model.NewUserRequest;
 import ru.practicum.user.model.User;
 import ru.practicum.user.model.UserDto;
 import ru.practicum.user.model.UserMapper;
+import ru.practicum.user.repository.UserRepository;
 import ru.practicum.user.service.UserService;
 import ru.practicum.util.General;
 
@@ -30,11 +30,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final EventServiceImpl eventService;
+    private final EventService eventService;
 
     private final UserRepository userRepository;
 
-    private final RequestServiceImpl requestService;
+    private final RequestService requestService;
 
     @Override
     public UserDto creteUser(NewUserRequest newUserRequest) {
@@ -133,6 +133,7 @@ public class UserServiceImpl implements UserService {
         return requestService.cancelingParticipate(userId, requestId);
     }
 
+    @Override
     public User findUserById(Integer userId) {
         return userRepository.findById(userId).orElseThrow(() -> new ValueNotFoundDbException("User with id=" + userId + " was not found"));
     }

@@ -11,28 +11,31 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import ru.practicum.MainServer;
 import ru.practicum.admin.model.UpdateEventAdminRequest;
 import ru.practicum.category.model.Category;
-import ru.practicum.category.service.impl.CategoryServiceImpl;
+import ru.practicum.category.service.CategoryService;
 import ru.practicum.client.ServerClient;
-import ru.practicum.event.dao.EventRepository;
 import ru.practicum.event.model.*;
 import ru.practicum.event.model.enums.State;
 import ru.practicum.event.model.enums.StateAction;
+import ru.practicum.event.repository.EventRepository;
 import ru.practicum.event.service.EventService;
 import ru.practicum.exceptionHandler.exception.InternalServerErrorException;
 import ru.practicum.exceptionHandler.exception.ValidateFieldException;
 import ru.practicum.exceptionHandler.exception.ValueNotFoundDbException;
-import ru.practicum.location.service.impl.LocationServiceImpl;
-import ru.practicum.reqest.service.impl.RequestServiceImpl;
+import ru.practicum.location.model.Location;
+import ru.practicum.location.service.LocationService;
+import ru.practicum.reqest.service.RequestService;
 import ru.practicum.user.model.User;
 import ru.practicum.util.General;
 
 import javax.validation.ValidationException;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -43,15 +46,15 @@ public class EventServiceImpl implements EventService {
 
     private final EventRepository eventRepository;
 
-    private final LocationServiceImpl locationService;
+    private final LocationService locationService;
 
-    private final CategoryServiceImpl categoryService;
+    private final CategoryService categoryService;
 
-    private final RequestServiceImpl requestService;
+    private final RequestService requestService;
 
     private final ServerClient serverClient;
 
-
+    @Override
     public EventFullDto createEvent(User user, NewEventDto newEventDto) {
         Category category = categoryService.findCategoryById(newEventDto.getCategory());
         locationService.createLocation(newEventDto.getLocation());
@@ -81,40 +84,9 @@ public class EventServiceImpl implements EventService {
     public EventFullDto updateEventUser(Integer eventId, UpdateEventUserRequest event) {
 
         Event updateEvent = eventRepository.findById(eventId).orElseThrow();
-        if (event.getAnnotation() != null) {
-            if (event.getAnnotation().length() < 20 || event.getAnnotation().length() > 2000) {
-                throw new ValidateFieldException("Length annotation min 20, max 7000 ");
-            }
-            updateEvent.setAnnotation(event.getAnnotation());
-        }
-        if (event.getCategory() != null) {
-            updateEvent.setCategory(categoryService.findCategoryById(event.getCategory()));
-        }
-        if (event.getDescription() != null) {
-            if (event.getDescription().length() < 20 || event.getDescription().length() > 7000) {
-                throw new ValidateFieldException("Length description min 20, max 7000 ");
-            }
-            updateEvent.setDescription(event.getDescription());
-        }
-        if (event.getEventDate() != null) {
-            LocalDateTime eventDate = LocalDateTime.parse(event.getEventDate(), MainServer.SERVER_FORMAT);
-            if (eventDate.isBefore(LocalDateTime.now())) {
-                throw new ValidateFieldException("Event date has already arrived");
-            }
-            updateEvent.setEventDate(eventDate);
-        }
-        if (event.getLocation() != null) {
-            updateEvent.setLocation(event.getLocation());
-        }
-        if (event.getPaid() != null) {
-            updateEvent.setPaid(event.getPaid());
-        }
-        if (event.getParticipantLimit() != null) {
-            updateEvent.setParticipantLimit(event.getParticipantLimit());
-        }
-        if (event.getRequestModeration() != null) {
-            updateEvent.setRequestModeration(event.getRequestModeration());
-        }
+        validatedAndUpdate(updateEvent, event.getAnnotation(), event.getCategory(), event.getDescription()
+                , event.getEventDate(), event.getLocation(), event.getPaid(), event.getParticipantLimit()
+                , event.getRequestModeration());
         if (event.getStateAction() != null) {
             if (event.getStateAction() == StateAction.CANCEL_REVIEW) {
                 updateEvent.setState(State.CANCELED);
@@ -141,40 +113,9 @@ public class EventServiceImpl implements EventService {
         } else {
             throw new ValidationException("The event cannot be published because the edit date is earlier than the publication date");
         }
-        if (event.getAnnotation() != null) {
-            if (event.getAnnotation().length() < 20 || event.getAnnotation().length() > 2000) {
-                throw new ValidateFieldException("Length annotation min 20, max 7000 ");
-            }
-            updateEvent.setAnnotation(event.getAnnotation());
-        }
-        if (event.getCategory() != null) {
-            updateEvent.setCategory(categoryService.findCategoryById(event.getCategory()));
-        }
-        if (event.getDescription() != null) {
-            if (event.getDescription().length() < 20 || event.getDescription().length() > 7000) {
-                throw new ValidateFieldException("Length description min 20, max 7000 ");
-            }
-            updateEvent.setDescription(event.getDescription());
-        }
-        if (event.getEventDate() != null) {
-            LocalDateTime eventDate = LocalDateTime.parse(event.getEventDate(), MainServer.SERVER_FORMAT);
-            if (eventDate.isBefore(LocalDateTime.now())) {
-                throw new ValidateFieldException("Event date has already arrived");
-            }
-            updateEvent.setEventDate(eventDate);
-        }
-        if (event.getLocation() != null) {
-            updateEvent.setLocation(event.getLocation());
-        }
-        if (event.getPaid() != null) {
-            updateEvent.setPaid(event.getPaid());
-        }
-        if (event.getParticipantLimit() != null) {
-            updateEvent.setParticipantLimit(event.getParticipantLimit());
-        }
-        if (event.getRequestModeration() != null) {
-            updateEvent.setRequestModeration(event.getRequestModeration());
-        }
+        validatedAndUpdate(updateEvent, event.getAnnotation(), event.getCategory(), event.getDescription()
+                , event.getEventDate(), event.getLocation(), event.getPaid(), event.getParticipantLimit()
+                , event.getRequestModeration());
         if (event.getStateAction() != null) {
             if (event.getStateAction().equals(ru.practicum.admin.model.StateAction.PUBLISH_EVENT)) {
                 if (!State.PENDING.equals(updateEvent.getState())) {
@@ -203,6 +144,43 @@ public class EventServiceImpl implements EventService {
         locationService.createLocation(updateEvent.getLocation());
         return getEventFullDto(List.of(updateEvent)).get(0);
 
+    }
+
+    private void validatedAndUpdate(Event updateEvent, String annotation, Integer category, String description, String eventDate2, Location location, Boolean paid, Integer participantLimit, Boolean requestModeration) {
+        if (annotation != null) {
+            if (annotation.length() < 20 || annotation.length() > 2000) {
+                throw new ValidateFieldException("Length annotation min 20, max 7000 ");
+            }
+            updateEvent.setAnnotation(annotation);
+        }
+        if (category != null) {
+            updateEvent.setCategory(categoryService.findCategoryById(category));
+        }
+        if (description != null) {
+            if (description.length() < 20 || description.length() > 7000) {
+                throw new ValidateFieldException("Length description min 20, max 7000 ");
+            }
+            updateEvent.setDescription(description);
+        }
+        if (eventDate2 != null) {
+            LocalDateTime eventDate = LocalDateTime.parse(eventDate2, General.SERVER_FORMAT);
+            if (eventDate.isBefore(LocalDateTime.now())) {
+                throw new ValidateFieldException("Event date has already arrived");
+            }
+            updateEvent.setEventDate(eventDate);
+        }
+        if (location != null) {
+            updateEvent.setLocation(location);
+        }
+        if (paid != null) {
+            updateEvent.setPaid(paid);
+        }
+        if (participantLimit != null) {
+            updateEvent.setParticipantLimit(participantLimit);
+        }
+        if (requestModeration != null) {
+            updateEvent.setRequestModeration(requestModeration);
+        }
     }
 
     @Override
@@ -280,10 +258,12 @@ public class EventServiceImpl implements EventService {
         return getEventFullDto(List.of(event)).get(0);
     }
 
+    @Override
     public Event findEventById(Integer eventId) {
         return eventRepository.findById(eventId).orElseThrow(() -> new ValueNotFoundDbException("Event not found"));
     }
 
+    @Override
     public List<EventFullDto> getEventFullDto(List<Event> events) {
         if (events.size() == 0) return List.of();
         Map<Integer, Integer> views = getViews(events.stream()

@@ -1,4 +1,4 @@
-package ru.practicum.event.dao;
+package ru.practicum.event.repository;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.admin.model.UpdateEventAdminRequest;
-import ru.practicum.admin.service.impl.AdminServiceImpl;
+import ru.practicum.admin.service.AdminService;
 import ru.practicum.category.model.CategoryDto;
 import ru.practicum.category.model.NewCategoryDto;
 import ru.practicum.compilation.model.CompilationDto;
@@ -29,7 +29,7 @@ import java.util.List;
 @RequestMapping(path = "/admin")
 public class AdminController {
 
-    private final AdminServiceImpl adminService;
+    private final AdminService adminService;
 
 
     @GetMapping("/users")

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.client.ServerClient;
 import ru.practicum.event.model.EventFullDto;
 import ru.practicum.event.model.EventShortDto;
-import ru.practicum.event.service.impl.EventServiceImpl;
+import ru.practicum.event.service.EventService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
@@ -18,7 +18,7 @@ import java.util.List;
 @RequestMapping(path = "/events")
 public class EventController {
 
-    private final EventServiceImpl eventService;
+    private final EventService eventService;
 
     private final ServerClient serverClient;
 

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import ru.practicum.category.dao.CategoryRepository;
+import ru.practicum.category.repository.CategoryRepository;
 import ru.practicum.category.model.Category;
 import ru.practicum.category.model.CategoryDto;
 import ru.practicum.category.model.CategoryMapper;
@@ -64,6 +64,7 @@ public class CategoryServiceImpl implements CategoryService {
         return toCategoryDto(findCategoryById(catId));
     }
 
+    @Override
     public Category findCategoryById(Integer catId) {
         return categoryRepository.findById(catId).orElseThrow(
                 () -> new ValueNotFoundDbException("Category with id=" + catId + " was not found"));

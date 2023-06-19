@@ -8,6 +8,7 @@ import ru.practicum.reqest.model.EventRequestStatusUpdateRequest;
 import ru.practicum.reqest.model.EventRequestStatusUpdateResult;
 import ru.practicum.reqest.model.ParticipationRequestDto;
 import ru.practicum.user.model.NewUserRequest;
+import ru.practicum.user.model.User;
 import ru.practicum.user.model.UserDto;
 
 import java.util.List;
@@ -37,4 +38,6 @@ public interface UserService {
     List<ParticipationRequestDto> getParticipationRequestUser(Integer userId);
 
     ParticipationRequestDto cancelingParticipate(Integer userId, Integer requestId);
+
+    User findUserById(Integer userId);
 }

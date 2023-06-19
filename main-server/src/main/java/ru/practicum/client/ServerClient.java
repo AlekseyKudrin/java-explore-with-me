@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
-import ru.practicum.MainServer;
 import ru.practicum.event.model.HitDto;
+import ru.practicum.util.General;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
@@ -53,12 +53,12 @@ public class ServerClient {
                 "ewm-main-service",
                 request.getRequestURI(),
                 request.getRemoteAddr(),
-                LocalDateTime.now().format(MainServer.SERVER_FORMAT)
+                LocalDateTime.now().format(General.SERVER_FORMAT)
         );
         return makeAndSendRequest(HttpMethod.POST, "/hit", null, hitDto);
     }
 
-    public ResponseEntity<Object> getStats(String start, String  end, List<String> uris, Boolean unique) {
+    public ResponseEntity<Object> getStats(String start, String end, List<String> uris, Boolean unique) {
         StringBuilder sb = new StringBuilder();
         Map<String, Object> parameters = new HashMap<>();
         if (uris != null) {

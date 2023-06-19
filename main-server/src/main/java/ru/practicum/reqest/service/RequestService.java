@@ -4,6 +4,7 @@ import ru.practicum.event.model.Event;
 import ru.practicum.reqest.model.EventRequestStatusUpdateRequest;
 import ru.practicum.reqest.model.EventRequestStatusUpdateResult;
 import ru.practicum.reqest.model.ParticipationRequestDto;
+import ru.practicum.reqest.model.Request;
 import ru.practicum.user.model.User;
 
 import java.util.List;
@@ -21,4 +22,6 @@ public interface RequestService {
     List<ParticipationRequestDto> getParticipation(Integer userId);
 
     ParticipationRequestDto cancelingParticipate(Integer userId, Integer requestId);
+
+    Request validateParticipateOfUser(Integer userId, Integer eventId);
 }

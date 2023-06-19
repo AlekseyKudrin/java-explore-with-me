@@ -4,12 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import ru.practicum.compilation.dao.CompilationRepository;
 import ru.practicum.compilation.model.*;
+import ru.practicum.compilation.repository.CompilationRepository;
 import ru.practicum.compilation.service.CompilationService;
 import ru.practicum.event.model.EventMapper;
 import ru.practicum.event.model.EventShortDto;
-import ru.practicum.event.service.impl.EventServiceImpl;
+import ru.practicum.event.service.EventService;
 import ru.practicum.exceptionHandler.exception.ValueNotFoundDbException;
 import ru.practicum.util.General;
 
@@ -25,7 +25,7 @@ public class CompilationServiceImpl implements CompilationService {
 
     private final CompilationRepository compilationRepository;
 
-    private final EventServiceImpl eventService;
+    private final EventService eventService;
 
     @Override
     public CompilationDto createCompilation(NewCompilationDto newCompilationDto) {

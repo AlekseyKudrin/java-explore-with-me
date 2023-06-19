@@ -2,12 +2,12 @@ package ru.practicum.event.model;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import ru.practicum.MainServer;
 import ru.practicum.category.model.Category;
 import ru.practicum.category.model.CategoryMapper;
 import ru.practicum.event.model.enums.State;
 import ru.practicum.user.model.User;
 import ru.practicum.user.model.UserMapper;
+import ru.practicum.util.General;
 
 import java.time.LocalDateTime;
 
@@ -36,14 +36,14 @@ public class EventMapper {
                 event.getAnnotation(),
                 CategoryMapper.toCategoryDto(event.getCategory()),
                 (int) countConfirmedRequest,
-                event.getCreatedOn().format(MainServer.SERVER_FORMAT),
+                event.getCreatedOn().format(General.SERVER_FORMAT),
                 event.getDescription(),
-                event.getEventDate().format(MainServer.SERVER_FORMAT),
+                event.getEventDate().format(General.SERVER_FORMAT),
                 UserMapper.toUserShortDto(event.getInitiator()),
                 event.getLocation(),
                 event.getPaid(),
                 event.getParticipantLimit(),
-                event.getPublishedOn() == null ? "" : event.getPublishedOn().format(MainServer.SERVER_FORMAT),
+                event.getPublishedOn() == null ? "" : event.getPublishedOn().format(General.SERVER_FORMAT),
                 event.getRequestModeration(),
                 event.getState().toString(),
                 event.getTitle(),

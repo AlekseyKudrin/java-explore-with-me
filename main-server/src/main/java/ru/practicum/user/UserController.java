@@ -12,7 +12,7 @@ import ru.practicum.event.model.UpdateEventUserRequest;
 import ru.practicum.reqest.model.EventRequestStatusUpdateRequest;
 import ru.practicum.reqest.model.EventRequestStatusUpdateResult;
 import ru.practicum.reqest.model.ParticipationRequestDto;
-import ru.practicum.user.service.impl.UserServiceImpl;
+import ru.practicum.user.service.UserService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.PositiveOrZero;
@@ -25,7 +25,7 @@ import java.util.List;
 @Validated
 public class UserController {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
     @GetMapping("/{userId}/events")
     public List<EventShortDto> getEventsUser(

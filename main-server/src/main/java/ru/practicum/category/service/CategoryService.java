@@ -1,5 +1,6 @@
 package ru.practicum.category.service;
 
+import ru.practicum.category.model.Category;
 import ru.practicum.category.model.CategoryDto;
 import ru.practicum.category.model.NewCategoryDto;
 
@@ -15,4 +16,6 @@ public interface CategoryService {
     List<CategoryDto> getCategories(Integer from, Integer size);
 
     CategoryDto getCategoryById(Integer catId);
+
+    Category findCategoryById(Integer catId);
 }

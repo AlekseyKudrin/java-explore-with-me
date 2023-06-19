@@ -7,18 +7,18 @@ import ru.practicum.admin.model.UpdateEventAdminRequest;
 import ru.practicum.admin.service.AdminService;
 import ru.practicum.category.model.CategoryDto;
 import ru.practicum.category.model.NewCategoryDto;
-import ru.practicum.category.service.impl.CategoryServiceImpl;
+import ru.practicum.category.service.CategoryService;
 import ru.practicum.compilation.model.CompilationDto;
 import ru.practicum.compilation.model.NewCompilationDto;
 import ru.practicum.compilation.model.UpdateCompilationRequest;
-import ru.practicum.compilation.service.impl.CompilationServiceImpl;
+import ru.practicum.compilation.service.CompilationService;
 import ru.practicum.event.model.EventFullDto;
 import ru.practicum.event.model.enums.State;
-import ru.practicum.event.service.impl.EventServiceImpl;
+import ru.practicum.event.service.EventService;
 import ru.practicum.exceptionHandler.exception.ValidateFieldException;
 import ru.practicum.user.model.NewUserRequest;
 import ru.practicum.user.model.UserDto;
-import ru.practicum.user.service.impl.UserServiceImpl;
+import ru.practicum.user.service.UserService;
 
 import javax.validation.ValidationException;
 import java.time.LocalDateTime;
@@ -30,13 +30,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdminServiceImpl implements AdminService {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
-    private final CategoryServiceImpl categoryService;
+    private final CategoryService categoryService;
 
-    private final CompilationServiceImpl compilationService;
+    private final CompilationService compilationService;
 
-    private final EventServiceImpl eventService;
+    private final EventService eventService;
 
     @Override
     public UserDto createUser(NewUserRequest newUserRequest) {
