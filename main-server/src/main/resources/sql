@@ -1,0 +1,52 @@
+select event_id, count(ra.status) as plus
+from event_rating as ra
+where case when (status = true) = false then (event_id is not null) else status = true end
+group by ra.event_id;
+
+select count(ra.status) as "-"
+from event_rating as ra
+where status = false
+group by ra.event_id;
+
+select a.event_id, (count(a.status) - b.dislikes) as likes
+from event_rating as a
+         right join (select event_id, count(status) as dislikes
+                     from event_rating
+                     where status = false
+                     group by event_id) as b on b.event_id = a.event_id
+where status = true
+group by a.event_id, b.dislikes;
+
+select events.*,
+       a.likes,
+       b.dislikes,
+       (case when likes is null then 0 else likes end - case when dislikes is null then 0 else dislikes end) as count
+from events
+         left join (select event_id, count(ra.status) as likes
+                    from event_rating as ra
+                    where status = true
+                    group by ra.event_id) as a on id = a.event_id
+         left join (select event_id, count(status) as dislikes
+                    from event_rating
+                    where status = false
+                    group by event_id) as b on id = b.event_id
+order by count desc;
+
+select users.*, (case when ev.count is null then 0 else ev.count end) as rating
+from users
+         left join (select events.*,
+                           a.likes,
+                           b.dislikes,
+                           (case when likes is null then 0 else likes end -
+                            case when dislikes is null then 0 else dislikes end) as count
+                    from events
+                             left join (select event_id, count(ra.status) as likes
+                                        from event_rating as ra
+                                        where status = true
+                                        group by ra.event_id) as a on id = a.event_id
+                             left join (select event_id, count(status) as dislikes
+                                        from event_rating
+                                        where status = false
+                                        group by event_id) as b on id = b.event_id) as ev on users.id = ev.initiator
+order by rating desc;
+

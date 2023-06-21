@@ -54,7 +54,7 @@ public class RatingController {
         return ratingEventDto;
     }
 
-    @GetMapping("/author/{userId}")
+    @GetMapping("/authors/{userId}")
     @ResponseStatus(HttpStatus.CREATED)
     public List<RatingAuthorDto> getRatingAuthors(@PathVariable Integer userId
     ) {
