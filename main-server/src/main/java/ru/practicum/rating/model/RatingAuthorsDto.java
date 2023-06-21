@@ -9,7 +9,7 @@ import ru.practicum.user.model.UserDto;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class RatingAuthorDto {
+public class RatingAuthorsDto {
     UserDto userDto;
     Long like;
 }

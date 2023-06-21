@@ -2,14 +2,23 @@ package ru.practicum.rating.model;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import ru.practicum.user.model.User;
 
+
+import javax.persistence.*;
+
+
+@MappedSuperclass
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@AllArgsConstructor
+//@NoArgsConstructor(access = AccessLevel.PRIVATE)
+//@FieldDefaults(level = AccessLevel.PRIVATE)
 public class RatingAuthors {
-    User user;
-    Long like;
+    Integer id;
+    @Column(name = "user1")
+    Integer user1;
+    @Column(name = "rating")
+    Integer rating;
 }

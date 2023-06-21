@@ -62,7 +62,9 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
-    public List<RatingAuthorDto> getRatingAuthors(Integer userId) {
+    public List<RatingAuthorsDto> getRatingAuthors(Integer userId) {
+        userService.findUserById(userId);
+        List<RatingAuthors> ratingAuthors = ratingRepository.getRatingAuthors();
         return null;
     }
 }

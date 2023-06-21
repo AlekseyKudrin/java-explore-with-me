@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.rating.model.RatingAuthorDto;
+import ru.practicum.rating.model.RatingAuthorsDto;
 import ru.practicum.rating.model.RatingDto;
 import ru.practicum.rating.model.RatingEventsDto;
 import ru.practicum.rating.service.RatingService;
@@ -56,12 +56,12 @@ public class RatingController {
 
     @GetMapping("/authors/{userId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public List<RatingAuthorDto> getRatingAuthors(@PathVariable Integer userId
+    public List<RatingAuthorsDto> getRatingAuthors(@PathVariable Integer userId
     ) {
         log.info("Received a request to return rating authors from user id={}", userId);
-        List<RatingAuthorDto> ratingAuthorDto = ratingService.getRatingAuthors(userId);
+        List<RatingAuthorsDto> ratingAuthorsDto = ratingService.getRatingAuthors(userId);
         log.info("Request to return rating authors from user id={} completed", userId);
-        return ratingAuthorDto;
+        return ratingAuthorsDto;
     }
 
 }

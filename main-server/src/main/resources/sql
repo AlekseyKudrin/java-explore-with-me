@@ -20,7 +20,7 @@ group by a.event_id, b.dislikes;
 select events.*,
        a.likes,
        b.dislikes,
-       (case when likes is null then 0 else likes end - case when dislikes is null then 0 else dislikes end) as count
+       (case when likes is null then 0 else likes end - case when dislikes is null then 0 else dislikes end) as sumLikes
 from events
          left join (select event_id, count(ra.status) as likes
                     from event_rating as ra
@@ -30,7 +30,7 @@ from events
                     from event_rating
                     where status = false
                     group by event_id) as b on id = b.event_id
-order by count desc;
+order by sumLikes desc;
 
 select users.*, (case when ev.count is null then 0 else ev.count end) as rating
 from users
@@ -50,3 +50,21 @@ from users
                                         group by event_id) as b on id = b.event_id) as ev on users.id = ev.initiator
 order by rating desc;
 
+select users.*, sum(case when ev.rating >= 1 then 1 when ev.rating<=-1 then -1 when ev.rating = 0 then 0 end) as rating
+from users
+         right join (select events.*,
+                            a.likes,
+                            b.dislikes,
+                            (case when likes is null then 0 else likes end -
+                             case when dislikes is null then 0 else dislikes end) as rating
+                     from events
+                              left join (select event_id, count(ra.status) as likes
+                                         from event_rating as ra
+                                         where status = true
+                                         group by ra.event_id) as a on id = a.event_id
+                              left join (select event_id, count(status) as dislikes
+                                         from event_rating
+                                         where status = false
+                                         group by event_id) as b on id = b.event_id) as ev on users.id = ev.initiator
+group by users.id, users.name, users.email
+order by rating desc;

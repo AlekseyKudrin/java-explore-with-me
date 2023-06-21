@@ -1,6 +1,6 @@
 package ru.practicum.rating.service;
 
-import ru.practicum.rating.model.RatingAuthorDto;
+import ru.practicum.rating.model.RatingAuthorsDto;
 import ru.practicum.rating.model.RatingDto;
 import ru.practicum.rating.model.RatingEventsDto;
 
@@ -14,5 +14,5 @@ public interface RatingService {
 
     List<RatingEventsDto> getRatingEvents(Integer userId);
 
-    List<RatingAuthorDto> getRatingAuthors(Integer userId);
+    List<RatingAuthorsDto> getRatingAuthors(Integer userId);
 }
