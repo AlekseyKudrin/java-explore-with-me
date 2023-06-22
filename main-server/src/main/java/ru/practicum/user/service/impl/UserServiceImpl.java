@@ -12,10 +12,7 @@ import ru.practicum.reqest.model.EventRequestStatusUpdateRequest;
 import ru.practicum.reqest.model.EventRequestStatusUpdateResult;
 import ru.practicum.reqest.model.ParticipationRequestDto;
 import ru.practicum.reqest.service.RequestService;
-import ru.practicum.user.model.NewUserRequest;
-import ru.practicum.user.model.User;
-import ru.practicum.user.model.UserDto;
-import ru.practicum.user.model.UserMapper;
+import ru.practicum.user.model.*;
 import ru.practicum.user.repository.UserRepository;
 import ru.practicum.user.service.UserService;
 import ru.practicum.util.General;
@@ -136,5 +133,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findUserById(Integer userId) {
         return userRepository.findById(userId).orElseThrow(() -> new ValueNotFoundDbException("User with id=" + userId + " was not found"));
+    }
+
+    public UserShortDto getUserShortDtoByUserId(Integer userId) {
+        return UserMapper.toUserShortDto(findUserById(userId));
     }
 }

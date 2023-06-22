@@ -12,6 +12,7 @@ import ru.practicum.rating.service.RatingService;
 import ru.practicum.user.model.User;
 import ru.practicum.user.service.UserService;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,7 +65,12 @@ public class RatingServiceImpl implements RatingService {
     @Override
     public List<RatingAuthorsDto> getRatingAuthors(Integer userId) {
         userService.findUserById(userId);
-        List<RatingAuthors> ratingAuthors = ratingRepository.getRatingAuthors();
-        return null;
+        return ratingRepository.getRatingAuthors()
+                .stream()
+                .map(i -> new RatingAuthors(((BigInteger) i[0]).intValue(), ((BigInteger) i[1]).intValue()))
+                .collect(Collectors.toList())
+                .stream()
+                .map(i -> RatingMapper.toRatingAuthorsDto(userService.getUserShortDtoByUserId(i.getId()), i.getRating()))
+                .collect(Collectors.toList());
     }
 }

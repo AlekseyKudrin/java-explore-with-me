@@ -10,6 +10,7 @@ import ru.practicum.reqest.model.ParticipationRequestDto;
 import ru.practicum.user.model.NewUserRequest;
 import ru.practicum.user.model.User;
 import ru.practicum.user.model.UserDto;
+import ru.practicum.user.model.UserShortDto;
 
 import java.util.List;
 
@@ -40,4 +41,6 @@ public interface UserService {
     ParticipationRequestDto cancelingParticipate(Integer userId, Integer requestId);
 
     User findUserById(Integer userId);
+
+    UserShortDto getUserShortDtoByUserId(Integer userId);
 }

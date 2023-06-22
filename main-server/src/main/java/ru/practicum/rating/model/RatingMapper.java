@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.model.EventShortDto;
 import ru.practicum.user.model.User;
+import ru.practicum.user.model.UserShortDto;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 
@@ -32,5 +33,11 @@ public class RatingMapper {
                 eventShortDto,
                 likes
         );
+    }
+
+    public static RatingAuthorsDto toRatingAuthorsDto(UserShortDto userShortDto, Integer likes) {
+        return new RatingAuthorsDto(
+                userShortDto,
+                likes);
     }
 }

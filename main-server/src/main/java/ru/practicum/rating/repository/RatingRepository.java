@@ -4,7 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import ru.practicum.event.model.Event;
 import ru.practicum.rating.model.Rating;
-import ru.practicum.rating.model.RatingAuthors;
 import ru.practicum.rating.model.RatingEvents;
 import ru.practicum.user.model.User;
 
@@ -41,7 +40,6 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
             "where status = false " +
             "group by event_id) as b on id = b.event_id) as ev on users.id=ev.initiator " +
             "group by users.id, users.name, users.email " +
-            "order by rating desc" , nativeQuery = true)
-
-            List<RatingAuthors>getRatingAuthors();
+            "order by rating desc", nativeQuery = true)
+    List<Object[]> getRatingAuthors();
 }

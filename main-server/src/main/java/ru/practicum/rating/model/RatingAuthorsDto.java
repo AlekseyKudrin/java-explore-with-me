@@ -2,7 +2,7 @@ package ru.practicum.rating.model;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import ru.practicum.user.model.UserDto;
+import ru.practicum.user.model.UserShortDto;
 
 @Getter
 @Setter
@@ -10,6 +10,6 @@ import ru.practicum.user.model.UserDto;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RatingAuthorsDto {
-    UserDto userDto;
-    Long like;
+    UserShortDto user;
+    Integer like;
 }
