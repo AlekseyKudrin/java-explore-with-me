@@ -63,13 +63,12 @@ public class RatingController {
     @GetMapping("/authors/{userId}")
     public List<RatingAuthorsDto> getRatingAuthors(
             @PathVariable Integer userId,
-            @RequestParam(required = false) String fieldSort,
             @RequestParam(defaultValue = "DESC") Sorting sort,
             @RequestParam(defaultValue = "0") Integer from,
             @RequestParam(defaultValue = "10") Integer size
     ) {
         log.info("Received a request to return rating authors from user id={}", userId);
-        List<RatingAuthorsDto> ratingAuthorsDto = ratingService.getRatingAuthors(userId, fieldSort, sort, from, size);
+        List<RatingAuthorsDto> ratingAuthorsDto = ratingService.getRatingAuthors(userId, sort, from, size);
         log.info("Request to return rating authors from user id={} completed", userId);
         return ratingAuthorsDto;
     }

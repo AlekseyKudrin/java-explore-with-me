@@ -29,8 +29,11 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
             , nativeQuery = true)
     List<Object[]> getRatingEvents(PageRequest pageRequest);
 
-    @Query(value = "select users.id, sum(case when ev.rating >= 1 then 1 when ev.rating<=-1 then -1 when ev.rating = 0 then 0 end) as rating " +
-            "from users " +
+    @Query(value = "select u.id, b.rating as rating " +
+            "from users as u " +
+            "left join (select " +
+            "u.id, sum(case when ev.rating >= 1 then 1 when ev.rating<=-1 then -1 when ev.rating = 0 then 0 end) as rating " +
+            "from users as u " +
             "right join (select events.*, a.likes, b.dislikes, " +
             "(case when likes is null then 0 else likes end -" +
             "case when dislikes is null then 0 else dislikes end)" +
@@ -43,8 +46,8 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
             "left join (select event_id, count(status) as dislikes " +
             "from event_rating " +
             "where status = false " +
-            "group by event_id) as b on id = b.event_id) as ev on users.id=ev.initiator " +
-            "group by users.id, users.name, users.email " +
-            "order by rating desc", nativeQuery = true)
+            "group by event_id) as b on id = b.event_id) as ev on u.id = ev.initiator " +
+            "group by u.id, u.name, u.email) as b on u.id = b.id"
+            , nativeQuery = true)
     List<Object[]> getRatingAuthors(PageRequest pageRequest);
 }

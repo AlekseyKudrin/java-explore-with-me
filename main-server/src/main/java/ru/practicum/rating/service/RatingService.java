@@ -15,5 +15,5 @@ public interface RatingService {
 
     List<RatingEventsDto> getRatingEvents(Integer userId, Sorting sort, Integer from, Integer size);
 
-    List<RatingAuthorsDto> getRatingAuthors(Integer userId, String fieldSort, Sorting sort, Integer from, Integer size);
+    List<RatingAuthorsDto> getRatingAuthors(Integer userId, Sorting sort, Integer from, Integer size);
 }

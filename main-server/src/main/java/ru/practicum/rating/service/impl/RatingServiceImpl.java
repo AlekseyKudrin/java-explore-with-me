@@ -13,6 +13,7 @@ import ru.practicum.user.model.User;
 import ru.practicum.user.service.UserService;
 import ru.practicum.util.General;
 
+import javax.validation.ValidationException;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,9 +33,11 @@ public class RatingServiceImpl implements RatingService {
     public RatingDto create(Integer userId, Integer eventId, Boolean state) {
         User user = userService.findUserById(userId);
         Event event = eventService.findEventById(eventId);
+        if (userId.equals(event.getInitiator().getId())) {
+            throw new ValidationException("user can't like himself");
+        }
 
         Rating rating = ratingRepository.searchByUserAndEvent(user, event);
-
         if (rating == null) {
             rating = ratingRepository.save(RatingMapper.toRating(user, event, state));
         } else {
@@ -55,7 +58,7 @@ public class RatingServiceImpl implements RatingService {
     @Override
     public List<RatingEventsDto> getRatingEvents(Integer userId, Sorting sort, Integer from, Integer size) {
         userService.findUserById(userId);
-        return ratingRepository.getRatingEvents(General.toPage(from, size, getSorting("rating", sort)))
+        return ratingRepository.getRatingEvents(General.toPage(from, size, getSorting(sort)))
                 .stream()
                 .map(i -> new RatingEvents(((BigInteger) i[0]).intValue(), ((BigInteger) i[1]).intValue()))
                 .collect(Collectors.toList())
@@ -65,9 +68,9 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
-    public List<RatingAuthorsDto> getRatingAuthors(Integer userId, String fieldSort, Sorting sort, Integer from, Integer size) {
+    public List<RatingAuthorsDto> getRatingAuthors(Integer userId, Sorting sort, Integer from, Integer size) {
         userService.findUserById(userId);
-        return ratingRepository.getRatingAuthors(fieldSort == null ? General.toPage(from, size) : General.toPage(from, size, getSorting(fieldSort, sort)))
+        return ratingRepository.getRatingAuthors(General.toPage(from, size, getSorting(sort)))
                 .stream()
                 .map(i -> new RatingAuthors(((BigInteger) i[0]).intValue(), ((BigInteger) i[1]).intValue()))
                 .collect(Collectors.toList())
@@ -76,7 +79,7 @@ public class RatingServiceImpl implements RatingService {
                 .collect(Collectors.toList());
     }
 
-    private Sort getSorting(String field, Sorting sorting) {
-        return sorting.name().equals("DESC") ? Sort.by(Sort.Direction.DESC, field) : Sort.by(Sort.Direction.ASC, field);
+    private Sort getSorting(Sorting sorting) {
+        return sorting.name().equals("DESC") ? Sort.by(Sort.Direction.DESC, "rating") : Sort.by(Sort.Direction.ASC, "rating");
     }
 }
