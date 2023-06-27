@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.rating.model.RatingAuthorsDto;
 import ru.practicum.rating.model.RatingDto;
 import ru.practicum.rating.model.RatingEventsDto;
+import ru.practicum.rating.model.Sorting;
 import ru.practicum.rating.service.RatingService;
 
 import java.util.List;
@@ -24,9 +25,10 @@ public class RatingController {
 
     @PostMapping("{userId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public RatingDto create(@PathVariable Integer userId,
-                            @RequestParam Integer eventId,
-                            @RequestParam Boolean status
+    public RatingDto create(
+            @PathVariable Integer userId,
+            @RequestParam Integer eventId,
+            @RequestParam Boolean status
     ) {
         log.info("Received a request to add a like by a user id={}", userId);
         RatingDto ratingDto = ratingService.create(userId, eventId, status);
@@ -35,9 +37,10 @@ public class RatingController {
     }
 
     @DeleteMapping("{userId}")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void delete(@PathVariable Integer userId,
-                       @RequestParam Integer eventId
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(
+            @PathVariable Integer userId,
+            @RequestParam Integer eventId
     ) {
         log.info("Received a request to delete a like by a user id={}", userId);
         ratingService.delete(userId, eventId);
@@ -45,21 +48,28 @@ public class RatingController {
     }
 
     @GetMapping("/events/{userId}")
-    @ResponseStatus(HttpStatus.CREATED)
-    public List<RatingEventsDto> getRatingEvents(@PathVariable Integer userId
+    public List<RatingEventsDto> getRatingEvents(
+            @PathVariable Integer userId,
+            @RequestParam(defaultValue = "DESC") Sorting sort,
+            @RequestParam(defaultValue = "0") Integer from,
+            @RequestParam(defaultValue = "10") Integer size
     ) {
         log.info("Received a request to return rating events from user id={}", userId);
-        List<RatingEventsDto> ratingEventDto = ratingService.getRatingEvents(userId);
+        List<RatingEventsDto> ratingEventDto = ratingService.getRatingEvents(userId, sort, from, size);
         log.info("Request to return rating events from user id={} completed", userId);
         return ratingEventDto;
     }
 
     @GetMapping("/authors/{userId}")
-    @ResponseStatus(HttpStatus.CREATED)
-    public List<RatingAuthorsDto> getRatingAuthors(@PathVariable Integer userId
+    public List<RatingAuthorsDto> getRatingAuthors(
+            @PathVariable Integer userId,
+            @RequestParam(required = false) String fieldSort,
+            @RequestParam(defaultValue = "DESC") Sorting sort,
+            @RequestParam(defaultValue = "0") Integer from,
+            @RequestParam(defaultValue = "10") Integer size
     ) {
         log.info("Received a request to return rating authors from user id={}", userId);
-        List<RatingAuthorsDto> ratingAuthorsDto = ratingService.getRatingAuthors(userId);
+        List<RatingAuthorsDto> ratingAuthorsDto = ratingService.getRatingAuthors(userId, fieldSort, sort, from, size);
         log.info("Request to return rating authors from user id={} completed", userId);
         return ratingAuthorsDto;
     }

@@ -3,6 +3,7 @@ package ru.practicum.util;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import java.time.format.DateTimeFormatter;
 
@@ -17,5 +18,9 @@ public class General {
 
     public static PageRequest toPage(Integer from, Integer size) {
         return PageRequest.of(from > 0 ? from / size : 0, size);
+    }
+
+    public static PageRequest toPage(Integer from, Integer size, Sort sort) {
+        return PageRequest.of(from > 0 ? from / size : 0, size, sort);
     }
 }

@@ -10,7 +10,7 @@ import ru.practicum.event.model.EventShortDto;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RatingEventsDto {
-    EventShortDto eventShort;
-    Long like;
+    EventShortDto event;
+    Integer like;
 
 }
