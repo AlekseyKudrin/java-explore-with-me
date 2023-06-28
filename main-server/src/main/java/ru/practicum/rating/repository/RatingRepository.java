@@ -25,8 +25,7 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
             "left join (select event_id, count(status) as dislikes " +
             "from event_rating " +
             "where status = false " +
-            "group by event_id) as b on e.id = b.event_id"
-            , nativeQuery = true)
+            "group by event_id) as b on e.id = b.event_id", nativeQuery = true)
     List<Object[]> getRatingEvents(PageRequest pageRequest);
 
     @Query(value = "select u.id, b.rating as rating " +
@@ -47,7 +46,6 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
             "from event_rating " +
             "where status = false " +
             "group by event_id) as b on id = b.event_id) as ev on u.id = ev.initiator " +
-            "group by u.id, u.name, u.email) as b on u.id = b.id"
-            , nativeQuery = true)
+            "group by u.id, u.name, u.email) as b on u.id = b.id", nativeQuery = true)
     List<Object[]> getRatingAuthors(PageRequest pageRequest);
 }
