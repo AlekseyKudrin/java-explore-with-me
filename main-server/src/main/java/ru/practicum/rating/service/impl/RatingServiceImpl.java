@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.service.EventService;
 import ru.practicum.rating.model.*;
@@ -47,6 +48,7 @@ public class RatingServiceImpl implements RatingService {
         return RatingMapper.toRatingDto(rating);
     }
 
+    @Transactional
     @Override
     public void delete(Integer userId, Integer eventId) {
         User user = userService.findUserById(userId);

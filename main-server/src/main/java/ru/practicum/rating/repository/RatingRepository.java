@@ -2,6 +2,7 @@ package ru.practicum.rating.repository;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import ru.practicum.event.model.Event;
 import ru.practicum.rating.model.Rating;
@@ -13,6 +14,7 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
 
     Rating searchByUserAndEvent(User user, Event event);
 
+    @Modifying
     void deleteByUserAndEvent(User user, Event event);
 
     @Query(value = "select e.id as id, case when likes is null then 0 else likes end -" +
