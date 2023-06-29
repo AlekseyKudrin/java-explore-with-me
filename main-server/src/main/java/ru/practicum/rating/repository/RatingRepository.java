@@ -30,7 +30,7 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
 
     @Query(value = "select u.id, b.rating as rating " +
             "from users as u " +
-            "left join (select " +
+            "right join (select " +
             "u.id, sum(case when ev.rating >= 1 then 1 when ev.rating<=-1 then -1 when ev.rating = 0 then 0 end) as rating " +
             "from users as u " +
             "right join (select events.*, a.likes, b.dislikes, " +
