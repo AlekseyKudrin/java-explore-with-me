@@ -2,7 +2,6 @@ package ru.practicum.rating.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.event.model.Event;
@@ -60,7 +59,7 @@ public class RatingServiceImpl implements RatingService {
     @Override
     public List<RatingEventsDto> getRatingEvents(Integer userId, Sorting sort, Integer from, Integer size) {
         userService.findUserById(userId);
-        return ratingRepository.getRatingEvents(General.toPage(from, size, getSorting(sort)))
+        return ratingRepository.getRatingEvents(General.toPage(from, size, sort.getSort()))
                 .stream()
                 .map(i -> new RatingEvents(((BigInteger) i[0]).intValue(), ((BigInteger) i[1]).intValue()))
                 .collect(Collectors.toList())
@@ -72,16 +71,12 @@ public class RatingServiceImpl implements RatingService {
     @Override
     public List<RatingAuthorsDto> getRatingAuthors(Integer userId, Sorting sort, Integer from, Integer size) {
         userService.findUserById(userId);
-        return ratingRepository.getRatingAuthors(General.toPage(from, size, getSorting(sort)))
+        return ratingRepository.getRatingAuthors(General.toPage(from, size, sort.getSort()))
                 .stream()
                 .map(i -> new RatingAuthors(((BigInteger) i[0]).intValue(), ((BigInteger) i[1]).intValue()))
                 .collect(Collectors.toList())
                 .stream()
                 .map(i -> RatingMapper.toRatingAuthorsDto(userService.getUserShortDtoByUserId(i.getUserId()), i.getRating()))
                 .collect(Collectors.toList());
-    }
-
-    private Sort getSorting(Sorting sorting) {
-        return sorting.name().equals("DESC") ? Sort.by(Sort.Direction.DESC, "rating") : Sort.by(Sort.Direction.ASC, "rating");
     }
 }

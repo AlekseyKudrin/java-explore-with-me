@@ -3,7 +3,6 @@ package ru.practicum.rating;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.rating.model.RatingAuthorsDto;
 import ru.practicum.rating.model.RatingDto;
@@ -14,7 +13,6 @@ import ru.practicum.rating.service.RatingService;
 import java.util.List;
 
 @Slf4j
-@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/rating")
