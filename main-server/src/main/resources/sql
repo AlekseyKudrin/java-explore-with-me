@@ -86,3 +86,10 @@ order by rating desc;
             "group by event_id) as b on id = b.event_id) as ev on u.id = ev.initiator " +
             "group by u.id, u.name, u.email"
             , nativeQuery = true)
+
+
+select new ru.practicum.rating.model.RatingEvents(e.id as eventId, count (r1.status) - count (r2.status) as rating) " +
+            "from Event as e " +
+            "left join Rating as r1 on e.id = r1.event.id and r1.status = true " +
+            "left join Rating as r2 on e.id = r2.event.id and r2.status = false " +
+            "group by e.id

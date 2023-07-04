@@ -28,7 +28,7 @@ public class RatingMapper {
         );
     }
 
-    public static RatingEventsDto toRatingEventsDto(EventShortDto eventShortDto, Integer likes) {
+    public static RatingEventsDto toRatingEventsDto(EventShortDto eventShortDto, Long likes) {
         return new RatingEventsDto(
                 eventShortDto,
                 likes

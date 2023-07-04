@@ -56,13 +56,22 @@ public class RatingServiceImpl implements RatingService {
         ratingRepository.deleteByUserAndEvent(user, event);
     }
 
+//    @Override
+//    public List<RatingEventsDto> getRatingEvents(Integer userId, Sorting sort, Integer from, Integer size) {
+//        userService.findUserById(userId);
+//        return ratingRepository.getRatingEvents(General.toPage(from, size, sort.getSort()))
+//                .stream()
+//                .map(i -> new RatingEvents(((BigInteger) i[0]).intValue(), ((BigInteger) i[1]).intValue()))
+//                .collect(Collectors.toList())
+//                .stream()
+//                .map(i -> RatingMapper.toRatingEventsDto(eventService.getEventShortDtoByEventId(i.getEventId()), i.getRating()))
+//                .collect(Collectors.toList());
+//    }
+
     @Override
     public List<RatingEventsDto> getRatingEvents(Integer userId, Sorting sort, Integer from, Integer size) {
         userService.findUserById(userId);
         return ratingRepository.getRatingEvents(General.toPage(from, size, sort.getSort()))
-                .stream()
-                .map(i -> new RatingEvents(((BigInteger) i[0]).intValue(), ((BigInteger) i[1]).intValue()))
-                .collect(Collectors.toList())
                 .stream()
                 .map(i -> RatingMapper.toRatingEventsDto(eventService.getEventShortDtoByEventId(i.getEventId()), i.getRating()))
                 .collect(Collectors.toList());

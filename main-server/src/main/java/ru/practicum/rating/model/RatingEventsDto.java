@@ -11,6 +11,6 @@ import ru.practicum.event.model.EventShortDto;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RatingEventsDto {
     EventShortDto event;
-    Integer like;
+    Long like;
 
 }
