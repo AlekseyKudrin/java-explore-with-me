@@ -264,6 +264,11 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public EventShortDto getEventShortDtoByEventId(Integer eventId) {
+        return EventMapper.toEventShortDto(getEventFullDto(List.of(findEventById(eventId))).get(0));
+    }
+
+    @Override
     public List<EventFullDto> getEventFullDto(List<Event> events) {
         if (events.size() == 0) return List.of();
         Map<Integer, Integer> views = getViews(events.stream()

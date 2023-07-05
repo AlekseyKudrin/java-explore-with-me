@@ -19,10 +19,11 @@ import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @Slf4j
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/users")
-@Validated
+
 public class UserController {
 
     private final UserService userService;

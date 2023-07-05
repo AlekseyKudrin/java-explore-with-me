@@ -1,0 +1,95 @@
+select event_id, count(ra.status) as plus
+from event_rating as ra
+where case when (status = true) = false then (event_id is not null) else status = true end
+group by ra.event_id;
+
+select count(ra.status) as "-"
+from event_rating as ra
+where status = false
+group by ra.event_id;
+
+select a.event_id, (count(a.status) - b.dislikes) as likes
+from event_rating as a
+         right join (select event_id, count(status) as dislikes
+                     from event_rating
+                     where status = false
+                     group by event_id) as b on b.event_id = a.event_id
+where status = true
+group by a.event_id, b.dislikes;
+
+select events.*,
+       a.likes,
+       b.dislikes,
+       (case when likes is null then 0 else likes end - case when dislikes is null then 0 else dislikes end) as sumLikes
+from events
+         left join (select event_id, count(ra.status) as likes
+                    from event_rating as ra
+                    where status = true
+                    group by ra.event_id) as a on id = a.event_id
+         left join (select event_id, count(status) as dislikes
+                    from event_rating
+                    where status = false
+                    group by event_id) as b on id = b.event_id
+order by sumLikes desc;
+
+select users.*, (case when ev.count is null then 0 else ev.count end) as rating
+from users
+         left join (select events.*,
+                           a.likes,
+                           b.dislikes,
+                           (case when likes is null then 0 else likes end -
+                            case when dislikes is null then 0 else dislikes end) as count
+                    from events
+                             left join (select event_id, count(ra.status) as likes
+                                        from event_rating as ra
+                                        where status = true
+                                        group by ra.event_id) as a on id = a.event_id
+                             left join (select event_id, count(status) as dislikes
+                                        from event_rating
+                                        where status = false
+                                        group by event_id) as b on id = b.event_id) as ev on users.id = ev.initiator
+order by rating desc;
+
+select users.*, sum(case when ev.rating >= 1 then 1 when ev.rating<=-1 then -1 when ev.rating = 0 then 0 end) as rating
+from users
+         right join (select events.*,
+                            a.likes,
+                            b.dislikes,
+                            (case when likes is null then 0 else likes end -
+                             case when dislikes is null then 0 else dislikes end) as rating
+                     from events
+                              left join (select event_id, count(ra.status) as likes
+                                         from event_rating as ra
+                                         where status = true
+                                         group by ra.event_id) as a on id = a.event_id
+                              left join (select event_id, count(status) as dislikes
+                                         from event_rating
+                                         where status = false
+                                         group by event_id) as b on id = b.event_id) as ev on users.id = ev.initiator
+group by users.id, users.name, users.email
+order by rating desc;
+
+@Query(value = "select u.id as id, sum(case when ev.rating >= 1 then 1 when ev.rating<=-1 then -1 when ev.rating = 0 then 0 end) as rating " +
+            "from users as u " +
+            "right join (select events.*, a.likes, b.dislikes, " +
+            "(case when likes is null then 0 else likes end -" +
+            "case when dislikes is null then 0 else dislikes end)" +
+            "as rating " +
+            "from events " +
+            "left join (select event_id, count(ra.status) as likes " +
+            "from event_rating as ra " +
+            "where status = true " +
+            "group by ra.event_id) as a on id = a.event_id " +
+            "left join (select event_id, count(status) as dislikes " +
+            "from event_rating " +
+            "where status = false " +
+            "group by event_id) as b on id = b.event_id) as ev on u.id = ev.initiator " +
+            "group by u.id, u.name, u.email"
+            , nativeQuery = true)
+
+
+select new ru.practicum.rating.model.RatingEvents(e.id as eventId, count (r1.status) - count (r2.status) as rating) " +
+            "from Event as e " +
+            "left join Rating as r1 on e.id = r1.event.id and r1.status = true " +
+            "left join Rating as r2 on e.id = r2.event.id and r2.status = false " +
+            "group by e.id
