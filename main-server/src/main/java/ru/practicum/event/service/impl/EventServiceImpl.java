@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.practicum.admin.model.UpdateEventAdminRequest;
@@ -221,23 +222,41 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<EventShortDto> getEvents(String text, List<Integer> categories, Boolean paid, LocalDateTime rangeStart, LocalDateTime rangeEnd, Boolean onlyAvailable, String sort, Integer from, Integer size) {
-        if (rangeStart != null && rangeEnd != null) {
+        BooleanExpression expression;
+        PageRequest pageRequest;
+        BooleanBuilder builder = new BooleanBuilder();
+
+        if (rangeStart == null && rangeEnd == null) {
+            rangeStart = LocalDateTime.now();
+        } else if (rangeStart != null && rangeEnd != null) {
             if (rangeStart.isAfter(rangeEnd)) {
                 throw new ValidateFieldException("Start date cannot be before than end date");
             }
         }
-
-        BooleanBuilder builder = new BooleanBuilder();
         if (text != null) builder.and(QEvent.event.annotation.likeIgnoreCase("%" + text.toLowerCase() + "%"))
                 .or(QEvent.event.title.likeIgnoreCase("%" + text.toLowerCase() + "%"));
         if (categories != null) builder.and(QEvent.event.category.id.in(categories));
         if (paid != null) builder.and(QEvent.event.paid.eq(paid));
         if (rangeStart != null) builder.and(QEvent.event.eventDate.after(rangeStart));
         if (rangeEnd != null) builder.and(QEvent.event.eventDate.before(rangeEnd));
+        if (sort != null) {
+            pageRequest = General.toPage(from, size, Sort.by(State.valueOf(sort).toString()));
+        } else {
+            pageRequest = General.toPage(from, size);
+        }
+        if (builder.getValue() == null && (sort != null && sort.equals("VIEWS"))) {
+            getViews(eventRepository.findAll()
+                    .stream()
+                    .map(Event::getId)
+                    .collect(Collectors.toList()))
+                    .entrySet()
+                    .stream()
+                    .sorted(Map.Entry.comparingByValue())
+                    .collect(Collectors.toList());
+        }
 
-        BooleanExpression expression = builder.getValue() == null ? QEvent.event.isNotNull() : Expressions.asBoolean(builder.getValue());
-        Page<Event> events = eventRepository.findAll(expression, General.toPage(from, size));
-        List<EventFullDto> eventFull = getEventFullDto(events.toList());
+        expression = builder.getValue() == null ? QEvent.event.isNotNull() : Expressions.asBoolean(builder.getValue());
+        List<EventFullDto> eventFull = getEventFullDto(eventRepository.findAll(expression, pageRequest).toList());
 
         if (onlyAvailable) {
             eventFull = eventFull.stream().filter(i -> i.getConfirmedRequests() <= i.getParticipantLimit()).collect(Collectors.toList());
