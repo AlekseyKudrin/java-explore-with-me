@@ -185,8 +185,8 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventFullDto> getEvents(List<Integer> users, List<String> states, List<Integer> categories, LocalDateTime
-            rangeStart, LocalDateTime rangeEnd, Integer from, Integer size) {
+    public List<EventFullDto> getEvents(List<Integer> users, List<String> states, List<Integer> categories,
+                                        LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size) {
         BooleanBuilder builder = new BooleanBuilder();
         BooleanExpression expression;
 
@@ -239,35 +239,54 @@ public class EventServiceImpl implements EventService {
         if (paid != null) builder.and(QEvent.event.paid.eq(paid));
         if (rangeStart != null) builder.and(QEvent.event.eventDate.after(rangeStart));
         if (rangeEnd != null) builder.and(QEvent.event.eventDate.before(rangeEnd));
-        if (sort != null) {
-            pageRequest = General.toPage(from, size, Sort.by(State.valueOf(sort).toString()));
+        if (sort != null && sort.equals("EVENT_DATE")) {
+            pageRequest = General.toPage(from, size, Sort.by("eventDate"));
         } else {
             pageRequest = General.toPage(from, size);
         }
-        if (builder.getValue() == null && (sort != null && sort.equals("VIEWS"))) {
-            getViews(eventRepository.findAll()
-                    .stream()
-                    .map(Event::getId)
-                    .collect(Collectors.toList()))
-                    .entrySet()
-                    .stream()
-                    .sorted(Map.Entry.comparingByValue())
-                    .collect(Collectors.toList());
+        if (sort != null && sort.equals("VIEWS")) {
+            List<Event> events = eventRepository.findByState(State.PUBLISHED);
+            List<EventFullDto> list = getEventFullDto(events);
+            if (onlyAvailable) {
+                return list.stream()
+                        .filter(i -> i.getConfirmedRequests() <= i.getParticipantLimit())
+                        .sorted(Comparator.comparingInt(EventFullDto::getViews))
+                        .skip(from)
+                        .limit(size)
+                        .map(EventMapper::toEventShortDto).collect(Collectors.toList());
+            } else {
+                return list.stream().sorted(Comparator.comparingInt(EventFullDto::getViews))
+                        .skip(from)
+                        .limit(size)
+                        .map(EventMapper::toEventShortDto).collect(Collectors.toList());
+
+            }
         }
+        if (builder.getValue() == null && sort != null && sort.equals("EVENT_DATE")) {
+            List<EventFullDto> list = getEventFullDto(eventRepository.findByState(State.PUBLISHED));
+            if (onlyAvailable) {
+                return list.stream()
+                        .filter(i -> i.getConfirmedRequests() <= i.getParticipantLimit())
+                        .sorted(Comparator.comparing(EventFullDto::getEventDate))
+                        .skip(from)
+                        .limit(size)
+                        .map(EventMapper::toEventShortDto).collect(Collectors.toList());
+            } else {
+                return list.stream().sorted(Comparator.comparing(EventFullDto::getEventDate))
+                        .skip(from)
+                        .limit(size)
+                        .map(EventMapper::toEventShortDto).collect(Collectors.toList());
+
+            }
+        }
+
 
         expression = builder.getValue() == null ? QEvent.event.isNotNull() : Expressions.asBoolean(builder.getValue());
-        List<EventFullDto> eventFull = getEventFullDto(eventRepository.findAll(expression, pageRequest).toList());
 
-        if (onlyAvailable) {
-            eventFull = eventFull.stream().filter(i -> i.getConfirmedRequests() <= i.getParticipantLimit()).collect(Collectors.toList());
-        }
-        if (sort != null && sort.equals("EVENT_DATE")) {
-            eventFull.sort(Comparator.comparing(EventFullDto::getEventDate));
-        } else {
-            eventFull.sort(Comparator.comparing(EventFullDto::getViews));
-        }
-
-        return eventFull.stream().map(EventMapper::toEventShortDto).collect(Collectors.toList());
+        return getEventFullDto(eventRepository.findAll(expression, pageRequest).toList())
+                .stream()
+                .map(EventMapper::toEventShortDto)
+                .collect(Collectors.toList());
     }
 
     @Override
