@@ -13,7 +13,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.practicum.admin.model.UpdateEventAdminRequest;
-import ru.practicum.category.model.Category;
 import ru.practicum.category.service.CategoryService;
 import ru.practicum.client.ServerClient;
 import ru.practicum.event.model.*;
@@ -57,17 +56,14 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventFullDto createEvent(User user, NewEventDto newEventDto) {
-        Category category = categoryService.findCategoryById(newEventDto.getCategory());
         locationService.createLocation(newEventDto.getLocation());
-        Event event = eventRepository.save(EventMapper.toEvent(user, category, newEventDto));
-
-        return EventMapper.toEventFullDto(0, 0, event);
+        return getEventFullDto(List.of(eventRepository.save(EventMapper.toEvent(user,
+                categoryService.findCategoryById(newEventDto.getCategory()), newEventDto)))).get(0);
     }
 
     @Override
     public List<EventShortDto> getEventsUser(Integer userId, PageRequest pageRequest) {
-        List<Event> events = eventRepository.findAllByInitiatorId(userId, pageRequest);
-        return getEventFullDto(events)
+        return getEventFullDto(eventRepository.findAllByInitiatorId(userId, pageRequest))
                 .stream()
                 .map(EventMapper::toEventShortDto)
                 .collect(Collectors.toList());
@@ -75,9 +71,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventFullDto getEventUser(Integer userId, Integer eventId) {
-        Event event = eventRepository.findByIdAndInitiatorId(eventId, userId);
-
-        return getEventFullDto(List.of(event)).get(0);
+        return getEventFullDto(List.of(eventRepository.findByIdAndInitiatorId(eventId, userId))).get(0);
     }
 
 
@@ -140,48 +134,9 @@ public class EventServiceImpl implements EventService {
             }
             updateEvent.setTitle(event.getTitle());
         }
-
-
         locationService.createLocation(updateEvent.getLocation());
         return getEventFullDto(List.of(updateEvent)).get(0);
 
-    }
-
-    private void validatedAndUpdate(Event updateEvent, String annotation, Integer category, String description, String eventDate2, Location location, Boolean paid, Integer participantLimit, Boolean requestModeration) {
-        if (annotation != null) {
-            if (annotation.length() < 20 || annotation.length() > 2000) {
-                throw new ValidateFieldException("Length annotation min 20, max 7000 ");
-            }
-            updateEvent.setAnnotation(annotation);
-        }
-        if (category != null) {
-            updateEvent.setCategory(categoryService.findCategoryById(category));
-        }
-        if (description != null) {
-            if (description.length() < 20 || description.length() > 7000) {
-                throw new ValidateFieldException("Length description min 20, max 7000 ");
-            }
-            updateEvent.setDescription(description);
-        }
-        if (eventDate2 != null) {
-            LocalDateTime eventDate = LocalDateTime.parse(eventDate2, General.SERVER_FORMAT);
-            if (eventDate.isBefore(LocalDateTime.now())) {
-                throw new ValidateFieldException("Event date has already arrived");
-            }
-            updateEvent.setEventDate(eventDate);
-        }
-        if (location != null) {
-            updateEvent.setLocation(location);
-        }
-        if (paid != null) {
-            updateEvent.setPaid(paid);
-        }
-        if (participantLimit != null) {
-            updateEvent.setParticipantLimit(participantLimit);
-        }
-        if (requestModeration != null) {
-            updateEvent.setRequestModeration(requestModeration);
-        }
     }
 
     @Override
@@ -292,7 +247,6 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventFullDto findPublishedEventById(Integer eventId) {
         Event event = eventRepository.findByIdAndState(eventId, State.PUBLISHED).orElseThrow(() -> new ValueNotFoundDbException("Event with id=" + eventId + " was not found"));
-
         return getEventFullDto(List.of(event)).get(0);
     }
 
@@ -341,5 +295,42 @@ public class EventServiceImpl implements EventService {
         }
 
         return viewsMap;
+    }
+
+    private void validatedAndUpdate(Event updateEvent, String annotation, Integer category, String description, String eventDate2, Location location, Boolean paid, Integer participantLimit, Boolean requestModeration) {
+        if (annotation != null) {
+            if (annotation.length() < 20 || annotation.length() > 2000) {
+                throw new ValidateFieldException("Length annotation min 20, max 7000 ");
+            }
+            updateEvent.setAnnotation(annotation);
+        }
+        if (category != null) {
+            updateEvent.setCategory(categoryService.findCategoryById(category));
+        }
+        if (description != null) {
+            if (description.length() < 20 || description.length() > 7000) {
+                throw new ValidateFieldException("Length description min 20, max 7000 ");
+            }
+            updateEvent.setDescription(description);
+        }
+        if (eventDate2 != null) {
+            LocalDateTime eventDate = LocalDateTime.parse(eventDate2, General.SERVER_FORMAT);
+            if (eventDate.isBefore(LocalDateTime.now())) {
+                throw new ValidateFieldException("Event date has already arrived");
+            }
+            updateEvent.setEventDate(eventDate);
+        }
+        if (location != null) {
+            updateEvent.setLocation(location);
+        }
+        if (paid != null) {
+            updateEvent.setPaid(paid);
+        }
+        if (participantLimit != null) {
+            updateEvent.setParticipantLimit(participantLimit);
+        }
+        if (requestModeration != null) {
+            updateEvent.setRequestModeration(requestModeration);
+        }
     }
 }
