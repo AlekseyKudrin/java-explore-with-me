@@ -4,8 +4,11 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.dto.EventShortDto;
+import ru.practicum.rating.dto.RatingAuthorsDto;
+import ru.practicum.rating.dto.RatingDto;
+import ru.practicum.rating.dto.RatingEventsDto;
 import ru.practicum.user.model.User;
-import ru.practicum.user.model.UserShortDto;
+import ru.practicum.user.dto.UserShortDto;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 

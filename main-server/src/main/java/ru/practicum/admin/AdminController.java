@@ -13,8 +13,8 @@ import ru.practicum.compilation.dto.CompilationDto;
 import ru.practicum.compilation.dto.NewCompilationDto;
 import ru.practicum.compilation.dto.UpdateCompilationRequest;
 import ru.practicum.event.dto.EventFullDto;
-import ru.practicum.user.model.NewUserRequest;
-import ru.practicum.user.model.UserDto;
+import ru.practicum.user.dto.NewUserRequest;
+import ru.practicum.user.dto.UserDto;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;

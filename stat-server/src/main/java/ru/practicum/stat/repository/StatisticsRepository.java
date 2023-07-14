@@ -4,13 +4,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import ru.practicum.stat.model.Hit;
-import ru.practicum.stat.model.Stats;
+import ru.practicum.stat.dto.Stats;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 public interface StatisticsRepository extends JpaRepository<Hit, Long> {
-    @Query("select new ru.practicum.stat.model.Stats( h.app, h.uri, count(distinct h.ip))" +
+    @Query("select new ru.practicum.stat.dto.Stats( h.app, h.uri, count(distinct h.ip))" +
             "from  Hit h " +
             "where ( h.timestamp between :start and :end) " +
             "and h.uri IN (:uris) " +
@@ -20,7 +20,7 @@ public interface StatisticsRepository extends JpaRepository<Hit, Long> {
                                @Param("end") LocalDateTime end,
                                @Param("uris") List<String> uris);
 
-    @Query("select new ru.practicum.stat.model.Stats(h.app, h.uri, count(h.ip)) " +
+    @Query("select new ru.practicum.stat.dto.Stats(h.app, h.uri, count(h.ip)) " +
             "from Hit h " +
             "where (h.timestamp between :start and :end) " +
             "and h.uri IN (:uris) " +
@@ -30,7 +30,7 @@ public interface StatisticsRepository extends JpaRepository<Hit, Long> {
                                   @Param("end") LocalDateTime end,
                                   @Param("uris") List<String> uris);
 
-    @Query("select new ru.practicum.stat.model.Stats(h.app, h.uri, count(distinct h.ip)) " +
+    @Query("select new ru.practicum.stat.dto.Stats(h.app, h.uri, count(distinct h.ip)) " +
             "from Hit h " +
             "where (h.timestamp between :start and :end) " +
             "group by h.app, h.uri " +
@@ -38,7 +38,7 @@ public interface StatisticsRepository extends JpaRepository<Hit, Long> {
     List<Stats> getStatsWithoutUriUnique(@Param("start") LocalDateTime start,
                                          @Param("end") LocalDateTime end);
 
-    @Query("select new ru.practicum.stat.model.Stats(h.app, h.uri, count(h.ip)) " +
+    @Query("select new ru.practicum.stat.dto.Stats(h.app, h.uri, count(h.ip)) " +
             "from Hit h " +
             "where (h.timestamp between :start and :end) " +
             "group by h.app, h.uri " +

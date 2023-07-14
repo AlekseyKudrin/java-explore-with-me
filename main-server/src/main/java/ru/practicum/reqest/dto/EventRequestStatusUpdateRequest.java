@@ -1,4 +1,4 @@
-package ru.practicum.reqest.model;
+package ru.practicum.reqest.dto;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;

@@ -1,9 +1,9 @@
-package ru.practicum.reqest.model;
+package ru.practicum.reqest.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import ru.practicum.reqest.model.enums.Status;
+import ru.practicum.reqest.model.Status;
 
 @AllArgsConstructor
 @Getter

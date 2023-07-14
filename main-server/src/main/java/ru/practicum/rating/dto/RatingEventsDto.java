@@ -1,4 +1,4 @@
-package ru.practicum.rating.model;
+package ru.practicum.rating.dto;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;

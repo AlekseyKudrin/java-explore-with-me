@@ -9,9 +9,9 @@ import ru.practicum.event.dto.EventFullDto;
 import ru.practicum.event.dto.EventShortDto;
 import ru.practicum.event.dto.NewEventDto;
 import ru.practicum.event.dto.UpdateEventUserRequest;
-import ru.practicum.reqest.model.EventRequestStatusUpdateRequest;
-import ru.practicum.reqest.model.EventRequestStatusUpdateResult;
-import ru.practicum.reqest.model.ParticipationRequestDto;
+import ru.practicum.reqest.dto.EventRequestStatusUpdateRequest;
+import ru.practicum.reqest.dto.EventRequestStatusUpdateResult;
+import ru.practicum.reqest.dto.ParticipationRequestDto;
 import ru.practicum.user.service.UserService;
 
 import javax.validation.Valid;

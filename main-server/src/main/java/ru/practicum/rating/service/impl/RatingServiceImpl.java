@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.service.EventService;
+import ru.practicum.rating.dto.*;
 import ru.practicum.rating.model.*;
 import ru.practicum.rating.repository.RatingRepository;
 import ru.practicum.rating.service.RatingService;

@@ -16,8 +16,8 @@ import ru.practicum.event.dto.EventFullDto;
 import ru.practicum.event.model.State;
 import ru.practicum.event.service.EventService;
 import ru.practicum.exceptionHandler.exception.ValidateFieldException;
-import ru.practicum.user.model.NewUserRequest;
-import ru.practicum.user.model.UserDto;
+import ru.practicum.user.dto.NewUserRequest;
+import ru.practicum.user.dto.UserDto;
 import ru.practicum.user.service.UserService;
 
 import javax.validation.ValidationException;

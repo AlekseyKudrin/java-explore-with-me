@@ -1,4 +1,4 @@
-package ru.practicum.user.model;
+package ru.practicum.rating.dto;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,8 +8,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserDto {
-    Integer id;
-    String email;
-    String name;
+public class RatingEvents {
+    Integer eventId;
+    Long rating;
 }

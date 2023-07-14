@@ -2,6 +2,7 @@ package ru.practicum.reqest.model;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import ru.practicum.reqest.dto.ParticipationRequestDto;
 import ru.practicum.util.General;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

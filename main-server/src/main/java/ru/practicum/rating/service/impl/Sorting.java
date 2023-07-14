@@ -1,4 +1,4 @@
-package ru.practicum.rating.model;
+package ru.practicum.rating.service.impl;
 
 import org.springframework.data.domain.Sort;
 

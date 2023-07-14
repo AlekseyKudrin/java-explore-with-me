@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import ru.practicum.event.model.Event;
 import ru.practicum.rating.model.Rating;
-import ru.practicum.rating.model.RatingEvents;
+import ru.practicum.rating.dto.RatingEvents;
 import ru.practicum.user.model.User;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
     @Modifying
     void deleteByUserAndEvent(User user, Event event);
 
-    @Query(value = "select new ru.practicum.rating.model.RatingEvents(e.id as eventId, count (r1.status) - count (r2.status) as rating) " +
+    @Query(value = "select new ru.practicum.rating.dto.RatingEvents(e.id as eventId, count (r1.status) - count (r2.status) as rating) " +
             "from Event as e " +
             "left join Rating as r1 on e.id = r1.event.id and r1.status = true " +
             "left join Rating as r2 on e.id = r2.event.id and r2.status = false " +

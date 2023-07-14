@@ -4,13 +4,13 @@ import ru.practicum.event.dto.EventFullDto;
 import ru.practicum.event.dto.EventShortDto;
 import ru.practicum.event.dto.NewEventDto;
 import ru.practicum.event.dto.UpdateEventUserRequest;
-import ru.practicum.reqest.model.EventRequestStatusUpdateRequest;
-import ru.practicum.reqest.model.EventRequestStatusUpdateResult;
-import ru.practicum.reqest.model.ParticipationRequestDto;
-import ru.practicum.user.model.NewUserRequest;
+import ru.practicum.reqest.dto.EventRequestStatusUpdateRequest;
+import ru.practicum.reqest.dto.EventRequestStatusUpdateResult;
+import ru.practicum.reqest.dto.ParticipationRequestDto;
+import ru.practicum.user.dto.NewUserRequest;
 import ru.practicum.user.model.User;
-import ru.practicum.user.model.UserDto;
-import ru.practicum.user.model.UserShortDto;
+import ru.practicum.user.dto.UserDto;
+import ru.practicum.user.dto.UserShortDto;
 
 import java.util.List;
 

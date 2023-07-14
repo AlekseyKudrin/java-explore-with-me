@@ -88,7 +88,7 @@ order by rating desc;
             , nativeQuery = true)
 
 
-select new ru.practicum.rating.model.RatingEvents(e.id as eventId, count (r1.status) - count (r2.status) as rating) " +
+select new ru.practicum.rating.dto.RatingEvents(e.id as eventId, count (r1.status) - count (r2.status) as rating) " +
             "from Event as e " +
             "left join Rating as r1 on e.id = r1.event.id and r1.status = true " +
             "left join Rating as r2 on e.id = r2.event.id and r2.status = false " +

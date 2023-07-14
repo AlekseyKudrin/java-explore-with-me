@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.practicum.stat.repository.StatisticsRepository;
 import ru.practicum.stat.dto.HitDto;
 import ru.practicum.stat.model.HitMapper;
-import ru.practicum.stat.model.Stats;
+import ru.practicum.stat.dto.Stats;
 import ru.practicum.stat.service.StatisticsService;
 
 import java.time.LocalDateTime;

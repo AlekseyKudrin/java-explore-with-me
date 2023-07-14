@@ -4,7 +4,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.location.model.Location;
-import ru.practicum.user.model.UserShortDto;
+import ru.practicum.user.dto.UserShortDto;
 
 @Getter
 @Setter

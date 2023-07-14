@@ -1,9 +1,9 @@
 package ru.practicum.rating.service;
 
-import ru.practicum.rating.model.RatingAuthorsDto;
-import ru.practicum.rating.model.RatingDto;
-import ru.practicum.rating.model.RatingEventsDto;
-import ru.practicum.rating.model.Sorting;
+import ru.practicum.rating.dto.RatingAuthorsDto;
+import ru.practicum.rating.dto.RatingDto;
+import ru.practicum.rating.dto.RatingEventsDto;
+import ru.practicum.rating.service.impl.Sorting;
 
 import java.util.List;
 
