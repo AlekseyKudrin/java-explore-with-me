@@ -2,6 +2,8 @@ package ru.practicum.category.model;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import ru.practicum.category.dto.CategoryDto;
+import ru.practicum.category.dto.NewCategoryDto;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CategoryMapper {

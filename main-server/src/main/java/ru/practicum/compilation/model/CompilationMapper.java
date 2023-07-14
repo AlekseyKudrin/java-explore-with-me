@@ -2,7 +2,9 @@ package ru.practicum.compilation.model;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import ru.practicum.event.model.EventShortDto;
+import ru.practicum.compilation.dto.CompilationDto;
+import ru.practicum.compilation.dto.NewCompilationDto;
+import ru.practicum.event.dto.EventShortDto;
 
 import java.util.List;
 

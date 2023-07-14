@@ -2,7 +2,7 @@ package ru.practicum.rating.model;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import ru.practicum.event.model.EventShortDto;
+import ru.practicum.event.dto.EventShortDto;
 
 @Getter
 @Setter

@@ -1,8 +1,7 @@
-package ru.practicum.event.model;
+package ru.practicum.event.dto;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import ru.practicum.event.model.enums.StateAction;
 import ru.practicum.location.model.Location;
 
 @Getter
@@ -10,7 +9,7 @@ import ru.practicum.location.model.Location;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class UpdateEventUserRequest {
+public class UpdateEventAdminRequest {
     String annotation;
     Integer category;
     String description;
@@ -19,6 +18,6 @@ public class UpdateEventUserRequest {
     Boolean paid;
     Integer participantLimit;
     Boolean requestModeration;
-    StateAction stateAction;
+    StateActionAdmin stateAction;
     String title;
 }

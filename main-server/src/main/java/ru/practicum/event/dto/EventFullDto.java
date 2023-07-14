@@ -1,8 +1,8 @@
-package ru.practicum.event.model;
+package ru.practicum.event.dto;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import ru.practicum.category.model.CategoryDto;
+import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.location.model.Location;
 import ru.practicum.user.model.UserShortDto;
 

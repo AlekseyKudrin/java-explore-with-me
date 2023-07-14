@@ -12,12 +12,17 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import ru.practicum.admin.model.UpdateEventAdminRequest;
+import ru.practicum.event.dto.UpdateEventAdminRequest;
 import ru.practicum.category.service.CategoryService;
 import ru.practicum.client.ServerClient;
+import ru.practicum.event.dto.EventFullDto;
+import ru.practicum.event.dto.EventShortDto;
+import ru.practicum.event.dto.NewEventDto;
+import ru.practicum.event.dto.UpdateEventUserRequest;
+import ru.practicum.event.dto.StateActionAdmin;
 import ru.practicum.event.model.*;
-import ru.practicum.event.model.enums.State;
-import ru.practicum.event.model.enums.StateAction;
+import ru.practicum.event.model.State;
+import ru.practicum.event.dto.StateActionUser;
 import ru.practicum.event.repository.EventRepository;
 import ru.practicum.event.service.EventService;
 import ru.practicum.exceptionHandler.exception.InternalServerErrorException;
@@ -83,7 +88,7 @@ public class EventServiceImpl implements EventService {
                 event.getEventDate(), event.getLocation(), event.getPaid(), event.getParticipantLimit(),
                 event.getRequestModeration());
         if (event.getStateAction() != null) {
-            if (event.getStateAction() == StateAction.CANCEL_REVIEW) {
+            if (event.getStateAction() == StateActionUser.CANCEL_REVIEW) {
                 updateEvent.setState(State.CANCELED);
             } else {
                 updateEvent.setState(State.PENDING);
@@ -112,7 +117,7 @@ public class EventServiceImpl implements EventService {
                 event.getEventDate(), event.getLocation(), event.getPaid(), event.getParticipantLimit(),
                 event.getRequestModeration());
         if (event.getStateAction() != null) {
-            if (event.getStateAction().equals(ru.practicum.admin.model.StateAction.PUBLISH_EVENT)) {
+            if (event.getStateAction().equals(StateActionAdmin.PUBLISH_EVENT)) {
                 if (!State.PENDING.equals(updateEvent.getState())) {
                     throw new ValidationException("Cannot publish the event because it's not in the right state: " + updateEvent.getState());
                 } else {
@@ -120,7 +125,7 @@ public class EventServiceImpl implements EventService {
                     updateEvent.setPublishedOn(LocalDateTime.now());
                 }
             }
-            if (event.getStateAction().equals(ru.practicum.admin.model.StateAction.REJECT_EVENT)) {
+            if (event.getStateAction().equals(StateActionAdmin.REJECT_EVENT)) {
                 if (State.PUBLISHED.equals(updateEvent.getState())) {
                     throw new ValidationException("Unable to cancel the event because it is in the wrong state: PUBLISHING");
                 } else {
@@ -234,7 +239,6 @@ public class EventServiceImpl implements EventService {
 
             }
         }
-
 
         expression = builder.getValue() == null ? QEvent.event.isNotNull() : Expressions.asBoolean(builder.getValue());
 

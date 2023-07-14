@@ -1,8 +1,8 @@
-package ru.practicum.compilation.model;
+package ru.practicum.compilation.dto;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import ru.practicum.event.model.EventShortDto;
+import ru.practicum.event.dto.EventShortDto;
 
 import java.util.List;
 

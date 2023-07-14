@@ -1,4 +1,4 @@
-package ru.practicum.admin.model;
+package ru.practicum.event.dto;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -9,7 +9,7 @@ import ru.practicum.location.model.Location;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class UpdateEventAdminRequest {
+public class UpdateEventUserRequest {
     String annotation;
     Integer category;
     String description;
@@ -18,6 +18,6 @@ public class UpdateEventAdminRequest {
     Boolean paid;
     Integer participantLimit;
     Boolean requestModeration;
-    StateAction stateAction;
+    StateActionUser stateAction;
     String title;
 }

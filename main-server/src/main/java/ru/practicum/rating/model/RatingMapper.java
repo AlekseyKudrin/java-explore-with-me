@@ -3,7 +3,7 @@ package ru.practicum.rating.model;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import ru.practicum.event.model.Event;
-import ru.practicum.event.model.EventShortDto;
+import ru.practicum.event.dto.EventShortDto;
 import ru.practicum.user.model.User;
 import ru.practicum.user.model.UserShortDto;
 

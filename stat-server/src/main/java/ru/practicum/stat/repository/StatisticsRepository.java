@@ -1,4 +1,4 @@
-package ru.practicum.stat.dao;
+package ru.practicum.stat.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

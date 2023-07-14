@@ -1,10 +1,10 @@
-package ru.practicum.event.model;
+package ru.practicum.event.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.practicum.category.model.CategoryDto;
+import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.user.model.UserShortDto;
 
 @AllArgsConstructor
